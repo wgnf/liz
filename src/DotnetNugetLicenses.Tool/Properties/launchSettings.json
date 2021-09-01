@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DotnetNugetLicenses.Tool": {
+      "commandName": "Project",
+      "commandLineArgs": "--target ../../../DotnetNugetLicenses.Tool.csproj"
+    }
+  }
+}
