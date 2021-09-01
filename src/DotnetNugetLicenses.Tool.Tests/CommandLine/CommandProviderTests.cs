@@ -41,7 +41,7 @@ namespace DotnetNugetLicenses.Tool.Tests.CommandLine
 
             var rootCommand = sut.Get();
 
-            var inputOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "input");
+            var inputOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "target");
             inputOption
                 .Should()
                 .NotBeNull();
@@ -60,8 +60,8 @@ namespace DotnetNugetLicenses.Tool.Tests.CommandLine
                 .Aliases
                 .Should()
                 .Contain(alias =>
-                    alias == "--input" ||
-                    alias == "--i");
+                    alias == "--target" ||
+                    alias == "--t");
         }
     }
 }

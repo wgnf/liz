@@ -21,22 +21,22 @@ namespace DotnetNugetLicenses.Tool.CommandLine
         {
             var options = new List<Option>
             {
-                GetInputFileOption()
+                GetTargetFileOption()
             };
             return options;
         }
 
-        private static Option GetInputFileOption()
+        private static Option GetTargetFileOption()
         {
             var option = new Option<FileInfo>(
-                "--input",
+                "--target",
                 description: "The input file to analyze. Can be a Solution (sln) or a Project (csproj, fsproj)")
             {
                 IsRequired = true,
-                Name = "input"
+                Name = "target"
             };
 
-            option.AddAlias("-i");
+            option.AddAlias("-t");
             option.AddSuggestions("./path/to/your/Solution.sln", "./path/to/your/Project.csproj");
 
             return option;
