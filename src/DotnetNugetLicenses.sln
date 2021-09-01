@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotnetNugetLicenses.Tool", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotnetNugetLicenses.Tool.Tests", "DotnetNugetLicenses.Tool.Tests\DotnetNugetLicenses.Tool.Tests.csproj", "{8D8AD946-3247-4A2C-9204-B87C40AED8A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotnetNugetLicenses.Core", "DotnetNugetLicenses.Core\DotnetNugetLicenses.Core.csproj", "{B8621B57-8078-4D3D-8D1F-0DF7828991C8}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5E837776-450A-4435-A7AE-39D6BC44D09B}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -46,6 +48,18 @@ Global
 		{8D8AD946-3247-4A2C-9204-B87C40AED8A1}.Release|x64.Build.0 = Release|Any CPU
 		{8D8AD946-3247-4A2C-9204-B87C40AED8A1}.Release|x86.ActiveCfg = Release|Any CPU
 		{8D8AD946-3247-4A2C-9204-B87C40AED8A1}.Release|x86.Build.0 = Release|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Debug|x64.Build.0 = Debug|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Debug|x86.Build.0 = Debug|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Release|x64.ActiveCfg = Release|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Release|x64.Build.0 = Release|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Release|x86.ActiveCfg = Release|Any CPU
+		{B8621B57-8078-4D3D-8D1F-0DF7828991C8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

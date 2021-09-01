@@ -1,7 +1,10 @@
-﻿using DotnetNugetLicenses.Tool.CommandLine;
+﻿using DotnetNugetLicenses.Core;
+using DotnetNugetLicenses.Core.Contracts;
+using DotnetNugetLicenses.Tool.CommandLine;
 using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using System.CommandLine;
 using System.Diagnostics.CodeAnalysis;
+using System.IO.Abstractions;
 using System.Threading.Tasks;
 using Unity;
 
@@ -31,7 +34,26 @@ namespace DotnetNugetLicenses
 
         private static void RegisterTypes(IUnityContainer container)
         {
-            container.RegisterType<ICommandProvider, CommandProvider>();
+            RegisterCommandLineServices(container);
+			RegisterCoreServices(container);
+
+			RegisterOtherServices(container);
         }
-    }
+
+		private static void RegisterCommandLineServices(IUnityContainer container)
+		{
+			container.RegisterType<ICommandProvider, CommandProvider>();
+			container.RegisterType<ICommandRunner, CommandRunner>();
+		}
+
+		private static void RegisterCoreServices(IUnityContainer container)
+		{
+			container.RegisterType<IExtractLicenses, ExtractLicenses>();
+		}
+
+		private static void RegisterOtherServices(IUnityContainer container)
+		{
+			container.RegisterSingleton<IFileSystem, FileSystem>();
+		}
+	}
 }

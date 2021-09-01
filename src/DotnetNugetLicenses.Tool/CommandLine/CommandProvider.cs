@@ -1,18 +1,29 @@
-﻿using DotnetNugetLicenses.Tool.Contracts.CommandLine;
+﻿using Ardalis.GuardClauses;
+using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using System.Collections.Generic;
 using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.IO;
 
 namespace DotnetNugetLicenses.Tool.CommandLine
 {
     public class CommandProvider : ICommandProvider
     {
+        private readonly ICommandRunner _commandRunner;
+
+        public CommandProvider(ICommandRunner commandRunner)
+        {
+            _commandRunner = Guard.Against.Null(commandRunner, nameof(commandRunner));
+        }
+
         public RootCommand Get()
         {
             var rootCommand = new RootCommand("dotnet-tool to analyze the licenses of your project(s)");
 
             var options = GetOptions();
             foreach (var option in options) rootCommand.AddOption(option);
+
+            rootCommand.Handler = CommandHandler.Create<FileInfo>(_commandRunner.Run);
 
             return rootCommand;
         }
