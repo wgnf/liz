@@ -2,7 +2,6 @@
 using DotnetNugetLicenses.Tool.CommandLine;
 using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using FluentAssertions;
-using System.IO;
 using System.Linq;
 using Xunit;
 
@@ -54,7 +53,7 @@ namespace DotnetNugetLicenses.Tool.Tests.CommandLine
             inputOption
                 .ValueType
                 .Should()
-                .Be<FileInfo>();
+                .Be<string>();
 
             inputOption
                 .Aliases
