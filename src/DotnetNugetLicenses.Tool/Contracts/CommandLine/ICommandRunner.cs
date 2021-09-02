@@ -1,7 +1,9 @@
-﻿namespace DotnetNugetLicenses.Tool.Contracts.CommandLine
+﻿using System.IO;
+
+namespace DotnetNugetLicenses.Tool.Contracts.CommandLine
 {
     public interface ICommandRunner
     {
-        void Run(string targetFile);
+        void Run(FileInfo targetFile);
     }
 }

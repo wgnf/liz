@@ -5,7 +5,7 @@ using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using FluentAssertions;
 using Moq;
 using System;
-using System.IO.Abstractions;
+using System.IO;
 using Xunit;
 
 namespace DotnetNugetLicenses.Tool.Tests.CommandLine
@@ -36,20 +36,14 @@ namespace DotnetNugetLicenses.Tool.Tests.CommandLine
 			var context = new ArrangeContext<CommandRunner>();
 			var sut = context.Build();
 
-			const string file = "some/file";
+			var fileInfo = new FileInfo("some/file.txt");
 
-			var fileInfo = new Mock<IFileInfo>();
-			context
-				.For<IFileSystem>()
-				.Setup(f => f.FileInfo.FromFileName(file))
-				.Returns(fileInfo.Object);
-
-			sut.Run(file);
+			sut.Run(fileInfo);
 
 			context
 				.For<IExtractLicenses>()
 				.Verify(e => e.Extract(It.Is<ExtractSettings>(settings =>
-					settings.TargetFile == fileInfo.Object)), Times.Once());
+					settings.TargetFile.FullName == fileInfo.FullName)), Times.Once());
 		}
 	}
 }

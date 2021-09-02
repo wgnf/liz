@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using DotnetNugetLicenses.Core.Contracts;
 using DotnetNugetLicenses.Tool.Contracts.CommandLine;
+using System.IO;
 using System.IO.Abstractions;
 
 namespace DotnetNugetLicenses.Tool.CommandLine
@@ -16,7 +17,7 @@ namespace DotnetNugetLicenses.Tool.CommandLine
 			_fileSystem = Guard.Against.Null(fileSystem, nameof(fileSystem));
 		}
 
-        public void Run(string targetFile)
+        public void Run(FileInfo targetFile)
         {
             Guard.Against.Null(targetFile, nameof(targetFile));
 
@@ -24,9 +25,9 @@ namespace DotnetNugetLicenses.Tool.CommandLine
 			_extractLicenses.Extract(settings);
         }
 
-		private ExtractSettings CreateSettings(string targetFile)
+		private ExtractSettings CreateSettings(FileInfo targetFile)
 		{
-			var targetFileInfo = _fileSystem.FileInfo.FromFileName(targetFile);
+			var targetFileInfo = new FileInfoWrapper(_fileSystem, targetFile);
 
 			var settings = new ExtractSettings(targetFileInfo);
 

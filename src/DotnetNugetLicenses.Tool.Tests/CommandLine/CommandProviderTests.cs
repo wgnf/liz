@@ -2,6 +2,7 @@
 using DotnetNugetLicenses.Tool.CommandLine;
 using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using FluentAssertions;
+using System.IO;
 using System.Linq;
 using Xunit;
 
@@ -40,10 +41,8 @@ namespace DotnetNugetLicenses.Tool.Tests.CommandLine
 
             var rootCommand = sut.Get();
 
-            var inputOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "target");
-            inputOption
-                .Should()
-                .NotBeNull();
+            var inputOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "targetFile");
+            Assert.NotNull(inputOption);
 
             inputOption
                 .Description
@@ -53,7 +52,7 @@ namespace DotnetNugetLicenses.Tool.Tests.CommandLine
             inputOption
                 .ValueType
                 .Should()
-                .Be<string>();
+                .Be<FileInfo>();
 
             inputOption
                 .Aliases

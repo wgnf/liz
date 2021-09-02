@@ -3,6 +3,7 @@ using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.IO;
 
 namespace DotnetNugetLicenses.Tool.CommandLine
 {
@@ -22,7 +23,7 @@ namespace DotnetNugetLicenses.Tool.CommandLine
             var options = GetOptions();
             foreach (var option in options) rootCommand.AddOption(option);
 
-            rootCommand.Handler = CommandHandler.Create<string>(_commandRunner.Run);
+            rootCommand.Handler = CommandHandler.Create<FileInfo>(_commandRunner.Run);
 
             return rootCommand;
         }
@@ -38,7 +39,7 @@ namespace DotnetNugetLicenses.Tool.CommandLine
 
         private static Option GetTargetFileOption()
         {
-            var option = new Option<string>(
+            var option = new Option<FileInfo>(
                 "--target",
                 "The input file to analyze. Can be a Solution (sln) or a Project (csproj, fsproj)")
             {
