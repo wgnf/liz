@@ -45,7 +45,7 @@ namespace DotnetNugetLicenses.Tool.CommandLine
             {
                 IsRequired = true,
                 /*
-                 * NOTE: This has to match the parameter that is called
+                 * NOTE: This has to match the parameter that is called (see CommandRunner)
                  * or else CommandHandler does not know where to put the values
                  */
                 Name = "targetFile"
