@@ -18,7 +18,6 @@ namespace DotnetNugetLicenses.Tool.CommandLine
 
         public void Run(string targetFile)
         {
-			// FIX: targetFile somehow is always empty??
             Guard.Against.Null(targetFile, nameof(targetFile));
 
 			var settings = CreateSettings(targetFile);

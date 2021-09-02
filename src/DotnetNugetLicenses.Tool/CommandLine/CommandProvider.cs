@@ -40,14 +40,18 @@ namespace DotnetNugetLicenses.Tool.CommandLine
         {
             var option = new Option<string>(
                 "--target",
-                description: "The input file to analyze. Can be a Solution (sln) or a Project (csproj, fsproj)")
+                "The input file to analyze. Can be a Solution (sln) or a Project (csproj, fsproj)")
             {
                 IsRequired = true,
-                Name = "target"
+                /*
+                 * NOTE: This has to match the parameter that is called
+                 * or else CommandHandler does not know where to put the values
+                 */
+                Name = "targetFile"
             };
 
             option.AddAlias("-t");
-            option.AddSuggestions("./path/to/your/Solution.sln", "./path/to/your/Project.csproj");
+            option.AddSuggestions("./path/to/Solution.sln", "./path/to/Project.csproj");
 
             return option;
         }

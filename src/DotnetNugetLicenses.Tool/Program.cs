@@ -8,7 +8,7 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using Unity;
 
-namespace DotnetNugetLicenses
+namespace DotnetNugetLicenses.Tool
 {
     [ExcludeFromCodeCoverage] // mostly untestable
     public static class Program
