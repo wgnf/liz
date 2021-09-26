@@ -6,7 +6,7 @@ using System.IO.Abstractions;
 
 namespace DotnetNugetLicenses.Tool.CommandLine
 {
-	public class CommandRunner : ICommandRunner
+	public sealed class CommandRunner : ICommandRunner
 	{
 		private readonly IExtractLicenses _extractLicenses;
 		private readonly IFileSystem _fileSystem;

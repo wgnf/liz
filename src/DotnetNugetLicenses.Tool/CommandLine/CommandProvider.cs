@@ -7,7 +7,7 @@ using System.IO;
 
 namespace DotnetNugetLicenses.Tool.CommandLine
 {
-	public class CommandProvider : ICommandProvider
+	public sealed class CommandProvider : ICommandProvider
 	{
 		private readonly ICommandRunner _commandRunner;
 

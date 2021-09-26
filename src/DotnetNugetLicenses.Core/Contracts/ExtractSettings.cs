@@ -5,7 +5,7 @@ using System.IO.Abstractions;
 namespace DotnetNugetLicenses.Core.Contracts
 {
 	[ExcludeFromCodeCoverage] // simple DTO
-	public class ExtractSettings
+	public sealed class ExtractSettings
 	{
 		public ExtractSettings(IFileInfo targetFile)
 		{

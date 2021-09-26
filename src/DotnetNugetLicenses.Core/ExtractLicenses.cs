@@ -4,7 +4,7 @@ using System;
 
 namespace DotnetNugetLicenses.Core
 {
-	public class ExtractLicenses : IExtractLicenses
+	public sealed class ExtractLicenses : IExtractLicenses
 	{
 		public void Extract(ExtractSettings settings)
 		{
