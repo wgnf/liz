@@ -10,35 +10,35 @@ using Unity;
 
 namespace DotnetNugetLicenses.Tool
 {
-    [ExcludeFromCodeCoverage] // mostly untestable
-    public static class Program
-    {
-        public static Task<int> Main(string[] args)
-        {
-            using var container = InitializeContainer();
+	[ExcludeFromCodeCoverage] // mostly untestable
+	public static class Program
+	{
+		public static Task<int> Main(string[] args)
+		{
+			using var container = InitializeContainer();
 
-            var commandProvider = container.Resolve<ICommandProvider>();
-            var rootCommand = commandProvider.Get();
+			var commandProvider = container.Resolve<ICommandProvider>();
+			var rootCommand = commandProvider.Get();
 
-            return rootCommand.InvokeAsync(args);
-        }
+			return rootCommand.InvokeAsync(args);
+		}
 
-        private static IUnityContainer InitializeContainer()
-        {
-            var container = new UnityContainer();
+		private static IUnityContainer InitializeContainer()
+		{
+			var container = new UnityContainer();
 
-            RegisterTypes(container);
+			RegisterTypes(container);
 
-            return container;
-        }
+			return container;
+		}
 
-        private static void RegisterTypes(IUnityContainer container)
-        {
-            RegisterCommandLineServices(container);
+		private static void RegisterTypes(IUnityContainer container)
+		{
+			RegisterCommandLineServices(container);
 			RegisterCoreServices(container);
 
 			RegisterOtherServices(container);
-        }
+		}
 
 		private static void RegisterCommandLineServices(IUnityContainer container)
 		{
