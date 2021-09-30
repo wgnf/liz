@@ -13,7 +13,7 @@ namespace DotnetNugetLicenses.Core.Tests
         [InlineData(typeof(IExtractLicenses))]
         public void Should_Register_Needed_Core_Services(Type typeToCheck)
         {
-            var container = new UnityContainer();
+            using var container = new UnityContainer();
 
             container.RegisterCoreServices();
 
@@ -27,7 +27,7 @@ namespace DotnetNugetLicenses.Core.Tests
         [InlineData(typeof(IFileSystem))]
         public void Should_Register_Other_Needed_Services(Type typeToCheck)
         {
-            var container = new UnityContainer();
+            using var container = new UnityContainer();
 
             container.RegisterOtherServices();
 

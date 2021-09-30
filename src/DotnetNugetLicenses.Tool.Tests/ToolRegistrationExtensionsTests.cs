@@ -13,7 +13,7 @@ namespace DotnetNugetLicenses.Tool.Tests
         [InlineData(typeof(ICommandRunner))]
         public void Should_Register_Needed_CommandLine_Tool_Services(Type typeToCheck)
         {
-            var container = new UnityContainer();
+            using var container = new UnityContainer();
 
             container.RegisterToolServices();
 
