@@ -1,5 +1,6 @@
 ﻿using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using System;
 using Unity;
 using Xunit;
@@ -21,6 +22,34 @@ namespace DotnetNugetLicenses.Tool.Tests
                 .IsRegistered(typeToCheck)
                 .Should()
                 .BeTrue();
+        }
+
+        [Theory]
+        [InlineData(typeof(ILoggerFactory))]
+        [InlineData(typeof(ILogger<>))]
+        public void Should_Register_Needed_Logging_Services(Type typeToCheck)
+        {
+            using var container = new UnityContainer();
+
+            container.RegisterLoggingServices();
+
+            container
+                .IsRegistered(typeToCheck)
+                .Should()
+                .BeTrue();
+        }
+
+        [Fact]
+        public void Container_Should_Be_Able_To_Create_Scoped_ILogger_Instance()
+        {
+            using var container = new UnityContainer();
+            
+            container.RegisterLoggingServices();
+
+            var logger = container.Resolve<ILogger<ToolRegistrationExtensionsTests>>();
+            logger
+                .Should()
+                .NotBeNull();
         }
     }
 }

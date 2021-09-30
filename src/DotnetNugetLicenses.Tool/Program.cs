@@ -1,10 +1,7 @@
 ﻿using DotnetNugetLicenses.Core;
-using DotnetNugetLicenses.Core.Contracts;
-using DotnetNugetLicenses.Tool.CommandLine;
 using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using System.CommandLine;
 using System.Diagnostics.CodeAnalysis;
-using System.IO.Abstractions;
 using System.Threading.Tasks;
 using Unity;
 
@@ -38,6 +35,7 @@ namespace DotnetNugetLicenses.Tool
             container.RegisterOtherServices();
             
             container.RegisterToolServices();
+            container.RegisterLoggingServices();
 		}
 	}
 }
