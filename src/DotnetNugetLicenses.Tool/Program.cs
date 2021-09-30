@@ -10,7 +10,7 @@ using Unity;
 
 namespace DotnetNugetLicenses.Tool
 {
-	[ExcludeFromCodeCoverage] // mostly untestable
+	[ExcludeFromCodeCoverage] // mostly untestable setup code
 	public static class Program
 	{
 		public static Task<int> Main(string[] args)
@@ -34,26 +34,10 @@ namespace DotnetNugetLicenses.Tool
 
 		private static void RegisterTypes(IUnityContainer container)
 		{
-			RegisterCommandLineServices(container);
-			RegisterCoreServices(container);
-
-			RegisterOtherServices(container);
-		}
-
-		private static void RegisterCommandLineServices(IUnityContainer container)
-		{
-			container.RegisterType<ICommandProvider, CommandProvider>();
-			container.RegisterType<ICommandRunner, CommandRunner>();
-		}
-
-		private static void RegisterCoreServices(IUnityContainer container)
-		{
-			container.RegisterType<IExtractLicenses, ExtractLicenses>();
-		}
-
-		private static void RegisterOtherServices(IUnityContainer container)
-		{
-			container.RegisterSingleton<IFileSystem, FileSystem>();
+            container.RegisterCoreServices();
+            container.RegisterOtherServices();
+            
+            container.RegisterToolServices();
 		}
 	}
 }

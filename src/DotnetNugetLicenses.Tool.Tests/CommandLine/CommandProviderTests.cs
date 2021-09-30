@@ -8,7 +8,7 @@ using Xunit;
 
 namespace DotnetNugetLicenses.Tool.Tests.CommandLine
 {
-	public class CommandProviderTests
+	public sealed class CommandProviderTests
 	{
 		[Fact]
 		public void Should_Have_Correct_Interface()

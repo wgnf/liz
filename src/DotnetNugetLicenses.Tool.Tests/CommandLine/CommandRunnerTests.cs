@@ -10,7 +10,7 @@ using Xunit;
 
 namespace DotnetNugetLicenses.Tool.Tests.CommandLine
 {
-	public class CommandRunnerTests
+	public sealed class CommandRunnerTests
 	{
 		[Fact]
 		public void Should_Have_Correct_Interface()
