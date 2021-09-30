@@ -3,6 +3,7 @@ using DotnetNugetLicenses.Core.Contracts;
 using DotnetNugetLicenses.Tool.CommandLine;
 using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.IO;
@@ -27,7 +28,7 @@ namespace DotnetNugetLicenses.Tool.Tests.CommandLine
 		{
 			var sut = new ArrangeContext<CommandRunner>().Build();
 
-			Assert.Throws<ArgumentNullException>(() => sut.Run(null));
+			Assert.Throws<ArgumentNullException>(() => sut.Run(null, LogLevel.Information));
 		}
 
 		[Fact]
@@ -38,7 +39,7 @@ namespace DotnetNugetLicenses.Tool.Tests.CommandLine
 
 			var fileInfo = new FileInfo("some/file.txt");
 
-			sut.Run(fileInfo);
+			sut.Run(fileInfo, LogLevel.Information);
 
 			context
 				.For<IExtractLicenses>()

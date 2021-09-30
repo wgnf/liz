@@ -31,7 +31,7 @@ namespace DotnetNugetLicenses.Tool.Tests
         {
             using var container = new UnityContainer();
 
-            container.RegisterLoggingServices();
+            container.RegisterLoggingServices(LogLevel.Information);
 
             container
                 .IsRegistered(typeToCheck)
@@ -44,7 +44,7 @@ namespace DotnetNugetLicenses.Tool.Tests
         {
             using var container = new UnityContainer();
             
-            container.RegisterLoggingServices();
+            container.RegisterLoggingServices(LogLevel.Information);
 
             var logger = container.Resolve<ILogger<ToolRegistrationExtensionsTests>>();
             logger

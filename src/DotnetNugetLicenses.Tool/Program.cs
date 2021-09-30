@@ -35,7 +35,6 @@ namespace DotnetNugetLicenses.Tool
             container.RegisterOtherServices();
             
             container.RegisterToolServices();
-            container.RegisterLoggingServices();
 		}
 	}
 }

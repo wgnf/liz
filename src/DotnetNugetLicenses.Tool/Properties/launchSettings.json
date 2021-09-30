@@ -2,7 +2,7 @@
   "profiles": {
     "DotnetNugetLicenses.Tool": {
       "commandName": "Project",
-      "commandLineArgs": "--target ../../../DotnetNugetLicenses.Tool.csproj"
+      "commandLineArgs": "-t ../../../DotnetNugetLicenses.Tool.csproj -l Trace"
     }
   }
 }
