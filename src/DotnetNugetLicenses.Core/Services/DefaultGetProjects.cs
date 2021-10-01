@@ -65,7 +65,6 @@ namespace DotnetNugetLicenses.Core.Services
             return new[] { new Project(projectName, targetFile) };
         }
 
-        // TODO: Test this one as well...
         private IEnumerable<Project> GetProjectFromSolutionFile(IFileSystemInfo fileInfo)
         {
             var solution = _solutionParser.Parse(fileInfo.FullName);
@@ -73,7 +72,7 @@ namespace DotnetNugetLicenses.Core.Services
                 .AllProjects
                 .OfType<SolutionProject>()
                 .Where(project => project.File.Extension is ".csproj" or ".fsproj")
-                .Where(project => project.File.Exists)
+                .Where(project => _fileSystem.File.Exists(project.File.FullName))
                 .Select(project => new Project(project.Name, _fileSystem.FileInfo.FromFileName(project.File.FullName)))
                 .ToList();
 
