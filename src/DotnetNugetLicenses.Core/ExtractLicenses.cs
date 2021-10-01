@@ -1,23 +1,39 @@
 ﻿using Ardalis.GuardClauses;
 using DotnetNugetLicenses.Core.Contracts;
+using DotnetNugetLicenses.Core.Contracts.Services;
+using DotnetNugetLicenses.Core.Models;
+using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.IO.Abstractions;
+using System.Linq;
 
 namespace DotnetNugetLicenses.Core
 {
 	public sealed class ExtractLicenses : IExtractLicenses
 	{
+        private readonly IGetProjects _getProjects;
+        private readonly ILogger<ExtractLicenses> _logger;
+
+        public ExtractLicenses(
+            [NotNull] IGetProjects getProjects,
+            [NotNull] ILogger<ExtractLicenses> logger)
+        {
+            _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+        
 		public void Extract(ExtractSettings settings)
 		{
 			Guard.Against.Null(settings, nameof(settings));
-            
-            CheckProvidedTargetFile(settings.TargetFile);
-            
+
+            var projects = GetProjects(settings.TargetFile);
+
+
             /*
              * -- TODO --
              * 
-             * get projects -> sln: Parse + Select csproj/fsproj | csproj: take csproj
              * filter projects (by name with Regex)
              *
              * get dependencies (including/excluding transitive)
@@ -41,15 +57,16 @@ namespace DotnetNugetLicenses.Core
              */
         }
 
-        private static void CheckProvidedTargetFile(IFileSystemInfo targetFile)
+        private IEnumerable<Project> GetProjects(IFileInfo targetFile)
         {
-            if (!targetFile.Exists)
-                throw new FileNotFoundException($"The provided target-file '{targetFile.FullName}' could not be found");
+            _logger.LogDebug("Trying to get projects from {TargetFile}...", targetFile);
 
-            if (targetFile.Extension is not ("sln" or "csproj" or "fsproj"))
-                throw new ArgumentException(
-                    $"The provided target-file '{targetFile.FullName}' is not of the right type " +
-                    "(only 'sln', 'csproj' and 'fsproj' is supported");
+            var projects = _getProjects.GetFromFile(targetFile).ToList();
+            
+            _logger.LogDebug("Found following projects:\n{Projects}",
+                string.Join("\n", projects.Select(project => $"\t-{project.File.FullName}")));
+
+            return projects;
         }
-	}
+    }
 }
