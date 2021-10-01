@@ -4,10 +4,12 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Unity;
 
 namespace DotnetNugetLicenses.Tool
 {
+    [ExcludeFromCodeCoverage] // do not want to test registrations
     public static class ToolRegistrationExtensions
     {
         public static void RegisterToolServices(this IUnityContainer container)
