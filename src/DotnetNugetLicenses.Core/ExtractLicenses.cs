@@ -15,14 +15,17 @@ namespace DotnetNugetLicenses.Core
              * get projects -> sln: Parse + Select csproj/fsproj | csproj: take csproj
              * filter projects (by name with Regex)
              *
-             * get references (including/excluding transitive)
+             * get dependencies (including/excluding transitive)
+             *      SDK-Style csproj: DependencyGraphSpec (+ Lock-File if transitive)
+             *      Old-Style csproj: packages.config (which is already including transitive dependencies - warning when transitive=false!!) without development-dependencies!
              * include manual packages
-             * filter references (by name/version with Regex)
+             * filter dependencies (by name/version with Regex)
+             * make dependencies unique (according to settings) 
              *
-             * get information for references (however this works...) including raw text if requested
+             * get information for dependencies (however this works...) including raw text if requested
              * include manual License-URL to License Mappings
              *
-             * validate references with their licenses (with the provided allowed licenses)
+             * validate dependencies with their licenses (with the provided allowed licenses)
              *
              *
              * in Tool (according to parameters):
