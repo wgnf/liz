@@ -1,4 +1,5 @@
 ﻿using ArrangeContext.Moq;
+using DotnetNugetLicenses.Core;
 using DotnetNugetLicenses.Core.Contracts;
 using DotnetNugetLicenses.Tool.CommandLine;
 using DotnetNugetLicenses.Tool.Contracts.CommandLine;
@@ -7,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.IO;
+using System.IO.Abstractions;
+using Unity;
 using Xunit;
 
 namespace DotnetNugetLicenses.Tool.Tests.CommandLine
@@ -33,18 +36,21 @@ namespace DotnetNugetLicenses.Tool.Tests.CommandLine
 
 		[Fact]
 		public void Should_Forward_Execution_To_Extract_Licenses_With_Settings()
-		{
-			var context = new ArrangeContext<CommandRunner>();
-			var sut = context.Build();
+        {
+            var extractLicenses = new Mock<IExtractLicenses>();
+            var extractLicensesFactory = new Func<IExtractLicenses>(() => extractLicenses.Object);
+            var fileSystem = new Mock<IFileSystem>();
+            var unityContainer = new Mock<IUnityContainer>();
 
-			var fileInfo = new FileInfo("some/file.txt");
+            var sut = new CommandRunner(extractLicensesFactory, fileSystem.Object, unityContainer.Object);
+
+            var fileInfo = new FileInfo("some/file.txt");
 
 			sut.Run(fileInfo, LogLevel.Information);
 
-			context
-				.For<IExtractLicenses>()
-				.Verify(e => e.Extract(It.Is<ExtractSettings>(settings =>
-					settings.TargetFile.FullName == fileInfo.FullName)), Times.Once());
+            extractLicenses
+                .Verify(e => e.Extract(It.Is<ExtractSettings>(settings =>
+                    settings.TargetFile.FullName == fileInfo.FullName)), Times.Once());
 		}
 	}
 }

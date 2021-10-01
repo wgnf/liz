@@ -2,6 +2,7 @@
 using DotnetNugetLicenses.Core.Contracts;
 using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.IO.Abstractions;
 using Unity;
@@ -10,16 +11,24 @@ namespace DotnetNugetLicenses.Tool.CommandLine
 {
 	public sealed class CommandRunner : ICommandRunner
 	{
-        private readonly IExtractLicenses _extractLicenses;
+        private readonly Func<IExtractLicenses> _extractLicensesFactory;
 		private readonly IFileSystem _fileSystem;
         private readonly IUnityContainer _unityContainer;
 
         public CommandRunner(
-            IExtractLicenses extractLicenses, 
+            /*
+             * NOTE
+             * We need to use a Func-Factory here, because we only register the Logging-Stuff as soon as we
+             * call the Run()-Method of this CommandRunner.
+             * But because this CommandRunner depends on other services that might depend on the ILogger<>
+             * that leads to problems when Unity tries to resolve the instance of this CommandRunner
+             * (because the ILogger<> is not registered yet)
+             */
+            Func<IExtractLicenses> extractLicensesFactory, 
             IFileSystem fileSystem,
             IUnityContainer unityContainer)
 		{
-            _extractLicenses = Guard.Against.Null(extractLicenses, nameof(extractLicenses));
+            _extractLicensesFactory = Guard.Against.Null(extractLicensesFactory, nameof(extractLicensesFactory));
 			_fileSystem = Guard.Against.Null(fileSystem, nameof(fileSystem));
             _unityContainer = Guard.Against.Null(unityContainer, nameof(unityContainer));
         }
@@ -32,7 +41,7 @@ namespace DotnetNugetLicenses.Tool.CommandLine
             _unityContainer.RegisterLoggingServices(logLevel);
 
             var settings = CreateSettings(targetFile);
-			_extractLicenses.Extract(settings);
+			_extractLicensesFactory().Extract(settings);
 		}
 
 		private ExtractSettings CreateSettings(FileInfo targetFile)
