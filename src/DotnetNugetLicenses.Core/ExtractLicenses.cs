@@ -1,5 +1,8 @@
 ﻿using Ardalis.GuardClauses;
 using DotnetNugetLicenses.Core.Contracts;
+using System;
+using System.IO;
+using System.IO.Abstractions;
 
 namespace DotnetNugetLicenses.Core
 {
@@ -8,6 +11,8 @@ namespace DotnetNugetLicenses.Core
 		public void Extract(ExtractSettings settings)
 		{
 			Guard.Against.Null(settings, nameof(settings));
+            
+            CheckProvidedTargetFile(settings.TargetFile);
             
             /*
              * -- TODO --
@@ -34,6 +39,17 @@ namespace DotnetNugetLicenses.Core
              * - export Package + License-Details in a JSON-Format (including/excluding Raw Text)
              * 
              */
+        }
+
+        private static void CheckProvidedTargetFile(IFileSystemInfo targetFile)
+        {
+            if (!targetFile.Exists)
+                throw new FileNotFoundException($"The provided target-file '{targetFile.FullName}' could not be found");
+
+            if (targetFile.Extension is not ("sln" or "csproj" or "fsproj"))
+                throw new ArgumentException(
+                    $"The provided target-file '{targetFile.FullName}' is not of the right type " +
+                    "(only 'sln', 'csproj' and 'fsproj' is supported");
         }
 	}
 }
