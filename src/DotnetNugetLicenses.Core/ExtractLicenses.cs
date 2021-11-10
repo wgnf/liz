@@ -39,7 +39,7 @@ namespace DotnetNugetLicenses.Core
              * get dependencies (including/excluding transitive)
              *      SDK-Style csproj: DependencyGraphSpec (+ Lock-File if transitive)
              *      Old-Style csproj: packages.config (which is already including transitive dependencies - warning when transitive=false!!) without development-dependencies!
-             * include manual packages
+             * include manual packages (with URL/License-Text)
              * filter dependencies (by name/version with Regex)
              * make dependencies unique (according to settings) 
              *
