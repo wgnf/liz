@@ -9,59 +9,59 @@ using Xunit;
 
 namespace DotnetNugetLicenses.Tool.Tests.CommandLine
 {
-	public sealed class CommandProviderTests
-	{
-		[Fact]
-		public void Should_Have_Correct_Interface()
-		{
-			var sut = new ArrangeContext<CommandProvider>().Build();
-			sut
-				.Should()
-				.BeAssignableTo<ICommandProvider>();
-		}
+    public sealed class CommandProviderTests
+    {
+        [Fact]
+        public void Should_Have_Correct_Interface()
+        {
+            var sut = new ArrangeContext<CommandProvider>().Build();
+            sut
+                .Should()
+                .BeAssignableTo<ICommandProvider>();
+        }
 
-		[Fact]
-		public void Should_Provide_Root_Command()
-		{
-			var sut = new ArrangeContext<CommandProvider>().Build();
+        [Fact]
+        public void Should_Provide_Root_Command()
+        {
+            var sut = new ArrangeContext<CommandProvider>().Build();
 
-			var rootCommand = sut.Get();
-			rootCommand
-				.Should()
-				.NotBeNull();
-			rootCommand
-				.Description
-				.Should()
-				.NotBeNullOrWhiteSpace();
-		}
+            var rootCommand = sut.Get();
+            rootCommand
+                .Should()
+                .NotBeNull();
+            rootCommand
+                .Description
+                .Should()
+                .NotBeNullOrWhiteSpace();
+        }
 
-		[Fact]
-		public void Provided_Root_Command_Should_Have_File_Input_Option()
-		{
-			var sut = new ArrangeContext<CommandProvider>().Build();
+        [Fact]
+        public void Provided_Root_Command_Should_Have_File_Input_Option()
+        {
+            var sut = new ArrangeContext<CommandProvider>().Build();
 
-			var rootCommand = sut.Get();
+            var rootCommand = sut.Get();
 
-			var inputOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "targetFile");
-			Assert.NotNull(inputOption);
+            var inputOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "targetFile");
+            Assert.NotNull(inputOption);
 
-			inputOption
-				.Description
-				.Should()
-				.NotBeNullOrWhiteSpace();
+            inputOption
+                .Description
+                .Should()
+                .NotBeNullOrWhiteSpace();
 
-			inputOption
-				.ValueType
-				.Should()
-				.Be<FileInfo>();
+            inputOption
+                .ValueType
+                .Should()
+                .Be<FileInfo>();
 
-			inputOption
-				.Aliases
-				.Should()
-				.Contain(alias =>
-					alias == "--target" ||
-					alias == "-t");
-		}
+            inputOption
+                .Aliases
+                .Should()
+                .Contain(alias =>
+                    alias == "--target" ||
+                    alias == "-t");
+        }
 
         [Fact]
         public void Provided_Root_Command_Should_Have_Log_Level_Option()
@@ -90,5 +90,5 @@ namespace DotnetNugetLicenses.Tool.Tests.CommandLine
                     alias == "--log-level" ||
                     alias == "-l");
         }
-	}
+    }
 }

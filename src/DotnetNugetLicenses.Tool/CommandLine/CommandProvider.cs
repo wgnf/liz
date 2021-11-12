@@ -31,11 +31,7 @@ namespace DotnetNugetLicenses.Tool.CommandLine
 
         private static IEnumerable<Option> GetOptions()
         {
-            var options = new List<Option>
-            {
-                GetTargetFileOption(), 
-                GetLogLevelOption()
-            };
+            var options = new List<Option> { GetTargetFileOption(), GetLogLevelOption() };
             return options;
         }
 
@@ -66,8 +62,7 @@ namespace DotnetNugetLicenses.Tool.CommandLine
                 () => LogLevel.Information,
                 "The Log-Level that describes which messages are displayed when running the tool")
             {
-                IsRequired = false, 
-                Name = "logLevel"
+                IsRequired = false, Name = "logLevel"
             };
 
             option.AddAlias("-l");

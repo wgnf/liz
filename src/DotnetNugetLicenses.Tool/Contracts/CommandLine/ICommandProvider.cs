@@ -2,8 +2,8 @@
 
 namespace DotnetNugetLicenses.Tool.Contracts.CommandLine
 {
-	public interface ICommandProvider
-	{
-		RootCommand Get();
-	}
+    public interface ICommandProvider
+    {
+        RootCommand Get();
+    }
 }

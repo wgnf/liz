@@ -25,7 +25,7 @@ namespace DotnetNugetLicenses.Tool
                 var serilogLogLevel = MapToSerilogLogLevel(logLevel);
                 ConfigureSerilog(serilogLogLevel);
             }
-            
+
             var loggerFactory = ConfigureLoggingExtensions(logLevel);
 
             container.RegisterInstance(typeof(ILoggerFactory), loggerFactory);

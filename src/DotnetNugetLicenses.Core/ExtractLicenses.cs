@@ -11,8 +11,8 @@ using System.Linq;
 
 namespace DotnetNugetLicenses.Core
 {
-	public sealed class ExtractLicenses : IExtractLicenses
-	{
+    public sealed class ExtractLicenses : IExtractLicenses
+    {
         private readonly IGetProjects _getProjects;
         private readonly ILogger<ExtractLicenses> _logger;
 
@@ -23,10 +23,10 @@ namespace DotnetNugetLicenses.Core
             _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-        
-		public void Extract(ExtractSettings settings)
-		{
-			Guard.Against.Null(settings, nameof(settings));
+
+        public void Extract(ExtractSettings settings)
+        {
+            Guard.Against.Null(settings, nameof(settings));
 
             var projects = GetProjects(settings.TargetFile);
 
@@ -62,7 +62,7 @@ namespace DotnetNugetLicenses.Core
             _logger.LogDebug("Trying to get projects from {TargetFile}...", targetFile);
 
             var projects = _getProjects.GetFromFile(targetFile).ToList();
-            
+
             _logger.LogDebug("Found following projects:\n{Projects}",
                 string.Join("\n", projects.Select(project => $"\t-{project.File.FullName}")));
 

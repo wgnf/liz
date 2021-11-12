@@ -7,34 +7,34 @@ using Unity;
 
 namespace DotnetNugetLicenses.Tool
 {
-	[ExcludeFromCodeCoverage] // mostly untestable setup code
-	public static class Program
-	{
-		public static Task<int> Main(string[] args)
-		{
-			using var container = InitializeContainer();
+    [ExcludeFromCodeCoverage] // mostly untestable setup code
+    public static class Program
+    {
+        public static Task<int> Main(string[] args)
+        {
+            using var container = InitializeContainer();
 
-			var commandProvider = container.Resolve<ICommandProvider>();
-			var rootCommand = commandProvider.Get();
+            var commandProvider = container.Resolve<ICommandProvider>();
+            var rootCommand = commandProvider.Get();
 
-			return rootCommand.InvokeAsync(args);
-		}
+            return rootCommand.InvokeAsync(args);
+        }
 
-		private static IUnityContainer InitializeContainer()
-		{
-			var container = new UnityContainer();
+        private static IUnityContainer InitializeContainer()
+        {
+            var container = new UnityContainer();
 
-			RegisterTypes(container);
+            RegisterTypes(container);
 
-			return container;
-		}
+            return container;
+        }
 
-		private static void RegisterTypes(IUnityContainer container)
-		{
+        private static void RegisterTypes(IUnityContainer container)
+        {
             container.RegisterCoreServices();
             container.RegisterOtherServices();
-            
+
             container.RegisterToolServices();
-		}
-	}
+        }
+    }
 }
