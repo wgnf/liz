@@ -5,11 +5,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ArrangeContext.Moq" Version="1.2.0"/>
-        <PackageReference Include="FluentAssertions" Version="6.1.0"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0"/>
-        <PackageReference Include="xunit" Version="2.4.1"/>
-        <PackageReference Include="xunit.analyzers" Version="0.10.0"/>
+        <PackageReference Include="ArrangeContext.Moq" Version="1.2.2" />
+        <PackageReference Include="FluentAssertions" Version="6.2.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.analyzers" Version="0.10.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DotnetNugetLicenses.Tool\DotnetNugetLicenses.Tool.csproj"/>
+        <ProjectReference Include="..\DotnetNugetLicenses.Tool\DotnetNugetLicenses.Tool.csproj" />
     </ItemGroup>
 
 </Project>
