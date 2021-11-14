@@ -10,7 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DotnetNugetLicenses.Core\DotnetNugetLicenses.Core.csproj" />
+        <ProjectReference Include="..\..\Core\DotnetNugetLicenses.Core\DotnetNugetLicenses.Core.csproj" />
     </ItemGroup>
 
 </Project>
