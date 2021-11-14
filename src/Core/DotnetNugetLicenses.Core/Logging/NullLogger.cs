@@ -40,9 +40,4 @@ internal sealed class NullLogger : ILogger
     {
         // does nothing
     }
-
-    public bool IsEnabled()
-    {
-        return false;
-    }
 }

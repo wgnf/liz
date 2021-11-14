@@ -1,7 +1,9 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 
 namespace DotnetNugetLicenses.Core.Logging;
 
+[PublicAPI]
 public interface ILogger
 {
     public void Log(LogLevel level, string message, Exception exception = null);
@@ -11,5 +13,4 @@ public interface ILogger
     public void LogWarning(string message, Exception exception = null);
     public void LogError(string message, Exception exception = null);
     public void LogCritical(string message, Exception exception = null);
-    public bool IsEnabled();
 }

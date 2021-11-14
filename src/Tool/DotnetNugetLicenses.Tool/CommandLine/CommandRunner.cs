@@ -2,6 +2,7 @@
 using DotnetNugetLicenses.Core.Logging;
 using DotnetNugetLicenses.Core.Settings;
 using DotnetNugetLicenses.Tool.Contracts.CommandLine;
+using DotnetNugetLicenses.Tool.Logging;
 using System;
 using System.IO;
 
@@ -20,15 +21,28 @@ internal sealed class CommandRunner : ICommandRunner
     {
         if (targetFile == null) throw new ArgumentNullException(nameof(targetFile));
 
-        var settings = CreateSettings(targetFile);
-        var extractLicenses = _extractLicensesFactory.Create(settings);
-        
-        extractLicenses.Extract();
+        var settings = CreateSettings(targetFile, logLevel);
+
+        var loggerProvider = new CommandLineLoggerProvider();
+        var extractLicenses = _extractLicensesFactory.Create(settings, loggerProvider);
+
+        try
+        {
+            extractLicenses.Extract();
+        }
+        catch (Exception ex)
+        {
+            var logger = loggerProvider.Get(settings.LogLevel);
+            logger.LogCritical($"Error occured while extracting licenses for '{settings.TargetFile}'", ex);
+        }
     }
 
-    private static ExtractLicensesSettings CreateSettings(FileSystemInfo targetFile)
+    private static ExtractLicensesSettings CreateSettings(
+        FileSystemInfo targetFile,
+        LogLevel logLevel)
     {
-        var settings = new ExtractLicensesSettings(targetFile.FullName);
+        var settings = new ExtractLicensesSettings(targetFile.FullName) { LogLevel = logLevel };
+
         return settings;
     }
 }

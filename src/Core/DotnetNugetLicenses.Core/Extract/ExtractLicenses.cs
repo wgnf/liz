@@ -57,13 +57,20 @@ internal sealed class ExtractLicenses : IExtractLicenses
 
     private IEnumerable<Project> GetProjects(string targetFile)
     {
-        _logger.LogDebug($"Trying to get projects from {targetFile}...");
+        try
+        {
+            _logger.LogDebug($"Trying to get projects from {targetFile}...");
 
-        var projects = _getProjects.GetFromFile(targetFile).ToList();
+            var projects = _getProjects.GetFromFile(targetFile).ToList();
 
-        var foundProjectsLogString = string.Join("\n", projects.Select(project => $"\t-{project.File.FullName}"));
-        _logger.LogDebug($"Found following projects:\n{foundProjectsLogString}");
+            var foundProjectsLogString = string.Join("\n", projects.Select(project => $"\t- {project.File.FullName}"));
+            _logger.LogDebug($"Found following projects:\n{foundProjectsLogString}");
 
-        return projects;
+            return projects;
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Could not determine projects for '{targetFile}'", ex);
+        }
     }
 }
