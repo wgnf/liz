@@ -1,40 +1,18 @@
-﻿using DotnetNugetLicenses.Core;
-using DotnetNugetLicenses.Tool.Contracts.CommandLine;
+﻿using DotnetNugetLicenses.Tool.CommandLine;
 using System.CommandLine;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using Unity;
 
-namespace DotnetNugetLicenses.Tool
+namespace DotnetNugetLicenses.Tool;
+
+[ExcludeFromCodeCoverage] // mostly untestable startup code
+public static class Program
 {
-    [ExcludeFromCodeCoverage] // mostly untestable setup code
-    public static class Program
+    public static Task<int> Main(string[] args)
     {
-        public static Task<int> Main(string[] args)
-        {
-            using var container = InitializeContainer();
+        var commandProvider = new CommandProvider();
+        var rootCommand = commandProvider.Get();
 
-            var commandProvider = container.Resolve<ICommandProvider>();
-            var rootCommand = commandProvider.Get();
-
-            return rootCommand.InvokeAsync(args);
-        }
-
-        private static IUnityContainer InitializeContainer()
-        {
-            var container = new UnityContainer();
-
-            RegisterTypes(container);
-
-            return container;
-        }
-
-        private static void RegisterTypes(IUnityContainer container)
-        {
-            container.RegisterCoreServices();
-            container.RegisterOtherServices();
-
-            container.RegisterToolServices();
-        }
+        return rootCommand.InvokeAsync(args);
     }
 }

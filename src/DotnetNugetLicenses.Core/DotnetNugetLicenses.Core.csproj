@@ -5,11 +5,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Ardalis.GuardClauses" Version="3.3.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
         <PackageReference Include="SlnParser" Version="2.0.0" />
         <PackageReference Include="System.IO.Abstractions" Version="13.2.47" />
-        <PackageReference Include="Unity" Version="5.11.10" />
+        <PackageReference Include="JetBrains.Annotations" Version="2021.3.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
 </Project>

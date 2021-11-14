@@ -1,55 +1,53 @@
 ﻿using ArrangeContext.Moq;
-using DotnetNugetLicenses.Core.Contracts;
+using DotnetNugetLicenses.Core;
+using DotnetNugetLicenses.Core.Extract;
+using DotnetNugetLicenses.Core.Logging;
+using DotnetNugetLicenses.Core.Settings;
 using DotnetNugetLicenses.Tool.CommandLine;
 using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.IO;
-using System.IO.Abstractions;
-using Unity;
 using Xunit;
 
-namespace DotnetNugetLicenses.Tool.Tests.CommandLine
+namespace DotnetNugetLicenses.Tool.Tests.CommandLine;
+
+public sealed class CommandRunnerTests
 {
-    public sealed class CommandRunnerTests
+    [Fact]
+    public void Should_Have_Correct_Interface()
     {
-        [Fact]
-        public void Should_Have_Correct_Interface()
-        {
-            var sut = new ArrangeContext<CommandRunner>().Build();
+        var sut = new ArrangeContext<CommandRunner>().Build();
 
-            sut
-                .Should()
-                .BeAssignableTo<ICommandRunner>();
-        }
+        sut
+            .Should()
+            .BeAssignableTo<ICommandRunner>();
+    }
 
-        [Fact]
-        public void Should_Fail_To_Run_When_Invalid_Parameters()
-        {
-            var sut = new ArrangeContext<CommandRunner>().Build();
+    [Fact]
+    public void Should_Fail_To_Run_When_Invalid_Parameters()
+    {
+        var sut = new ArrangeContext<CommandRunner>().Build();
 
-            Assert.Throws<ArgumentNullException>(() => sut.Run(null, LogLevel.Information));
-        }
+        Assert.Throws<ArgumentNullException>(() => sut.Run(null, LogLevel.Information));
+    }
 
-        [Fact]
-        public void Should_Forward_Execution_To_Extract_Licenses_With_Settings()
-        {
-            var extractLicenses = new Mock<IExtractLicenses>();
-            var extractLicensesFactory = new Func<IExtractLicenses>(() => extractLicenses.Object);
-            var fileSystem = new Mock<IFileSystem>();
-            var unityContainer = new Mock<IUnityContainer>();
+    [Fact]
+    public void Should_Forward_Execution_To_Extract_Licenses_With_Settings()
+    {
+        var extractLicenses = new Mock<IExtractLicenses>();
+        var extractLicensesFactory = new Mock<IExtractLicensesFactory>();
+        extractLicensesFactory
+            .Setup(factory => factory.Create(It.IsAny<ExtractLicensesSettings>(), It.IsAny<ILoggerProvider>()))
+            .Returns(extractLicenses.Object);
 
-            var sut = new CommandRunner(extractLicensesFactory, fileSystem.Object, unityContainer.Object);
+        var sut = new CommandRunner(extractLicensesFactory.Object);
 
-            var fileInfo = new FileInfo("some/file.txt");
+        var fileInfo = new FileInfo("some/file.txt");
 
-            sut.Run(fileInfo, LogLevel.Information);
+        sut.Run(fileInfo, LogLevel.Information);
 
-            extractLicenses
-                .Verify(e => e.Extract(It.Is<ExtractSettings>(settings =>
-                    settings.TargetFile.FullName == fileInfo.FullName)), Times.Once());
-        }
+        extractLicenses.Verify(e => e.Extract(), Times.Once());
     }
 }

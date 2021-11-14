@@ -1,9 +1,8 @@
 ﻿using System.CommandLine;
 
-namespace DotnetNugetLicenses.Tool.Contracts.CommandLine
+namespace DotnetNugetLicenses.Tool.Contracts.CommandLine;
+
+public interface ICommandProvider
 {
-    public interface ICommandProvider
-    {
-        RootCommand Get();
-    }
+    RootCommand Get();
 }

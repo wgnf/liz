@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using DotnetNugetLicenses.Core.Logging;
 using System.IO;
 
-namespace DotnetNugetLicenses.Tool.Contracts.CommandLine
+namespace DotnetNugetLicenses.Tool.Contracts.CommandLine;
+
+public interface ICommandRunner
 {
-    public interface ICommandRunner
-    {
-        void Run(FileInfo targetFile, LogLevel logLevel);
-    }
+    void Run(FileInfo targetFile, LogLevel logLevel);
 }
