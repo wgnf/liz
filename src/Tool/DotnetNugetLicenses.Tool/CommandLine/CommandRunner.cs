@@ -22,19 +22,10 @@ internal sealed class CommandRunner : ICommandRunner
         if (targetFile == null) throw new ArgumentNullException(nameof(targetFile));
 
         var settings = CreateSettings(targetFile, logLevel);
-
         var loggerProvider = new CommandLineLoggerProvider();
+        
         var extractLicenses = _extractLicensesFactory.Create(settings, loggerProvider);
-
-        try
-        {
-            extractLicenses.Extract();
-        }
-        catch (Exception ex)
-        {
-            var logger = loggerProvider.Get(settings.LogLevel);
-            logger.LogCritical($"Error occured while extracting licenses for '{settings.TargetFile}'", ex);
-        }
+        extractLicenses.Extract();
     }
 
     private static ExtractLicensesSettings CreateSettings(

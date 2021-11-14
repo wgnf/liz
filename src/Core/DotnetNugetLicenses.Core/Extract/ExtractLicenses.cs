@@ -26,7 +26,14 @@ internal sealed class ExtractLicenses : IExtractLicenses
 
     public void Extract()
     {
-        var projects = GetProjects(_settings.TargetFile);
+        try
+        {
+            var projects = GetProjects(_settings.TargetFile);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical($"Error occured while extracting licenses for '{_settings.TargetFile}'", ex);
+        }
 
 
         /*
