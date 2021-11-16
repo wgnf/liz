@@ -37,18 +37,9 @@ internal sealed class GetPackageReferencesFacade : IGetPackageReferences
             throw new FileNotFoundException($"Project file '{project.File}' does not exist");
 
         if (await IsSdkStyleAsync(project.File))
-        {
-            _logger.LogDebug(
-                $"Project '{project.Name} ({project.File})' appears to be in SDK-Style-Format. Getting package-references via dotnet cli...");
-            return await _getPackageReferencesViaDotnetCli.GetFromProjectAsync(project, includeTransitive);
-        }
+            return await GetFromSdkStyle(project, includeTransitive);
 
-        _logger.LogDebug(
-            $"Project '{project.Name} ({project.File})' appears to be in non-SDK-style-Format. Getting package-references via packages.config...");
-
-        _logger.LogWarning(
-            $"Project '{project.Name} ({project.File})' has the non-SDK-style-Format, which is currently not supported!");
-        return Enumerable.Empty<PackageReference>();
+        return GetFromNonSdkStyle(project);
     }
 
     private async Task<bool> IsSdkStyleAsync(IFileSystemInfo projectFile)
@@ -64,5 +55,22 @@ internal sealed class GetPackageReferencesFacade : IGetPackageReferences
         var hasSdkElement = xmlDocument.Element("Sdk") != null;
 
         return hasSdkAttribute || hasSdkElement;
+    }
+
+    private async Task<IEnumerable<PackageReference>> GetFromSdkStyle(Project project, bool includeTransitive)
+    {
+        _logger.LogDebug($"Project '{project.Name} ({project.File})' " +
+                         "appears to be in SDK-Style-Format. Getting package-references via dotnet cli...");
+        return await _getPackageReferencesViaDotnetCli.GetFromProjectAsync(project, includeTransitive);
+    }
+
+    private IEnumerable<PackageReference> GetFromNonSdkStyle(Project project)
+    {
+        _logger.LogDebug($"Project '{project.Name} ({project.File})' " +
+                         "appears to be in non-SDK-style-Format. Getting package-references via packages.config...");
+
+        _logger.LogWarning($"Project '{project.Name} ({project.File})' " +
+                           "has the non-SDK-style-Format, which is currently not supported!");
+        return Enumerable.Empty<PackageReference>();
     }
 }
