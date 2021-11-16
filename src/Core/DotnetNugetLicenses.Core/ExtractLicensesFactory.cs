@@ -15,7 +15,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
     {
         var logger = GetLogger(settings, loggerProvider);
 
-        var getProjects = new DefaultGetProjects(new SolutionParser(), new FileSystem());
+        var getProjects = new GetProjectsViaSlnParser(new SolutionParser(), new FileSystem());
         var extractLicenses = new ExtractLicenses(settings, getProjects, logger);
         
         return extractLicenses;

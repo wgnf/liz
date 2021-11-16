@@ -15,7 +15,7 @@ public class DefaultGetProjectsTests
     [Fact]
     public void Should_Check_If_Target_File_Is_Null()
     {
-        var context = new ArrangeContext<DefaultGetProjects>();
+        var context = new ArrangeContext<GetProjectsViaSlnParser>();
         var sut = context.Build();
 
         Assert.Throws<ArgumentException>(() => sut.GetFromFile(null!));
@@ -24,7 +24,7 @@ public class DefaultGetProjectsTests
     [Fact]
     public void Should_Check_Provided_Target_File_If_Exists_And_Throw_When_Not()
     {
-        var context = new ArrangeContext<DefaultGetProjects>();
+        var context = new ArrangeContext<GetProjectsViaSlnParser>();
         var sut = context.Build();
         
         var targetFileMock = new Mock<IFileInfo>();
@@ -46,7 +46,7 @@ public class DefaultGetProjectsTests
     [InlineData(".something super complicated")]
     public void Should_Check_Provided_Target_File_If_Correct_Extension_And_Throw_When_Not(string extension)
     {
-        var context = new ArrangeContext<DefaultGetProjects>();
+        var context = new ArrangeContext<GetProjectsViaSlnParser>();
         var sut = context.Build();
 
         var targetFileMock = new Mock<IFileInfo>();
@@ -68,7 +68,7 @@ public class DefaultGetProjectsTests
     [Fact]
     public void Should_Only_Provide_Project_File_When_File_Is_Csproj()
     {
-        var context = new ArrangeContext<DefaultGetProjects>();
+        var context = new ArrangeContext<GetProjectsViaSlnParser>();
         var sut = context.Build();
 
         var targetFileMock = new Mock<IFileInfo>();
@@ -103,7 +103,7 @@ public class DefaultGetProjectsTests
     [Fact]
     public void Should_Only_Provide_Project_File_When_File_Is_Fsproj()
     {
-        var context = new ArrangeContext<DefaultGetProjects>();
+        var context = new ArrangeContext<GetProjectsViaSlnParser>();
         var sut = context.Build();
 
         var targetFileMock = new Mock<IFileInfo>();
@@ -138,7 +138,7 @@ public class DefaultGetProjectsTests
     [Fact]
     public void Should_Provide_Correct_Projects_When_File_Is_Solution()
     {
-        var context = new ArrangeContext<DefaultGetProjects>();
+        var context = new ArrangeContext<GetProjectsViaSlnParser>();
         var sut = context.Build();
 
         const string targetFile = "something";

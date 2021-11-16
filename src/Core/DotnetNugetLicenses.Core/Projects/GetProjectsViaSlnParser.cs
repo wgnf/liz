@@ -9,12 +9,12 @@ using System.Linq;
 
 namespace DotnetNugetLicenses.Core.Projects;
 
-internal sealed class DefaultGetProjects : IGetProjects
+internal sealed class GetProjectsViaSlnParser : IGetProjects
 {
     private readonly IFileSystem _fileSystem;
     private readonly ISolutionParser _solutionParser;
 
-    public DefaultGetProjects(
+    public GetProjectsViaSlnParser(
         [NotNull] ISolutionParser solutionParser,
         [NotNull] IFileSystem fileSystem)
     {
