@@ -18,6 +18,8 @@ public sealed class ExtractLicensesSettings
     }
 
     public string TargetFile { get; }
+    
+    public bool IncludeTransitiveDependencies { get; init; }
 
     public LogLevel LogLevel { get; init; } = LogLevel.Information;
 }

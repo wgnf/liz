@@ -9,6 +9,7 @@ using FluentAssertions;
 using Moq;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DotnetNugetLicenses.Tool.Tests.CommandLine;
@@ -26,15 +27,15 @@ public sealed class CommandRunnerTests
     }
 
     [Fact]
-    public void Should_Fail_To_Run_When_Invalid_Parameters()
+    public async Task Should_Fail_To_Run_When_Invalid_Parameters()
     {
         var sut = new ArrangeContext<CommandRunner>().Build();
 
-        Assert.Throws<ArgumentNullException>(() => sut.Run(null, LogLevel.Information));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => sut.RunAsync(null, LogLevel.Information));
     }
 
     [Fact]
-    public void Should_Forward_Execution_To_Extract_Licenses_With_Settings()
+    public async Task Should_Forward_Execution_To_Extract_Licenses_With_Settings()
     {
         var extractLicenses = new Mock<IExtractLicenses>();
         var extractLicensesFactory = new Mock<IExtractLicensesFactory>();
@@ -46,8 +47,8 @@ public sealed class CommandRunnerTests
 
         var fileInfo = new FileInfo("some/file.txt");
 
-        sut.Run(fileInfo, LogLevel.Information);
+        await sut.RunAsync(fileInfo, LogLevel.Information);
 
-        extractLicenses.Verify(e => e.Extract(), Times.Once());
+        extractLicenses.Verify(e => e.ExtractAsync(), Times.Once());
     }
 }

@@ -5,6 +5,7 @@ using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using DotnetNugetLicenses.Tool.Logging;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace DotnetNugetLicenses.Tool.CommandLine;
 
@@ -17,7 +18,7 @@ internal sealed class CommandRunner : ICommandRunner
         _extractLicensesFactory = extractLicensesFactory ?? new ExtractLicensesFactory();
     }
     
-    public void Run(FileInfo targetFile, LogLevel logLevel)
+    public async Task RunAsync(FileInfo targetFile, LogLevel logLevel)
     {
         if (targetFile == null) throw new ArgumentNullException(nameof(targetFile));
 
@@ -25,7 +26,7 @@ internal sealed class CommandRunner : ICommandRunner
         var loggerProvider = new CommandLineLoggerProvider();
         
         var extractLicenses = _extractLicensesFactory.Create(settings, loggerProvider);
-        extractLicenses.Extract();
+        await extractLicenses.ExtractAsync();
     }
 
     private static ExtractLicensesSettings CreateSettings(

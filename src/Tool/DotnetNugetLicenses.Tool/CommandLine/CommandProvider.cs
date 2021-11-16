@@ -23,7 +23,7 @@ internal sealed class CommandProvider : ICommandProvider
         var options = GetOptions();
         foreach (var option in options) rootCommand.AddOption(option);
 
-        rootCommand.Handler = CommandHandler.Create<FileInfo, LogLevel>(_commandRunner.Run);
+        rootCommand.Handler = CommandHandler.Create<FileInfo, LogLevel>(_commandRunner.RunAsync);
 
         return rootCommand;
     }

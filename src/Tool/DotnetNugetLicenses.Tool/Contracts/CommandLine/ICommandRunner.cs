@@ -1,9 +1,10 @@
 ﻿using DotnetNugetLicenses.Core.Logging;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace DotnetNugetLicenses.Tool.Contracts.CommandLine;
 
 public interface ICommandRunner
 {
-    void Run(FileInfo targetFile, LogLevel logLevel);
+    Task RunAsync(FileInfo targetFile, LogLevel logLevel);
 }

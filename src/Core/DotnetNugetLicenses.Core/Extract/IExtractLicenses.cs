@@ -1,8 +1,9 @@
 ﻿using DotnetNugetLicenses.Core.Settings;
+using System.Threading.Tasks;
 
 namespace DotnetNugetLicenses.Core.Extract;
 
 public interface IExtractLicenses
 {
-    void Extract();
+    Task ExtractAsync();
 }
