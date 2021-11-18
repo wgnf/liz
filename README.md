@@ -25,6 +25,9 @@ As this uses .NET 6.0, you need to install the .NET 6.0 SDK
 
 ## 👋 Want to Contribute?
 
+**DISCLAIMER**  
+As this is in really early development, I'd not recommend you contributing yet, because we have to figure stuff out on our own at the moment. (Code-) Structure and processes might change drastically over that time.  
+  
 Cool! We're always welcoming anyone that wants to contribute to this project! Take a look at the [Contributing Guidelines](CONTRIBUTING.md), which helps you get started. You can also look at the [Open Issues](https://github.com/wgnf/dotnet-nuget-licenses/issues) for getting more info about current or upcoming tasks.
 
 ## 💬 Want to discuss?
