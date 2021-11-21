@@ -2,4 +2,4 @@
 
 namespace DotnetNugetLicenses.Core.Projects;
 
-internal sealed record Project(string Name, IFileInfo File);
+internal sealed record Project(string Name, IFileInfo File, ProjectFormatStyle FormatStyle);

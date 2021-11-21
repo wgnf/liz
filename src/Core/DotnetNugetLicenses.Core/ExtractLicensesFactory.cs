@@ -22,7 +22,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var getProjects = new GetProjectsViaSlnParser(new SolutionParser(), fileSystem);
 
         var getPackageReferencesDotnetCli = new GetPackageReferencesViaDotnetCli();
-        var getPackageReferences = new GetPackageReferencesFacade(logger, fileSystem, getPackageReferencesDotnetCli);
+        var getPackageReferences = new GetPackageReferencesFacade(logger, getPackageReferencesDotnetCli);
         
         var extractLicenses = new ExtractLicenses(settings, logger, getProjects, getPackageReferences);
         

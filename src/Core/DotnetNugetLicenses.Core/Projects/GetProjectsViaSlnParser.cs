@@ -1,11 +1,11 @@
-﻿
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using SlnParser.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace DotnetNugetLicenses.Core.Projects;
 
@@ -62,7 +62,7 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
         var projectName = _fileSystem.Path.GetFileNameWithoutExtension(targetFile.FullName);
 
         // NOTE: we only return the target-file, because there is nothing else to gather in this case...
-        return new[] { new Project(projectName, targetFile) };
+        return new[] { new Project(projectName, targetFile, DetermineProjectFormatStyle(targetFile.FullName)) };
     }
 
     private IEnumerable<Project> GetProjectFromSolutionFile(IFileSystemInfo fileInfo)
@@ -73,9 +73,42 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
             .OfType<SolutionProject>()
             .Where(project => project.File.Extension is ".csproj" or ".fsproj")
             .Where(project => _fileSystem.File.Exists(project.File.FullName))
-            .Select(project => new Project(project.Name, _fileSystem.FileInfo.FromFileName(project.File.FullName)))
+            .Select(project => 
+                new Project(
+                    project.Name, 
+                    _fileSystem.FileInfo.FromFileName(project.File.FullName), 
+                    DetermineProjectFormatStyle(project.File.FullName)))
             .ToList();
 
         return projects;
+    }
+
+    private ProjectFormatStyle DetermineProjectFormatStyle(string projectFile)
+    {
+        try
+        {
+            return IsSdkStyle(projectFile)
+                ? ProjectFormatStyle.SdkStyle
+                : ProjectFormatStyle.NonSdkStyle;
+        }
+        catch (Exception)
+        {
+            return ProjectFormatStyle.Unknown;
+        }
+    }
+    
+    private bool IsSdkStyle(string projectFile)
+    {
+        var fileStream = _fileSystem.FileStream.Create(projectFile, FileMode.Open, FileAccess.Read);
+        var xmlDocument = XDocument.Load(fileStream);
+
+        var projectRoot = xmlDocument
+            .Elements("Project")
+            .FirstOrDefault();
+
+        var hasSdkAttribute = projectRoot?.Attribute("Sdk") != null;
+        var hasSdkElement = xmlDocument.Descendants("Sdk").Any();
+
+        return hasSdkAttribute || hasSdkElement;
     }
 }

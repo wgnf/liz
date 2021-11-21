@@ -6,11 +6,12 @@ using SlnParser.Contracts;
 using System;
 using System.IO;
 using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
 using Xunit;
 
 namespace DotnetNugetLicenses.Core.Tests.Projects;
 
-public class DefaultGetProjectsTests
+public class GetProjectsViaSlnParserTests
 {
     [Fact]
     public void Should_Check_If_Target_File_Is_Null()
@@ -68,71 +69,47 @@ public class DefaultGetProjectsTests
     [Fact]
     public void Should_Only_Provide_Project_File_When_File_Is_Csproj()
     {
+        var mockFileSystem = new MockFileSystem();
+        
         var context = new ArrangeContext<GetProjectsViaSlnParser>();
+        context.Use<IFileSystem>(mockFileSystem);
+        
         var sut = context.Build();
 
-        var targetFileMock = new Mock<IFileInfo>();
-        targetFileMock
-            .Setup(file => file.Exists)
-            .Returns(true);
-        targetFileMock
-            .Setup(file => file.Extension)
-            .Returns(".csproj");
+        const string file = "someFile.csproj";
+        mockFileSystem.AddFile(file, new MockFileData("bla"));
 
-        const string expectedName = "some project";
-
-        context
-            .For<IFileSystem>()
-            .Setup(fileSystem => fileSystem.Path.GetFileNameWithoutExtension(It.IsAny<string>()))
-            .Returns(expectedName);
-        
-        context
-            .For<IFileSystem>()
-            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(It.IsAny<string>()))
-            .Returns(targetFileMock.Object);
-
-        var projects = sut.GetFromFile("something");
+        var projects = sut.GetFromFile(file);
 
         projects
             .Should()
             .ContainSingle(project =>
-                project.Name == expectedName &&
-                project.File == targetFileMock.Object);
+                project.Name == "someFile" &&
+                project.File.Name == file &&
+                project.FormatStyle == ProjectFormatStyle.Unknown);
     }
 
     [Fact]
     public void Should_Only_Provide_Project_File_When_File_Is_Fsproj()
     {
+        var mockFileSystem = new MockFileSystem();
+        
         var context = new ArrangeContext<GetProjectsViaSlnParser>();
+        context.Use<IFileSystem>(mockFileSystem);
+        
         var sut = context.Build();
 
-        var targetFileMock = new Mock<IFileInfo>();
-        targetFileMock
-            .Setup(file => file.Exists)
-            .Returns(true);
-        targetFileMock
-            .Setup(file => file.Extension)
-            .Returns(".fsproj");
+        const string file = "someFile.fsproj";
+        mockFileSystem.AddFile(file, new MockFileData("bla"));
 
-        const string expectedName = "some project";
-
-        context
-            .For<IFileSystem>()
-            .Setup(fileSystem => fileSystem.Path.GetFileNameWithoutExtension(It.IsAny<string>()))
-            .Returns(expectedName);
-        
-        context
-            .For<IFileSystem>()
-            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(It.IsAny<string>()))
-            .Returns(targetFileMock.Object);
-
-        var projects = sut.GetFromFile("something");
+        var projects = sut.GetFromFile(file);
 
         projects
             .Should()
             .ContainSingle(project =>
-                project.Name == expectedName &&
-                project.File == targetFileMock.Object);
+                project.Name == "someFile" &&
+                project.File.Name == file &&
+                project.FormatStyle == ProjectFormatStyle.Unknown);
     }
 
     [Fact]
@@ -194,5 +171,80 @@ public class DefaultGetProjectsTests
             .ContainSingle(project =>
                 project.Name == existingFsproj.Name &&
                 project.File != null);
+    }
+    
+    [Fact]
+    public void Should_Determine_Style_Correctly_For_Sdk_Style_With_Attribute()
+    {
+        var mockFileSystem = new MockFileSystem();
+        
+        var context = new ArrangeContext<GetProjectsViaSlnParser>();
+        context.Use<IFileSystem>(mockFileSystem);
+        
+        var sut = context.Build();
+
+        const string file = "someFile.csproj";
+        const string fileContent = @"<Project Sdk=""Something""></Project>";
+        
+        mockFileSystem.AddFile(file, new MockFileData(fileContent));
+
+        var projects = sut.GetFromFile(file);
+
+        projects
+            .Should()
+            .ContainSingle(project =>
+                project.Name == "someFile" &&
+                project.File.Name == file &&
+                project.FormatStyle == ProjectFormatStyle.SdkStyle);
+    }
+    
+    [Fact]
+    public void Should_Determine_Style_Correctly_For_Sdk_Style_With_Element()
+    {
+        var mockFileSystem = new MockFileSystem();
+        
+        var context = new ArrangeContext<GetProjectsViaSlnParser>();
+        context.Use<IFileSystem>(mockFileSystem);
+        
+        var sut = context.Build();
+
+        const string file = "someFile.csproj";
+        const string fileContent = @"<Project><Sdk /></Project>";
+        
+        mockFileSystem.AddFile(file, new MockFileData(fileContent));
+
+        var projects = sut.GetFromFile(file);
+
+        projects
+            .Should()
+            .ContainSingle(project =>
+                project.Name == "someFile" &&
+                project.File.Name == file &&
+                project.FormatStyle == ProjectFormatStyle.SdkStyle);
+    }
+    
+    [Fact]
+    public void Should_Determine_Style_Correctly_For_Non_Sdk_Style()
+    {
+        var mockFileSystem = new MockFileSystem();
+        
+        var context = new ArrangeContext<GetProjectsViaSlnParser>();
+        context.Use<IFileSystem>(mockFileSystem);
+        
+        var sut = context.Build();
+
+        const string file = "someFile.csproj";
+        const string fileContent = @"<Project></Project>";
+        
+        mockFileSystem.AddFile(file, new MockFileData(fileContent));
+
+        var projects = sut.GetFromFile(file);
+
+        projects
+            .Should()
+            .ContainSingle(project =>
+                project.Name == "someFile" &&
+                project.File.Name == file &&
+                project.FormatStyle == ProjectFormatStyle.NonSdkStyle);
     }
 }
