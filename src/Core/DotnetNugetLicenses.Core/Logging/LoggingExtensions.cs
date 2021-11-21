@@ -4,7 +4,7 @@ using System;
 namespace DotnetNugetLicenses.Core.Logging;
 
 [PublicAPI]
-internal static class LoggingExtensions
+public static class LoggingExtensions
 {
     public static void LogTrace([NotNull] this ILogger logger, string message, Exception exception = null)
     {
