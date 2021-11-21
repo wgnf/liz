@@ -24,36 +24,6 @@ internal sealed class CommandLineLogger : ILogger
         WriteLine(text, color);
     }
 
-    public void LogTrace(string message, Exception exception = null)
-    {
-        Log(LogLevel.Trace, message, exception);
-    }
-
-    public void LogDebug(string message, Exception exception = null)
-    {
-        Log(LogLevel.Debug, message, exception);
-    }
-
-    public void LogInformation(string message, Exception exception = null)
-    {
-        Log(LogLevel.Information, message, exception);
-}
-
-    public void LogWarning(string message, Exception exception = null)
-    {
-        Log(LogLevel.Warning, message, exception);
-    }
-
-    public void LogError(string message, Exception exception = null)
-    {
-        Log(LogLevel.Error, message, exception);
-    }
-
-    public void LogCritical(string message, Exception exception = null)
-    {
-        Log(LogLevel.Critical, message, exception);
-    }
-
     private bool IsEnabled(LogLevel logLevel)
     {
         return (int)logLevel >= (int)_configuredLogLevel;
