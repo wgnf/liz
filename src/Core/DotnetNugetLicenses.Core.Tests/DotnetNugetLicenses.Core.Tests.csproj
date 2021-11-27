@@ -2,6 +2,9 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
+
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <WarningLevel>5</WarningLevel>
     </PropertyGroup>
 
     <ItemGroup>
