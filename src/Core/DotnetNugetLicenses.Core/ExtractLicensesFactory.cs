@@ -1,4 +1,5 @@
-﻿using DotnetNugetLicenses.Core.Extract;
+﻿using DotnetNugetLicenses.Core.CliTool;
+using DotnetNugetLicenses.Core.Extract;
 using DotnetNugetLicenses.Core.Logging;
 using DotnetNugetLicenses.Core.Logging.Null;
 using DotnetNugetLicenses.Core.PackageReferences;
@@ -18,10 +19,12 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
     {
         var logger = GetLogger(settings, loggerProvider);
         var fileSystem = new FileSystem();
+        var cliToolExecutor = new DefaultCliToolExecutor();
 
         var getProjects = new GetProjectsViaSlnParser(new SolutionParser(), fileSystem);
+        var parseDotnetListPackage = new ParseDotnetListPackageResult();
 
-        var getPackageReferencesDotnetCli = new GetPackageReferencesViaDotnetCli();
+        var getPackageReferencesDotnetCli = new GetPackageReferencesViaDotnetCli(cliToolExecutor, parseDotnetListPackage);
         var getPackageReferences = new GetPackageReferencesFacade(logger, getPackageReferencesDotnetCli);
         
         var extractLicenses = new ExtractLicenses(settings, logger, getProjects, getPackageReferences);

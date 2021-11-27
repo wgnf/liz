@@ -42,8 +42,10 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
         return packageReferences;
     }
 
-    private static void ProcessLine(string line, ParsePackageReferenceContext context,
-        List<PackageReference> packageReferences)
+    private static void ProcessLine(
+        string line, 
+        ParsePackageReferenceContext context,
+        ICollection<PackageReference> packageReferences)
     {
         // [ indicates line with Target-Framework
         if (line.StartsWith("["))
