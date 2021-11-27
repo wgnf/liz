@@ -22,7 +22,7 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
     
     public async Task<IEnumerable<PackageReference>> GetFromProjectAsync(Project project, bool includeTransitive)
     {
-        if (project == null) throw new ArgumentNullException(nameof(project));
+        ArgumentNullException.ThrowIfNull(project);
 
         await RunDotNetRestore(project);
         var result = await RunDotNetListPackage(project, includeTransitive);

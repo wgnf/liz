@@ -26,7 +26,7 @@ internal sealed class GetPackageReferencesFacade : IGetPackageReferences
 
     public Task<IEnumerable<PackageReference>> GetFromProjectAsync(Project project, bool includeTransitive)
     {
-        if (project == null) throw new ArgumentNullException(nameof(project));
+        ArgumentNullException.ThrowIfNull(project);
         if (!project.File.Exists)
             throw new FileNotFoundException($"Project file '{project.File}' does not exist");
 

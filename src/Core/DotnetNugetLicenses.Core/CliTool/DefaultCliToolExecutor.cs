@@ -9,7 +9,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
 {
     public async Task ExecuteAsync(string fileName, string arguments)
     {
-        if (arguments == null) throw new ArgumentNullException(nameof(arguments));
+        ArgumentNullException.ThrowIfNull(arguments);
         if (string.IsNullOrWhiteSpace(fileName))
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(fileName));
 
@@ -18,7 +18,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
     
     public async Task<string> ExecuteWithResultAsync(string fileName, string arguments)
     {
-        if (arguments == null) throw new ArgumentNullException(nameof(arguments));
+        ArgumentNullException.ThrowIfNull(arguments);
         if (string.IsNullOrWhiteSpace(fileName))
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(fileName));
 

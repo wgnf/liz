@@ -12,7 +12,7 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
 {
     public IEnumerable<PackageReference> Parse(string input)
     {
-        if (input == null) throw new ArgumentNullException(nameof(input));
+        ArgumentNullException.ThrowIfNull(input);
 
         if (string.IsNullOrWhiteSpace(input))
             return Enumerable.Empty<PackageReference>();

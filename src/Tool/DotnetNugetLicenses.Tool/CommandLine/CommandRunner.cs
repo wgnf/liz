@@ -20,7 +20,7 @@ internal sealed class CommandRunner : ICommandRunner
     
     public async Task RunAsync(FileInfo targetFile, LogLevel logLevel, bool includeTransitive)
     {
-        if (targetFile == null) throw new ArgumentNullException(nameof(targetFile));
+        ArgumentNullException.ThrowIfNull(targetFile);
 
         var settings = CreateSettings(targetFile, logLevel, includeTransitive);
         var loggerProvider = new CommandLineLoggerProvider();
