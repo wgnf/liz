@@ -90,4 +90,32 @@ public sealed class CommandProviderTests
                 alias == "--log-level" ||
                 alias == "-l");
     }
+    
+    [Fact]
+    public void Provided_Root_Command_Should_Have_Include_Transitive_Option()
+    {
+        var sut = new ArrangeContext<CommandProvider>().Build();
+
+        var rootCommand = sut.Get();
+
+        var includeTransitiveOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "includeTransitive");
+        Assert.NotNull(includeTransitiveOption);
+
+        includeTransitiveOption
+            .Description
+            .Should()
+            .NotBeNullOrWhiteSpace();
+
+        includeTransitiveOption
+            .ValueType
+            .Should()
+            .Be<bool>();
+
+        includeTransitiveOption
+            .Aliases
+            .Should()
+            .Contain(alias =>
+                alias == "--include-transitive" ||
+                alias == "-i");
+    }
 }

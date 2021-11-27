@@ -31,7 +31,7 @@ public sealed class CommandRunnerTests
     {
         var sut = new ArrangeContext<CommandRunner>().Build();
 
-        await Assert.ThrowsAsync<ArgumentNullException>(() => sut.RunAsync(null, LogLevel.Information));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => sut.RunAsync(null, LogLevel.Information, true));
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public sealed class CommandRunnerTests
 
         var fileInfo = new FileInfo("some/file.txt");
 
-        await sut.RunAsync(fileInfo, LogLevel.Information);
+        await sut.RunAsync(fileInfo, LogLevel.Information, true);
 
         extractLicenses.Verify(e => e.ExtractAsync(), Times.Once());
     }

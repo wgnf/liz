@@ -23,14 +23,19 @@ internal sealed class CommandProvider : ICommandProvider
         var options = GetOptions();
         foreach (var option in options) rootCommand.AddOption(option);
 
-        rootCommand.Handler = CommandHandler.Create<FileInfo, LogLevel>(_commandRunner.RunAsync);
+        rootCommand.Handler = CommandHandler.Create<FileInfo, LogLevel, bool>(_commandRunner.RunAsync);
 
         return rootCommand;
     }
 
     private static IEnumerable<Option> GetOptions()
     {
-        var options = new List<Option> { GetTargetFileOption(), GetLogLevelOption() };
+        var options = new List<Option>
+        {
+            GetTargetFileOption(), 
+            GetLogLevelOption(),
+            GetIncludeTransitiveOption()
+        };
         return options;
     }
 
@@ -61,11 +66,27 @@ internal sealed class CommandProvider : ICommandProvider
             () => LogLevel.Information,
             "The Log-Level that describes which messages are displayed when running the tool")
         {
-            IsRequired = false, Name = "logLevel"
+            IsRequired = false, 
+            Name = "logLevel"
         };
 
         option.AddAlias("-l");
         option.AddSuggestions(LogLevel.Information.ToString(), LogLevel.Error.ToString());
+        return option;
+    }
+
+    private static Option GetIncludeTransitiveOption()
+    {
+        var option = new Option<bool>(
+            "--include-transitive",
+            () => false,
+            "If transitive dependencies should be included or not")
+        {
+            IsRequired = false, 
+            Name = "includeTransitive"
+        };
+        
+        option.AddAlias("-i");
         return option;
     }
 }
