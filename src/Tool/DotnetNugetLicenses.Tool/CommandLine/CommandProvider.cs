@@ -20,6 +20,9 @@ internal sealed class CommandProvider : ICommandProvider
     {
         var rootCommand = new RootCommand("dotnet-tool to analyze the licenses of your project(s)");
 
+        var targetFileArgument = GetTargetFileArgument();
+        rootCommand.AddArgument(targetFileArgument);
+            
         var options = GetOptions();
         foreach (var option in options) rootCommand.AddOption(option);
 
@@ -32,25 +35,18 @@ internal sealed class CommandProvider : ICommandProvider
     {
         var options = new List<Option>
         {
-            GetTargetFileOption(), 
             GetLogLevelOption(),
             GetIncludeTransitiveOption()
         };
         return options;
     }
 
-    private static Option GetTargetFileOption()
+    private static Argument GetTargetFileArgument()
     {
-        var option = new Option<FileInfo>(
-            new []{"--target", "-t"},
-            "The input file to analyze. Can be a Solution (sln) or a Project (csproj, fsproj)")
-        {
-            IsRequired = true
-        };
-
-        option.AddSuggestions("./path/to/Solution.sln", "./path/to/Project.csproj");
-
-        return option;
+        var argument = new Argument<FileInfo>(
+            "targetFile",
+            "The input file to analyze. Can be a Solution (sln) or a Project (csproj, fsproj)");
+        return argument;
     }
 
     private static Option GetLogLevelOption()

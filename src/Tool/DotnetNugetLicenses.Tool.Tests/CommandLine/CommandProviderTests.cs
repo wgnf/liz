@@ -36,31 +36,24 @@ public sealed class CommandProviderTests
     }
 
     [Fact]
-    public void Provided_Root_Command_Should_Have_File_Input_Option()
+    public void Provided_Root_Command_Should_Have_File_Input_Argument()
     {
         var sut = new ArrangeContext<CommandProvider>().Build();
 
         var rootCommand = sut.Get();
 
-        var inputOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "target");
-        Assert.NotNull(inputOption);
+        var targetFileArgument = rootCommand.Arguments.FirstOrDefault(opt => opt.Name == "targetFile");
+        Assert.NotNull(targetFileArgument);
 
-        inputOption
+        targetFileArgument
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        inputOption
-            .ValueType
+        targetFileArgument
+            .ArgumentType
             .Should()
             .Be<FileInfo>();
-
-        inputOption
-            .Aliases
-            .Should()
-            .Contain(alias =>
-                alias == "--target" ||
-                alias == "-t");
     }
 
     [Fact]

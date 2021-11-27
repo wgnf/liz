@@ -6,5 +6,5 @@ namespace DotnetNugetLicenses.Tool.Contracts.CommandLine;
 
 public interface ICommandRunner
 {
-    Task RunAsync(FileInfo target, LogLevel logLevel, bool includeTransitive);
+    Task RunAsync(FileInfo targetFile, LogLevel logLevel, bool includeTransitive);
 }
