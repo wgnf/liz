@@ -42,18 +42,12 @@ internal sealed class CommandProvider : ICommandProvider
     private static Option GetTargetFileOption()
     {
         var option = new Option<FileInfo>(
-            "--target",
+            new []{"--target", "-t"},
             "The input file to analyze. Can be a Solution (sln) or a Project (csproj, fsproj)")
         {
-            IsRequired = true,
-            /*
-             * NOTE: This has to match the parameter that is called (see CommandRunner)
-             * or else CommandHandler does not know where to put the values
-             */
-            Name = "targetFile"
+            IsRequired = true
         };
 
-        option.AddAlias("-t");
         option.AddSuggestions("./path/to/Solution.sln", "./path/to/Project.csproj");
 
         return option;
@@ -62,15 +56,10 @@ internal sealed class CommandProvider : ICommandProvider
     private static Option GetLogLevelOption()
     {
         var option = new Option<LogLevel>(
-            "--log-level",
+            new[] { "--log-level", "-l" },
             () => LogLevel.Information,
-            "The Log-Level that describes which messages are displayed when running the tool")
-        {
-            IsRequired = false, 
-            Name = "logLevel"
-        };
+            "The Log-Level that describes which messages are displayed when running the tool");
 
-        option.AddAlias("-l");
         option.AddSuggestions(LogLevel.Information.ToString(), LogLevel.Error.ToString());
         return option;
     }
@@ -78,15 +67,9 @@ internal sealed class CommandProvider : ICommandProvider
     private static Option GetIncludeTransitiveOption()
     {
         var option = new Option<bool>(
-            "--include-transitive",
+            new[] { "--include-transitive", "-i" },
             () => false,
-            "If transitive dependencies should be included or not")
-        {
-            IsRequired = false, 
-            Name = "includeTransitive"
-        };
-        
-        option.AddAlias("-i");
+            "If transitive dependencies should be included or not");
         return option;
     }
 }

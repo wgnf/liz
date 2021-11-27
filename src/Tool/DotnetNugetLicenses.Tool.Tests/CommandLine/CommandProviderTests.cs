@@ -42,7 +42,7 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var inputOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "targetFile");
+        var inputOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "target");
         Assert.NotNull(inputOption);
 
         inputOption
@@ -70,7 +70,7 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var logLevelOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "logLevel");
+        var logLevelOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "log-level");
         Assert.NotNull(logLevelOption);
 
         logLevelOption
@@ -98,7 +98,7 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var includeTransitiveOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "includeTransitive");
+        var includeTransitiveOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "include-transitive");
         Assert.NotNull(includeTransitiveOption);
 
         includeTransitiveOption
