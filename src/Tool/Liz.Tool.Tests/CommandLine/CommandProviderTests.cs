@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Liz.Core.Logging;
 using Liz.Tool.CommandLine;
-using Liz.Tool.Contracts.CommandLine;
 using System.IO;
 using System.Linq;
 using Xunit;
