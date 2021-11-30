@@ -69,7 +69,7 @@ public class ParseDotnetListPackageResultTests
         var context = new ArrangeContext<ParseDotnetListPackageResult>();
         var sut = context.Build();
         
-        const string output = @"Project 'DotnetNugetLicenses.Core' has the following package references
+        const string output = @"Project 'Liz.Core' has the following package references
    [net5.0]:
    Top-level Package             Requested   Resolved
    > JetBrains.Annotations       2021.3.0    2021.3.0

@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "DotnetNugetLicenses.Tool": {
+    "Liz.Tool": {
       "commandName": "Project",
-      "commandLineArgs": "../../../../../DotnetNugetLicenses.sln -l Trace -i"
+      "commandLineArgs": "../../../../../Liz.sln -l Trace -i"
     }
   }
 }
