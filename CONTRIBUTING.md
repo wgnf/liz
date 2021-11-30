@@ -2,7 +2,7 @@
 
 You can contribute to this project by filing issues, bugs and reports.  
 We're also happy when you take a look at open issues and engage in discussions or even make a contribution by fixing one of them.
-Good starting points are issues marked with [Good First Issue](https://github.com/wgnf/dotnet-nuget-licenses/labels/good%20first%20issue) or even [Help Wanted](https://github.com/wgnf/dotnet-nuget-licenses/labels/help%20wanted)!  
+Good starting points are issues marked with [Good First Issue](https://github.com/wgnf/liz/labels/good%20first%20issue) or even [Help Wanted](https://github.com/wgnf/liz/labels/help%20wanted)!  
 We want to make contributing to this project as easy and transparent as possible, whether it's:
 
 - Reporting a bug
@@ -12,7 +12,7 @@ We want to make contributing to this project as easy and transparent as possible
 - Becoming a maintainer
 - Or everything else basically
 
-If you want to discuss on something then feel free to present your opinions, views or any other relevant comment in the [Discussions](https://github.com/wgnf/dotnet-nuget-licenses/discussions).  
+If you want to discuss on something then feel free to present your opinions, views or any other relevant comment in the [Discussions](https://github.com/wgnf/liz/discussions).  
 To help feel everyone at home, we have a [Code Of Conduct](CODE_OF_CONDUCT.md) that everyone has to follow in all our interactions with the project and each other.  
   
 ## Code Contribution
