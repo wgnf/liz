@@ -1,7 +1,6 @@
-﻿using DotnetNugetLicenses.Core.Settings;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace DotnetNugetLicenses.Core.Extract;
+namespace Liz.Core.Extract;
 
 public interface IExtractLicenses
 {

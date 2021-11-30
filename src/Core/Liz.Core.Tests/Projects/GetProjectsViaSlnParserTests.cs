@@ -1,6 +1,6 @@
 ﻿using ArrangeContext.Moq;
-using DotnetNugetLicenses.Core.Projects;
 using FluentAssertions;
+using Liz.Core.Projects;
 using Moq;
 using SlnParser.Contracts;
 using System;
@@ -9,7 +9,7 @@ using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;
 
-namespace DotnetNugetLicenses.Core.Tests.Projects;
+namespace Liz.Core.Tests.Projects;
 
 public class GetProjectsViaSlnParserTests
 {

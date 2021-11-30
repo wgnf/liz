@@ -1,9 +1,9 @@
 ﻿using ArrangeContext.Moq;
-using DotnetNugetLicenses.Core.CliTool;
-using DotnetNugetLicenses.Core.PackageReferences;
-using DotnetNugetLicenses.Core.PackageReferences.DotnetCli;
-using DotnetNugetLicenses.Core.Projects;
 using FluentAssertions;
+using Liz.Core.CliTool;
+using Liz.Core.PackageReferences;
+using Liz.Core.PackageReferences.DotnetCli;
+using Liz.Core.Projects;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace DotnetNugetLicenses.Core.Tests.PackageReferences.DotnetCli;
+namespace Liz.Core.Tests.PackageReferences.DotnetCli;
 
 public class GetPackageReferencesViaDotnetCliTests
 {

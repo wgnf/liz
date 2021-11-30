@@ -1,14 +1,14 @@
-﻿using DotnetNugetLicenses.Core.Logging;
-using DotnetNugetLicenses.Core.PackageReferences.DotnetCli;
-using DotnetNugetLicenses.Core.Projects;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
+using Liz.Core.Logging;
+using Liz.Core.PackageReferences.DotnetCli;
+using Liz.Core.Projects;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DotnetNugetLicenses.Core.PackageReferences;
+namespace Liz.Core.PackageReferences;
 
 internal sealed class GetPackageReferencesFacade : IGetPackageReferences
 {

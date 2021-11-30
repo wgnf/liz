@@ -1,8 +1,8 @@
 ﻿using ArrangeContext.Moq;
-using DotnetNugetLicenses.Core.Logging;
-using DotnetNugetLicenses.Core.PackageReferences;
-using DotnetNugetLicenses.Core.PackageReferences.DotnetCli;
-using DotnetNugetLicenses.Core.Projects;
+using Liz.Core.Logging;
+using Liz.Core.PackageReferences;
+using Liz.Core.PackageReferences.DotnetCli;
+using Liz.Core.Projects;
 using Moq;
 using System;
 using System.IO;
@@ -10,7 +10,7 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace DotnetNugetLicenses.Core.Tests.PackageReferences;
+namespace Liz.Core.Tests.PackageReferences;
 
 public class GetPackageReferencesFacadeTests
 {

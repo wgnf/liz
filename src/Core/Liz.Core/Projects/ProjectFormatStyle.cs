@@ -1,4 +1,4 @@
-﻿namespace DotnetNugetLicenses.Core.Projects;
+﻿namespace Liz.Core.Projects;
 
 internal enum ProjectFormatStyle
 {

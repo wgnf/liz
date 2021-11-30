@@ -1,12 +1,12 @@
 ﻿using ArrangeContext.Moq;
-using DotnetNugetLicenses.Core.PackageReferences;
-using DotnetNugetLicenses.Core.PackageReferences.DotnetCli;
 using FluentAssertions;
+using Liz.Core.PackageReferences;
+using Liz.Core.PackageReferences.DotnetCli;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace DotnetNugetLicenses.Core.Tests.PackageReferences.DotnetCli;
+namespace Liz.Core.Tests.PackageReferences.DotnetCli;
 
 public class ParseDotnetListPackageResultTests
 {

@@ -7,7 +7,7 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace DotnetNugetLicenses.Core.Projects;
+namespace Liz.Core.Projects;
 
 internal sealed class GetProjectsViaSlnParser : IGetProjects
 {

@@ -1,7 +1,7 @@
-﻿using DotnetNugetLicenses.Core.Logging;
+﻿using Liz.Core.Logging;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DotnetNugetLicenses.Tool.Logging;
+namespace Liz.Tool.Logging;
 
 [ExcludeFromCodeCoverage] // simple provider
 internal sealed class CommandLineLoggerProvider : ILoggerProvider

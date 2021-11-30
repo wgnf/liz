@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 
-namespace DotnetNugetLicenses.Tool.Contracts.CommandLine;
+namespace Liz.Tool.Contracts.CommandLine;
 
 public interface ICommandProvider
 {

@@ -1,4 +1,4 @@
-﻿namespace DotnetNugetLicenses.Core.Tests.Extract;
+﻿namespace Liz.Core.Tests.Extract;
 
 public class ExtractLicensesTests
 {

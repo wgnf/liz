@@ -1,11 +1,11 @@
 ﻿using ArrangeContext.Moq;
-using DotnetNugetLicenses.Core.CliTool;
 using FluentAssertions;
+using Liz.Core.CliTool;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace DotnetNugetLicenses.Core.Tests.CliTool;
+namespace Liz.Core.Tests.CliTool;
 
 public class DefaultCliToolExecutorTests
 {

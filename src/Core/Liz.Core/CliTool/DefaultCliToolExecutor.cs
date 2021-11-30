@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace DotnetNugetLicenses.Core.CliTool;
+namespace Liz.Core.CliTool;
 
 internal sealed class DefaultCliToolExecutor : ICliToolExecutor
 {

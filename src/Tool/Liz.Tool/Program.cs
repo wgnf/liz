@@ -1,9 +1,9 @@
-﻿using DotnetNugetLicenses.Tool.CommandLine;
+﻿using Liz.Tool.CommandLine;
 using System.CommandLine;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
-namespace DotnetNugetLicenses.Tool;
+namespace Liz.Tool;
 
 [ExcludeFromCodeCoverage] // mostly untestable startup code
 public static class Program

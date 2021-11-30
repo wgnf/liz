@@ -1,13 +1,13 @@
 ﻿using ArrangeContext.Moq;
-using DotnetNugetLicenses.Core.Logging;
-using DotnetNugetLicenses.Tool.CommandLine;
-using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using FluentAssertions;
+using Liz.Core.Logging;
+using Liz.Tool.CommandLine;
+using Liz.Tool.Contracts.CommandLine;
 using System.IO;
 using System.Linq;
 using Xunit;
 
-namespace DotnetNugetLicenses.Tool.Tests.CommandLine;
+namespace Liz.Tool.Tests.CommandLine;
 
 public sealed class CommandProviderTests
 {

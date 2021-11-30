@@ -1,9 +1,9 @@
-﻿using DotnetNugetLicenses.Core.Logging;
+﻿using Liz.Core.Logging;
 using Moq;
 using System;
 using Xunit;
 
-namespace DotnetNugetLicenses.Core.Tests.Logging;
+namespace Liz.Core.Tests.Logging;
 
 public class LoggingExtensionsTests
 {

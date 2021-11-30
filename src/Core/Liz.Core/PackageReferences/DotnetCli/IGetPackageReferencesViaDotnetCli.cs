@@ -1,4 +1,4 @@
-﻿namespace DotnetNugetLicenses.Core.PackageReferences.DotnetCli;
+﻿namespace Liz.Core.PackageReferences.DotnetCli;
 
 internal interface IGetPackageReferencesViaDotnetCli : IGetPackageReferences
 {

@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System.Collections.Generic;
 
-namespace DotnetNugetLicenses.Core.PackageReferences.DotnetCli;
+namespace Liz.Core.PackageReferences.DotnetCli;
 
 internal interface IParseDotnetListPackageResult
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DotnetNugetLicenses.Core.PackageReferences.DotnetCli;
+namespace Liz.Core.PackageReferences.DotnetCli;
 
 /*
  * Example output see:

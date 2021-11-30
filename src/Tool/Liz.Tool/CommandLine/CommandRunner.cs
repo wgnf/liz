@@ -1,13 +1,13 @@
-﻿using DotnetNugetLicenses.Core;
-using DotnetNugetLicenses.Core.Logging;
-using DotnetNugetLicenses.Core.Settings;
-using DotnetNugetLicenses.Tool.Contracts.CommandLine;
-using DotnetNugetLicenses.Tool.Logging;
+﻿using Liz.Core;
+using Liz.Core.Logging;
+using Liz.Core.Settings;
+using Liz.Tool.Contracts.CommandLine;
+using Liz.Tool.Logging;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace DotnetNugetLicenses.Tool.CommandLine;
+namespace Liz.Tool.CommandLine;
 
 internal sealed class CommandRunner : ICommandRunner
 {

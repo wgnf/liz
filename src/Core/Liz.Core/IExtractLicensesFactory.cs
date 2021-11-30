@@ -1,8 +1,8 @@
-﻿using DotnetNugetLicenses.Core.Extract;
-using DotnetNugetLicenses.Core.Logging;
-using DotnetNugetLicenses.Core.Settings;
+﻿using Liz.Core.Extract;
+using Liz.Core.Logging;
+using Liz.Core.Settings;
 
-namespace DotnetNugetLicenses.Core;
+namespace Liz.Core;
 
 public interface IExtractLicensesFactory
 {

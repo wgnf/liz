@@ -1,16 +1,16 @@
-﻿using DotnetNugetLicenses.Core.CliTool;
-using DotnetNugetLicenses.Core.Extract;
-using DotnetNugetLicenses.Core.Logging;
-using DotnetNugetLicenses.Core.Logging.Null;
-using DotnetNugetLicenses.Core.PackageReferences;
-using DotnetNugetLicenses.Core.PackageReferences.DotnetCli;
-using DotnetNugetLicenses.Core.Projects;
-using DotnetNugetLicenses.Core.Settings;
+﻿using Liz.Core.CliTool;
+using Liz.Core.Extract;
+using Liz.Core.Logging;
+using Liz.Core.Logging.Null;
+using Liz.Core.PackageReferences;
+using Liz.Core.PackageReferences.DotnetCli;
+using Liz.Core.Projects;
+using Liz.Core.Settings;
 using SlnParser;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 
-namespace DotnetNugetLicenses.Core;
+namespace Liz.Core;
 
 [ExcludeFromCodeCoverage] // Factory
 public sealed class ExtractLicensesFactory : IExtractLicensesFactory

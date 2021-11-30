@@ -1,9 +1,9 @@
-﻿using DotnetNugetLicenses.Core.Projects;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
+using Liz.Core.Projects;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DotnetNugetLicenses.Core.PackageReferences;
+namespace Liz.Core.PackageReferences;
 
 internal interface IGetPackageReferences
 {

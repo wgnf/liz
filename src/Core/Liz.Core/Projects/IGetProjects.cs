@@ -1,8 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System.Collections.Generic;
-using System.IO.Abstractions;
 
-namespace DotnetNugetLicenses.Core.Projects;
+namespace Liz.Core.Projects;
 
 internal interface IGetProjects
 {

@@ -1,11 +1,11 @@
-﻿using DotnetNugetLicenses.Core.Logging;
-using DotnetNugetLicenses.Tool.Contracts.CommandLine;
+﻿using Liz.Core.Logging;
+using Liz.Tool.Contracts.CommandLine;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 
-namespace DotnetNugetLicenses.Tool.CommandLine;
+namespace Liz.Tool.CommandLine;
 
 internal sealed class CommandProvider : ICommandProvider
 {

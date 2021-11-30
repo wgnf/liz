@@ -1,8 +1,8 @@
-﻿using DotnetNugetLicenses.Core.Logging;
+﻿using Liz.Core.Logging;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DotnetNugetLicenses.Tool.Logging;
+namespace Liz.Tool.Logging;
 
 [ExcludeFromCodeCoverage] // not too sure how to test this properly
 internal sealed class CommandLineLogger : ILogger

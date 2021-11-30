@@ -1,9 +1,9 @@
-﻿using DotnetNugetLicenses.Core.Logging;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
+using Liz.Core.Logging;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DotnetNugetLicenses.Core.Settings;
+namespace Liz.Core.Settings;
 
 [PublicAPI]
 [ExcludeFromCodeCoverage] // simple DTO

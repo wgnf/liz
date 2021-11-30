@@ -1,18 +1,18 @@
 ﻿using ArrangeContext.Moq;
-using DotnetNugetLicenses.Core;
-using DotnetNugetLicenses.Core.Extract;
-using DotnetNugetLicenses.Core.Logging;
-using DotnetNugetLicenses.Core.Settings;
-using DotnetNugetLicenses.Tool.CommandLine;
-using DotnetNugetLicenses.Tool.Contracts.CommandLine;
 using FluentAssertions;
+using Liz.Core;
+using Liz.Core.Extract;
+using Liz.Core.Logging;
+using Liz.Core.Settings;
+using Liz.Tool.CommandLine;
+using Liz.Tool.Contracts.CommandLine;
 using Moq;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace DotnetNugetLicenses.Tool.Tests.CommandLine;
+namespace Liz.Tool.Tests.CommandLine;
 
 public sealed class CommandRunnerTests
 {

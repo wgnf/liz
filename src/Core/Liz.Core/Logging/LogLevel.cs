@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace DotnetNugetLicenses.Core.Logging;
+namespace Liz.Core.Logging;
 
 [PublicAPI]
 public enum LogLevel

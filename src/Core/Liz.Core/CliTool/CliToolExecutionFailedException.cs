@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DotnetNugetLicenses.Core.CliTool;
+namespace Liz.Core.CliTool;
 
 [ExcludeFromCodeCoverage] // exception
 internal sealed class CliToolExecutionFailedException : Exception

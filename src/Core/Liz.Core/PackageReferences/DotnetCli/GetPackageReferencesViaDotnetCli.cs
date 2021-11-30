@@ -1,11 +1,11 @@
-﻿using DotnetNugetLicenses.Core.CliTool;
-using DotnetNugetLicenses.Core.Projects;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
+using Liz.Core.CliTool;
+using Liz.Core.Projects;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DotnetNugetLicenses.Core.PackageReferences.DotnetCli;
+namespace Liz.Core.PackageReferences.DotnetCli;
 
 internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesViaDotnetCli
 {

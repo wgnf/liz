@@ -1,8 +1,8 @@
-﻿using DotnetNugetLicenses.Core.Logging;
+﻿using Liz.Core.Logging;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace DotnetNugetLicenses.Tool.Contracts.CommandLine;
+namespace Liz.Tool.Contracts.CommandLine;
 
 public interface ICommandRunner
 {

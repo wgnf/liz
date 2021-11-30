@@ -1,14 +1,14 @@
-﻿using DotnetNugetLicenses.Core.Logging;
-using DotnetNugetLicenses.Core.PackageReferences;
-using DotnetNugetLicenses.Core.Projects;
-using DotnetNugetLicenses.Core.Settings;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
+using Liz.Core.Logging;
+using Liz.Core.PackageReferences;
+using Liz.Core.Projects;
+using Liz.Core.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DotnetNugetLicenses.Core.Extract;
+namespace Liz.Core.Extract;
 
 internal sealed class ExtractLicenses : IExtractLicenses
 {

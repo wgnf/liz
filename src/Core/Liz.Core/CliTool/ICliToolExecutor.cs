@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System.Threading.Tasks;
 
-namespace DotnetNugetLicenses.Core.CliTool;
+namespace Liz.Core.CliTool;
 
 internal interface ICliToolExecutor
 {

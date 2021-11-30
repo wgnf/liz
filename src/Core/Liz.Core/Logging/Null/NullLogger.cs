@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DotnetNugetLicenses.Core.Logging.Null;
+namespace Liz.Core.Logging.Null;
 
 [ExcludeFromCodeCoverage] // does nothing
 internal sealed class NullLogger : ILogger

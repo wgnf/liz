@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System;
 
-namespace DotnetNugetLicenses.Core.Logging;
+namespace Liz.Core.Logging;
 
 [PublicAPI]
 public static class LoggingExtensions
