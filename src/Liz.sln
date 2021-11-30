@@ -10,15 +10,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{44F58819-8B73-4BB8-8659-0E4754E55274}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotnetNugetLicenses.Core", "Core\DotnetNugetLicenses.Core\DotnetNugetLicenses.Core.csproj", "{B8621B57-8078-4D3D-8D1F-0DF7828991C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liz.Core", "Core\Liz.Core\Liz.Core.csproj", "{B8621B57-8078-4D3D-8D1F-0DF7828991C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotnetNugetLicenses.Core.Tests", "Core\DotnetNugetLicenses.Core.Tests\DotnetNugetLicenses.Core.Tests.csproj", "{7463BD33-CED2-4166-9DFB-30CE8D7D17FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liz.Core.Tests", "Core\Liz.Core.Tests\Liz.Core.Tests.csproj", "{7463BD33-CED2-4166-9DFB-30CE8D7D17FD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool", "Tool", "{4854F7AC-5D3F-4025-BE2F-FD3163D6EE42}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotnetNugetLicenses.Tool", "Tool\DotnetNugetLicenses.Tool\DotnetNugetLicenses.Tool.csproj", "{2DB78516-0810-4CD4-80E9-A532A4856586}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liz.Tool", "Tool\Liz.Tool\Liz.Tool.csproj", "{2DB78516-0810-4CD4-80E9-A532A4856586}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotnetNugetLicenses.Tool.Tests", "Tool\DotnetNugetLicenses.Tool.Tests\DotnetNugetLicenses.Tool.Tests.csproj", "{8D8AD946-3247-4A2C-9204-B87C40AED8A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liz.Tool.Tests", "Tool\Liz.Tool.Tests\Liz.Tool.Tests.csproj", "{8D8AD946-3247-4A2C-9204-B87C40AED8A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

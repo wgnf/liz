@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DotnetNugetLicenses.Core\DotnetNugetLicenses.Core.csproj" />
+        <ProjectReference Include="..\Liz.Core\Liz.Core.csproj" />
     </ItemGroup>
 
 </Project>
