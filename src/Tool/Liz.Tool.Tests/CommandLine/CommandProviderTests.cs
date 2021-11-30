@@ -12,15 +12,6 @@ namespace Liz.Tool.Tests.CommandLine;
 public sealed class CommandProviderTests
 {
     [Fact]
-    public void Should_Have_Correct_Interface()
-    {
-        var sut = new ArrangeContext<CommandProvider>().Build();
-        sut
-            .Should()
-            .BeAssignableTo<ICommandProvider>();
-    }
-
-    [Fact]
     public void Should_Provide_Root_Command()
     {
         var sut = new ArrangeContext<CommandProvider>().Build();

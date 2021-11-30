@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Liz.Tool.CommandLine;
 
-internal sealed class CommandProvider : ICommandProvider
+internal sealed class CommandProvider
 {
     private readonly ICommandRunner _commandRunner;
 
