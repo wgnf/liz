@@ -62,7 +62,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"Could not determine projects for file '{targetFile}'", ex);
+            throw new GetProjectsFailedException(targetFile, ex);
         }
     }
 
@@ -99,7 +99,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"Could not determine package-references for {project}", ex);
+            throw new GetPackageReferencesFailedException(project, ex);
         }
     }
 
@@ -133,7 +133,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"Could not determine license information for {packageReference}", ex);
+            throw new GetLicenseInformationFailedException(packageReference, ex);
         }
     }
 }
