@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Liz.Core.License;
 using Liz.Core.Logging;
 using Liz.Core.PackageReferences;
 using Liz.Core.Projects;
@@ -13,6 +14,7 @@ namespace Liz.Core.Extract;
 internal sealed class ExtractLicenses : IExtractLicenses
 {
     private readonly IGetPackageReferences _getPackageReferences;
+    private readonly IGetLicenseInformation _getLicenseInformation;
     private readonly IGetProjects _getProjects;
     private readonly ILogger _logger;
     private readonly ExtractLicensesSettings _settings;
@@ -21,11 +23,13 @@ internal sealed class ExtractLicenses : IExtractLicenses
         [NotNull] ExtractLicensesSettings settings,
         [NotNull] ILogger logger,
         [NotNull] IGetProjects getProjects,
-        [NotNull] IGetPackageReferences getPackageReferences)
+        [NotNull] IGetPackageReferences getPackageReferences,
+        [NotNull] IGetLicenseInformation getLicenseInformation)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
         _getPackageReferences = getPackageReferences ?? throw new ArgumentNullException(nameof(getPackageReferences));
+        _getLicenseInformation = getLicenseInformation ?? throw new ArgumentNullException(nameof(getLicenseInformation));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -35,6 +39,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         {
             var projects = GetProjects(_settings.TargetFile);
             var packageReferences = await GetPackageReferencesAsync(projects);
+            var licenseInformation = await GetLicenseInformationAsync(packageReferences);
         }
         catch (Exception ex)
         {
@@ -94,8 +99,41 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException(
-                $"Could not determine package-references for project '{project.Name} ({project.File})'", ex);
+            throw new InvalidOperationException($"Could not determine package-references for {project}", ex);
+        }
+    }
+
+    private async Task<IEnumerable<LicenseInformation>> GetLicenseInformationAsync(
+        IEnumerable<PackageReference> packageReferences)
+    {
+        var licenseInformation = new List<LicenseInformation>();
+        
+        _logger.LogDebug("Trying to get license information for package(s)...");
+
+        foreach (var packageReference in packageReferences)
+        {
+            var licenseInformationFromPackageReference =
+                await GetLicenseInformationForPackageReferenceAsync(packageReference);
+            licenseInformation.Add(licenseInformationFromPackageReference);
+        }
+
+        return licenseInformation;
+    }
+
+    private async Task<LicenseInformation> GetLicenseInformationForPackageReferenceAsync(PackageReference packageReference)
+    {
+        try
+        {
+            _logger.LogDebug($"Trying to get license information for {packageReference}...");
+
+            var licenseInformation = await _getLicenseInformation.GetFromPackageReferenceAsync(packageReference);
+            _logger.LogDebug($"Found following license-type: '{licenseInformation.LicenseType}'");
+
+            return licenseInformation;
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Could not determine license information for {packageReference}", ex);
         }
     }
 }

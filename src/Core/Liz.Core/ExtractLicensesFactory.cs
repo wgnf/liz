@@ -1,5 +1,6 @@
 ﻿using Liz.Core.CliTool;
 using Liz.Core.Extract;
+using Liz.Core.License;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Null;
 using Liz.Core.PackageReferences;
@@ -26,8 +27,10 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
 
         var getPackageReferencesDotnetCli = new GetPackageReferencesViaDotnetCli(cliToolExecutor, parseDotnetListPackage);
         var getPackageReferences = new GetPackageReferencesFacade(logger, getPackageReferencesDotnetCli);
+
+        var getLicenseInformation = new GetLicenseInformation();
         
-        var extractLicenses = new ExtractLicenses(settings, logger, getProjects, getPackageReferences);
+        var extractLicenses = new ExtractLicenses(settings, logger, getProjects, getPackageReferences, getLicenseInformation);
         
         return extractLicenses;
     }
