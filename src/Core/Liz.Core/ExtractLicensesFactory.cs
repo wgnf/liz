@@ -39,6 +39,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var enrichLicenseInformation = new IEnrichLicenseInformationResult[]
         {
             new EnrichLicenseInformationFromLicenseElement(logger, fileSystem),
+            new EnrichLicenseInformationFromLicenseUrlElement(logger, fileSystem)
         };
 
         var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
