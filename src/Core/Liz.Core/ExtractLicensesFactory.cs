@@ -1,6 +1,7 @@
 ﻿using Liz.Core.CliTool;
 using Liz.Core.Extract;
 using Liz.Core.License;
+using Liz.Core.License.Sources;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Null;
 using Liz.Core.PackageReferences;
@@ -37,6 +38,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
 
         var enrichLicenseInformation = new IEnrichLicenseInformationResult[]
         {
+            new EnrichLicenseInformationFromLicenseElement(logger, fileSystem),
         };
 
         var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
