@@ -39,7 +39,7 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
     private async Task<string> RunDotNetListPackage(Project project, bool includeTransitive)
     {
         // c.f.: https://docs.microsoft.com/de-de/dotnet/core/tools/dotnet-list-package
-        var arguments = $"list {project.File} package {(includeTransitive ? "--include-transitive" : "")}";
+        var arguments = $"list \"{project.File}\" package {(includeTransitive ? "--include-transitive" : "")}";
         
         var result = await _cliToolExecutor.ExecuteWithResultAsync("dotnet", arguments);
         return result;
