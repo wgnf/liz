@@ -4,6 +4,7 @@ using Liz.Core.Logging;
 using Liz.Core.PackageReferences;
 using Liz.Core.Projects;
 using Liz.Core.Settings;
+using Liz.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
 {
     private readonly IGetPackageReferences _getPackageReferences;
     private readonly IGetLicenseInformation _getLicenseInformation;
+    private readonly IProvideTemporaryDirectory _provideTemporaryDirectory;
     private readonly IGetProjects _getProjects;
     private readonly ILogger _logger;
     private readonly ExtractLicensesSettings _settings;
@@ -24,12 +26,15 @@ internal sealed class ExtractLicenses : IExtractLicenses
         [NotNull] ILogger logger,
         [NotNull] IGetProjects getProjects,
         [NotNull] IGetPackageReferences getPackageReferences,
-        [NotNull] IGetLicenseInformation getLicenseInformation)
+        [NotNull] IGetLicenseInformation getLicenseInformation,
+        [NotNull] IProvideTemporaryDirectory provideTemporaryDirectory)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
         _getPackageReferences = getPackageReferences ?? throw new ArgumentNullException(nameof(getPackageReferences));
         _getLicenseInformation = getLicenseInformation ?? throw new ArgumentNullException(nameof(getLicenseInformation));
+        _provideTemporaryDirectory = provideTemporaryDirectory 
+                                     ?? throw new ArgumentNullException(nameof(provideTemporaryDirectory));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -44,6 +49,10 @@ internal sealed class ExtractLicenses : IExtractLicenses
         catch (Exception ex)
         {
             _logger.LogCritical($"Error occured while extracting licenses for '{_settings.TargetFile}'", ex);
+        }
+        finally
+        {
+            CleanUpTemporaryDirectory();
         }
     }
 
@@ -135,5 +144,11 @@ internal sealed class ExtractLicenses : IExtractLicenses
         {
             throw new GetLicenseInformationFailedException(packageReference, ex);
         }
+    }
+
+    private void CleanUpTemporaryDirectory()
+    {
+        var temporaryDirectory = _provideTemporaryDirectory.Get();
+        temporaryDirectory.Delete(true);
     }
 }

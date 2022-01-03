@@ -29,6 +29,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var getPackageReferences = new GetPackageReferencesFacade(logger, getPackageReferencesDotnetCli);
 
         var getLicenseInformation = new GetLicenseInformation();
+        var provideTemporaryDirectory = new ProvideTemporaryDirectory(settings, fileSystem);
         
         var extractLicenses = new ExtractLicenses(settings, logger, getProjects, getPackageReferences, getLicenseInformation);
         
