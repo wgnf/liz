@@ -10,13 +10,16 @@ namespace Liz.Core.License;
 internal sealed class GetLicenseInformation : IGetLicenseInformation
 {
     private readonly IDownloadPackageReference _downloadPackageReference;
+    private readonly IGetLicenseInformationFromArtifact _getLicenseInformationFromArtifact;
     private readonly ILogger _logger;
 
     public GetLicenseInformation(
         [NotNull] IDownloadPackageReference downloadPackageReference,
+        [NotNull] IGetLicenseInformationFromArtifact getLicenseInformationFromArtifact,
         [NotNull] ILogger logger)
     {
         _downloadPackageReference = downloadPackageReference ?? throw new ArgumentNullException(nameof(downloadPackageReference));
+        _getLicenseInformationFromArtifact = getLicenseInformationFromArtifact ?? throw new ArgumentNullException(nameof(getLicenseInformationFromArtifact));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     
@@ -25,6 +28,14 @@ internal sealed class GetLicenseInformation : IGetLicenseInformation
         ArgumentNullException.ThrowIfNull(packageReference);
 
         var downloadedPackageReferenceDirectory = await DownloadPackageReferenceAsync(packageReference);
+        var licenseInformationResult = await GetLicenseInformationAsync(downloadedPackageReferenceDirectory);
+
+        var licenseInformation = new LicenseInformation(
+            licenseInformationResult.LicenseType,
+            licenseInformationResult.LicenseUrl, 
+            licenseInformationResult.RawLicenseText, 
+            packageReference);
+        return licenseInformation;
     }
 
     // TODO: HOW TO HANDLE Project-References?!
@@ -37,7 +48,13 @@ internal sealed class GetLicenseInformation : IGetLicenseInformation
         return downloadedPackageReferenceDirectory;
     }
     
+    private async Task<GetLicenseInformationResult> GetLicenseInformationAsync(IDirectoryInfo downloadedPackageReferenceDirectory)
+    {
+        _logger.LogDebug($"Determining license information from {downloadedPackageReferenceDirectory}...");
+        var licenseInformationResult =
+            await _getLicenseInformationFromArtifact.GetFromDownloadedPackageReferenceAsync(
+                downloadedPackageReferenceDirectory);
 
-        throw new NotImplementedException();
+        return licenseInformationResult;
     }
 }

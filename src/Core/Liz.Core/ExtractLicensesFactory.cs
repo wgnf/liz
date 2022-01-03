@@ -29,14 +29,33 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var getPackageReferencesDotnetCli = new GetPackageReferencesViaDotnetCli(cliToolExecutor, parseDotnetListPackage);
         var getPackageReferences = new GetPackageReferencesFacade(logger, getPackageReferencesDotnetCli);
 
-        var getLicenseInformation = new GetLicenseInformation();
         var provideTemporaryDirectory = new ProvideTemporaryDirectory(settings, fileSystem);
         var downloadPackageReference = new DownloadPackageReferenceViaDotnetAddCli(
             fileSystem, 
             provideTemporaryDirectory,
             cliToolExecutor);
+
+        var enrichLicenseInformation = new IEnrichLicenseInformationResult[]
+        {
+        };
+
+        var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
+            fileSystem, 
+            logger, 
+            enrichLicenseInformation);
         
-        var extractLicenses = new ExtractLicenses(settings, logger, getProjects, getPackageReferences, getLicenseInformation);
+        var getLicenseInformation = new GetLicenseInformation(
+            downloadPackageReference, 
+            getLicenseInformationFromArtifact, 
+            logger);
+
+        var extractLicenses = new ExtractLicenses(
+            settings, 
+            logger, 
+            getProjects, 
+            getPackageReferences, 
+            getLicenseInformation, 
+            provideTemporaryDirectory);
         
         return extractLicenses;
     }
