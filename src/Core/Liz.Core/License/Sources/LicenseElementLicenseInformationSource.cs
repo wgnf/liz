@@ -8,6 +8,16 @@ using System.Xml.Linq;
 
 namespace Liz.Core.License.Sources;
 
+/*
+ * NOTE:
+ * There's no check here if LicenseInformation.Text or LicenseInformation.Type is set, because:
+ * The values that are provided by the 'license' element of the .nuspec always are the most accurate,
+ * because it either defines a license-type (type="expression") or a file containing the license-text
+ * (type="file") which is both controlled by the author
+ *
+ * The other sources are just _extras_ to hopefully gather everything that can be gathered and are "best guesses"
+ * and so should never override anything that was already specifically set by the author
+ */
 internal sealed class LicenseElementLicenseInformationSource : ILicenseInformationSource
 {
     private readonly IFileSystem _fileSystem;
