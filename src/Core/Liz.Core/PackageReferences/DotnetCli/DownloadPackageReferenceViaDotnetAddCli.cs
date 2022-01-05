@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Liz.Core.CliTool;
+using Liz.Core.Logging;
 using Liz.Core.Utils;
 using System;
 using System.IO;
@@ -14,16 +15,19 @@ internal sealed class DownloadPackageReferenceViaDotnetAddCli : IDownloadPackage
     private readonly IFileSystem _fileSystem;
     private readonly IProvideTemporaryDirectory _provideTemporaryDirectory;
     private readonly ICliToolExecutor _cliToolExecutor;
+    private readonly ILogger _logger;
 
     public DownloadPackageReferenceViaDotnetAddCli(
         [NotNull] IFileSystem fileSystem,
         [NotNull] IProvideTemporaryDirectory provideTemporaryDirectory,
-        [NotNull] ICliToolExecutor cliToolExecutor)
+        [NotNull] ICliToolExecutor cliToolExecutor,
+        [NotNull] ILogger logger)
     {
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _provideTemporaryDirectory = provideTemporaryDirectory 
                                      ?? throw new ArgumentNullException(nameof(provideTemporaryDirectory));
         _cliToolExecutor = cliToolExecutor ?? throw new ArgumentNullException(nameof(cliToolExecutor));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     
     public async Task<IDirectoryInfo> DownloadAsync(PackageReference packageReference)
@@ -90,7 +94,10 @@ internal sealed class DownloadPackageReferenceViaDotnetAddCli : IDownloadPackage
         }
         catch (Exception ex)
         {
-            throw new DownloadPackageReferenceFailedException(packageReference, ex);
+            _logger.LogDebug($"{packageReference} could not be downloaded. Possible causes:\n" +
+                             "- A NuGet-Source is missing\n" +
+                             "- The reference is caused by a Project-Reference, but is not released as a NuGet-Package\n" +
+                             "- The NuGet-Package cannot be downloaded because of any other issue", ex);
         }
     }
     

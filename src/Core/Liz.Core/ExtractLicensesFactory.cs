@@ -34,7 +34,8 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var downloadPackageReference = new DownloadPackageReferenceViaDotnetAddCli(
             fileSystem, 
             provideTemporaryDirectory,
-            cliToolExecutor);
+            cliToolExecutor,
+            logger);
 
         var enrichLicenseInformation = new IEnrichLicenseInformationResult[]
         {

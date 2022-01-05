@@ -37,8 +37,7 @@ internal sealed class GetLicenseInformation : IGetLicenseInformation
             packageReference);
         return licenseInformation;
     }
-
-    // TODO: HOW TO HANDLE Project-References?!
+    
     private async Task<IDirectoryInfo> DownloadPackageReferenceAsync(PackageReference packageReference)
     {
         _logger.LogDebug($"Downloading {packageReference}...");
