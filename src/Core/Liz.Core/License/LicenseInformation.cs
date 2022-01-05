@@ -3,15 +3,33 @@ using System.Text;
 
 namespace Liz.Core.License;
 
+/// <summary>
+///     An object containing information about a license
+/// </summary>
 [ExcludeFromCodeCoverage] // DTO
-internal sealed class LicenseInformation
+public sealed class LicenseInformation
 {
+    /// <summary>
+    ///     The type of a license
+    /// </summary>
+    /// <example>MIT</example>
     public string Type { get; set; }
 
+    /// <summary>
+    ///     The URL of the license
+    /// </summary>
+    /// <example>https://licenses.nuget.org/MIT</example>
     public string Url { get; set; }
 
+    /// <summary>
+    ///     The raw license text of that license
+    /// </summary>
     public string Text { get; set; }
 
+    /// <summary>
+    ///     Provides a string that represents this instance
+    /// </summary>
+    /// <returns>A string representing this instance</returns>
     public override string ToString()
     {
         var builder = new StringBuilder();

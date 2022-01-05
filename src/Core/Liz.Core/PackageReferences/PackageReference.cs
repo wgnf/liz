@@ -1,14 +1,26 @@
 ﻿using Liz.Core.License;
+using Liz.Core.Projects;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace Liz.Core.PackageReferences;
 
+/// <summary>
+///     Information about a dependency of a <see cref="Project"/>
+/// </summary>
 [ExcludeFromCodeCoverage] // DTO
-// internal sealed record PackageReference(string Name, string TargetFramework, string Version);
-internal sealed class PackageReference
+public sealed class PackageReference
 {
+    /// <summary>
+    ///     Create a new instance of <see cref="PackageReference"/>
+    /// </summary>
+    /// <param name="name">The name of the package</param>
+    /// <param name="targetFramework">The framework that the reference targets</param>
+    /// <param name="version">The version that is being targeted</param>
+    /// <exception cref="ArgumentException">
+    ///     All parameters are mandatory so an Exception will be thrown when any of those are not provided
+    /// </exception>
     public PackageReference(
         [JetBrains.Annotations.NotNull] string name,
         [JetBrains.Annotations.NotNull] string targetFramework,
@@ -27,15 +39,34 @@ internal sealed class PackageReference
 
         LicenseInformation = new LicenseInformation();
     }
-
+    
+    /// <summary>
+    ///     The name of the package
+    /// </summary>
+    /// <example>Newtonsoft.Json</example>
     public string Name { get; }
 
+    /// <summary>
+    ///     The framework that the reference targets
+    /// </summary>
+    /// <example>net6.0</example>
     public string TargetFramework { get; }
 
+    /// <summary>
+    ///     The version that is being targeted
+    /// </summary>
+    /// <example>11.1.0</example>
     public string Version { get; }
 
+    /// <summary>
+    ///     The acquired <see cref="LicenseInformation"/> of this package 
+    /// </summary>
     public LicenseInformation LicenseInformation { get; set; }
 
+    /// <summary>
+    ///     Provides a string that represents this instance
+    /// </summary>
+    /// <returns>A string representing this instance</returns>
     public override string ToString()
     {
         var builder = new StringBuilder();

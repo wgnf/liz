@@ -38,17 +38,20 @@ internal sealed class ExtractLicenses : IExtractLicenses
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task ExtractAsync()
+    public async Task<IEnumerable<PackageReference>> ExtractAsync()
     {
         try
         {
             var projects = GetProjects(_settings.TargetFile);
-            var packageReferences = await GetPackageReferencesAsync(projects);
+            var packageReferences = (await GetPackageReferencesAsync(projects)).ToList();
             await EnrichWithLicenseInformationAsync(packageReferences);
+
+            return packageReferences;
         }
         catch (Exception ex)
         {
             _logger.LogCritical($"Error occured while extracting licenses for '{_settings.TargetFile}'", ex);
+            throw;
         }
         finally
         {
