@@ -5,5 +5,5 @@ namespace Liz.Core.License;
 
 internal interface IGetLicenseInformationFromArtifact
 {
-    Task<GetLicenseInformationResult> GetFromDownloadedPackageReferenceAsync(IDirectoryInfo downloadDirectory);
+    Task<LicenseInformation> GetFromDownloadedPackageReferenceAsync(IDirectoryInfo downloadDirectory);
 }

@@ -15,7 +15,7 @@ namespace Liz.Core.Extract;
 internal sealed class ExtractLicenses : IExtractLicenses
 {
     private readonly IGetPackageReferences _getPackageReferences;
-    private readonly IGetLicenseInformation _getLicenseInformation;
+    private readonly IEnrichPackageReferenceWithLicenseInformation _enrichPackageReferenceWithLicenseInformation;
     private readonly IProvideTemporaryDirectory _provideTemporaryDirectory;
     private readonly IGetProjects _getProjects;
     private readonly ILogger _logger;
@@ -26,13 +26,13 @@ internal sealed class ExtractLicenses : IExtractLicenses
         [NotNull] ILogger logger,
         [NotNull] IGetProjects getProjects,
         [NotNull] IGetPackageReferences getPackageReferences,
-        [NotNull] IGetLicenseInformation getLicenseInformation,
+        [NotNull] IEnrichPackageReferenceWithLicenseInformation enrichPackageReferenceWithLicenseInformation,
         [NotNull] IProvideTemporaryDirectory provideTemporaryDirectory)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
         _getPackageReferences = getPackageReferences ?? throw new ArgumentNullException(nameof(getPackageReferences));
-        _getLicenseInformation = getLicenseInformation ?? throw new ArgumentNullException(nameof(getLicenseInformation));
+        _enrichPackageReferenceWithLicenseInformation = enrichPackageReferenceWithLicenseInformation ?? throw new ArgumentNullException(nameof(enrichPackageReferenceWithLicenseInformation));
         _provideTemporaryDirectory = provideTemporaryDirectory 
                                      ?? throw new ArgumentNullException(nameof(provideTemporaryDirectory));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -44,7 +44,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         {
             var projects = GetProjects(_settings.TargetFile);
             var packageReferences = await GetPackageReferencesAsync(projects);
-            var licenseInformation = await GetLicenseInformationAsync(packageReferences);
+            await EnrichWithLicenseInformationAsync(packageReferences);
         }
         catch (Exception ex)
         {
@@ -112,33 +112,23 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
     }
 
-    private async Task<IEnumerable<LicenseInformation>> GetLicenseInformationAsync(
+    private async Task EnrichWithLicenseInformationAsync(
         IEnumerable<PackageReference> packageReferences)
     {
-        var licenseInformation = new List<LicenseInformation>();
-        
         _logger.LogDebug("Trying to get license information for package(s)...");
 
         foreach (var packageReference in packageReferences)
-        {
-            var licenseInformationFromPackageReference =
-                await GetLicenseInformationForPackageReferenceAsync(packageReference);
-            licenseInformation.Add(licenseInformationFromPackageReference);
-        }
-
-        return licenseInformation;
+            await EnrichWithLicenseInformationForPackageReferenceAsync(packageReference);
     }
 
-    private async Task<LicenseInformation> GetLicenseInformationForPackageReferenceAsync(PackageReference packageReference)
+    private async Task EnrichWithLicenseInformationForPackageReferenceAsync(PackageReference packageReference)
     {
         try
         {
             _logger.LogDebug($"Trying to get license information for {packageReference}...");
 
-            var licenseInformation = await _getLicenseInformation.GetFromPackageReferenceAsync(packageReference);
-            _logger.LogDebug($"Found following license-type: '{licenseInformation.LicenseType}'");
-
-            return licenseInformation;
+            await _enrichPackageReferenceWithLicenseInformation.GetFromPackageReferenceAsync(packageReference);
+            _logger.LogDebug($"Found following license-type: '{packageReference.LicenseInformation.Type}'");
         }
         catch (Exception ex)
         {

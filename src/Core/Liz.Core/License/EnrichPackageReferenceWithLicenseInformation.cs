@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Liz.Core.License;
 
-internal sealed class GetLicenseInformation : IGetLicenseInformation
+internal sealed class EnrichPackageReferenceWithLicenseInformation : IEnrichPackageReferenceWithLicenseInformation
 {
     private readonly IDownloadPackageReference _downloadPackageReference;
     private readonly IGetLicenseInformationFromArtifact _getLicenseInformationFromArtifact;
     private readonly ILogger _logger;
 
-    public GetLicenseInformation(
+    public EnrichPackageReferenceWithLicenseInformation(
         [NotNull] IDownloadPackageReference downloadPackageReference,
         [NotNull] IGetLicenseInformationFromArtifact getLicenseInformationFromArtifact,
         [NotNull] ILogger logger)
@@ -23,19 +23,14 @@ internal sealed class GetLicenseInformation : IGetLicenseInformation
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     
-    public async Task<LicenseInformation> GetFromPackageReferenceAsync(PackageReference packageReference)
+    public async Task GetFromPackageReferenceAsync(PackageReference packageReference)
     {
         ArgumentNullException.ThrowIfNull(packageReference);
 
         var downloadedPackageReferenceDirectory = await DownloadPackageReferenceAsync(packageReference);
-        var licenseInformationResult = await GetLicenseInformationAsync(downloadedPackageReferenceDirectory);
+        var licenseInformation = await GetLicenseInformationAsync(downloadedPackageReferenceDirectory);
 
-        var licenseInformation = new LicenseInformation(
-            licenseInformationResult.LicenseType,
-            licenseInformationResult.LicenseUrl, 
-            licenseInformationResult.RawLicenseText, 
-            packageReference);
-        return licenseInformation;
+        packageReference.LicenseInformation = licenseInformation;
     }
     
     private async Task<IDirectoryInfo> DownloadPackageReferenceAsync(PackageReference packageReference)
@@ -47,13 +42,13 @@ internal sealed class GetLicenseInformation : IGetLicenseInformation
         return downloadedPackageReferenceDirectory;
     }
     
-    private async Task<GetLicenseInformationResult> GetLicenseInformationAsync(IDirectoryInfo downloadedPackageReferenceDirectory)
+    private async Task<LicenseInformation> GetLicenseInformationAsync(IDirectoryInfo downloadedPackageReferenceDirectory)
     {
         _logger.LogDebug($"Determining license information from {downloadedPackageReferenceDirectory}...");
-        var licenseInformationResult =
+        var licenseInformation =
             await _getLicenseInformationFromArtifact.GetFromDownloadedPackageReferenceAsync(
                 downloadedPackageReferenceDirectory);
 
-        return licenseInformationResult;
+        return licenseInformation;
     }
 }

@@ -14,64 +14,70 @@ namespace Liz.Core.License;
 
 internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformationFromArtifact
 {
+    private const string NugetSpecificationFileExtension = "nuspec";
+    private readonly IEnumerable<ILicenseInformationSource> _enrichLicenseInformationResults;
     private readonly IFileSystem _fileSystem;
     private readonly ILogger _logger;
-    private readonly IEnumerable<IEnrichLicenseInformationResult> _enrichLicenseInformationResults;
-    
-    private const string NugetSpecificationFileExtension = "nuspec";
 
     public GetLicenseInformationFromArtifact(
         [NotNull] IFileSystem fileSystem,
         [NotNull] ILogger logger,
-        [NotNull] IEnumerable<IEnrichLicenseInformationResult> enrichLicenseInformationResults)
+        [NotNull] IEnumerable<ILicenseInformationSource> enrichLicenseInformationResults)
     {
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _enrichLicenseInformationResults = enrichLicenseInformationResults 
+        _enrichLicenseInformationResults = enrichLicenseInformationResults
                                            ?? throw new ArgumentNullException(nameof(enrichLicenseInformationResults));
     }
-    
-    public async Task<GetLicenseInformationResult> GetFromDownloadedPackageReferenceAsync(IDirectoryInfo downloadDirectory)
+
+    public async Task<LicenseInformation> GetFromDownloadedPackageReferenceAsync(IDirectoryInfo downloadDirectory)
     {
         ArgumentNullException.ThrowIfNull(downloadDirectory);
 
-        var licenseInformationResult = await GetFromArtifactAsync(downloadDirectory);
-        return licenseInformationResult;
+        var licenseInformation = await GetFromArtifactAsync(downloadDirectory);
+        return licenseInformation;
     }
 
-    private async Task<GetLicenseInformationResult> GetFromArtifactAsync(IDirectoryInfo artifactDirectory)
+    private async Task<LicenseInformation> GetFromArtifactAsync(IDirectoryInfo artifactDirectory)
     {
-        var licenseInformationResult = new GetLicenseInformationResult
-        {
-            ArtifactDirectory = artifactDirectory,
-            NugetSpecifiactionFileXml = await GetNugetSpecificationFileXmlAsync(artifactDirectory)
-        };
+        var licenseInformationContext = await GetContext(artifactDirectory);
 
         foreach (var enrichLicenseInformationResult in _enrichLicenseInformationResults.OrderBy(e => e.Order))
-            await enrichLicenseInformationResult.EnrichAsync(licenseInformationResult);
+            await enrichLicenseInformationResult.GetInformationAsync(licenseInformationContext);
 
-        return licenseInformationResult;
+        return licenseInformationContext.LicenseInformation;
+    }
+
+    private async Task<GetLicenseInformationContext> GetContext(IDirectoryInfo artifactDirectory)
+    {
+        var licenseInformationContext = new GetLicenseInformationContext
+        {
+            ArtifactDirectory = artifactDirectory,
+            NugetSpecificationFileXml = await GetNugetSpecificationFileXmlAsync(artifactDirectory)
+        };
+        return licenseInformationContext;
     }
 
     private async Task<XDocument> GetNugetSpecificationFileXmlAsync(IDirectoryInfo artifactDirectory)
     {
         if (!TryGetNugetSpecificationFile(artifactDirectory, out var nugetSpecificationFile))
             return null; // return null is okay here
-        
+
         _logger.LogDebug($"Found '.nuspec' file: {nugetSpecificationFile}");
 
         var nugetSpecificationFileAsync = await LoadNugetSpecificationFileAsXmlFileAsync(nugetSpecificationFile);
         return nugetSpecificationFileAsync;
     }
-    
-    private static bool TryGetNugetSpecificationFile(IDirectoryInfo artifactDirectory, out IFileInfo nugetSpecificationFile)
+
+    private static bool TryGetNugetSpecificationFile(IDirectoryInfo artifactDirectory,
+        out IFileInfo nugetSpecificationFile)
     {
         nugetSpecificationFile = null;
-        
+
         try
         {
             var files = artifactDirectory.GetFiles(
-                $"*.{NugetSpecificationFileExtension}", 
+                $"*.{NugetSpecificationFileExtension}",
                 SearchOption.TopDirectoryOnly);
 
             var firstNuspec = files.FirstOrDefault();

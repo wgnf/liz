@@ -9,12 +9,12 @@ using System.Xml.Linq;
 
 namespace Liz.Core.License.Sources;
 
-internal sealed class EnrichLicenseInformationFromLicenseUrlElement : IEnrichLicenseInformationResult
+internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInformationSource
 {
     private readonly ILogger _logger;
     private readonly IFileSystem _fileSystem;
 
-    public EnrichLicenseInformationFromLicenseUrlElement(
+    public LicenseUrlElementLicenseInformationSource(
         [NotNull] ILogger logger,
         [NotNull] IFileSystem fileSystem)
     {
@@ -24,25 +24,27 @@ internal sealed class EnrichLicenseInformationFromLicenseUrlElement : IEnrichLic
     
     public int Order => 1;
     
-    public async Task EnrichAsync(GetLicenseInformationResult licenseInformationResult)
+    public async Task GetInformationAsync(GetLicenseInformationContext licenseInformationContext)
     {
-        ArgumentNullException.ThrowIfNull(licenseInformationResult);
+        ArgumentNullException.ThrowIfNull(licenseInformationContext);
 
-        if (licenseInformationResult.NugetSpecifiactionFileXml == null) return;
+        if (licenseInformationContext.NugetSpecificationFileXml == null) return;
         
         _logger.LogDebug("Get license-information from 'licenseUrl' element from the 'nuspec' file...");
 
-        await GetLicenseInformationFromLicenseUrlElementAsync(licenseInformationResult, licenseInformationResult.NugetSpecifiactionFileXml);
+        await GetLicenseInformationFromLicenseUrlElementAsync(
+            licenseInformationContext, 
+            licenseInformationContext.NugetSpecificationFileXml);
     }
 
-    private async Task GetLicenseInformationFromLicenseUrlElementAsync
-        (GetLicenseInformationResult licenseInformationResult, 
-            XContainer nugetSpecificationFileXml)
+    private async Task GetLicenseInformationFromLicenseUrlElementAsync(
+        GetLicenseInformationContext licenseInformationContext, 
+        XContainer nugetSpecificationFileXml)
     {
         if (!TryGetLicenseUrlElement(nugetSpecificationFileXml, out var licenseUrlElement)) return;
         
         _logger.LogDebug("Found 'licenseUrl' element");
-        await GetLicenseInformationBasedOnLicenseUrlElementAsync(licenseInformationResult, licenseUrlElement);
+        await GetLicenseInformationBasedOnLicenseUrlElementAsync(licenseInformationContext, licenseUrlElement);
     }
 
     private bool TryGetLicenseUrlElement(XContainer nugetSpecificationXml, out XElement licenseUrlElement)
@@ -82,37 +84,37 @@ internal sealed class EnrichLicenseInformationFromLicenseUrlElement : IEnrichLic
     }
 
     private async Task GetLicenseInformationBasedOnLicenseUrlElementAsync(
-        GetLicenseInformationResult licenseInformationResult, 
+        GetLicenseInformationContext licenseInformationContext, 
         XElement licenseUrlElement)
     {
         _logger.LogDebug("Getting license information from 'licenseUrl' element...");
 
-        if (!string.IsNullOrWhiteSpace(licenseInformationResult.RawLicenseText)) return;
+        /*
+         * NOTE:
+         * We abort early here, to save time and resources when the license-text was already extracted.
+         * Because when it already was extracted we can assume that it's already the right one
+         */
+        if (!string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text)) return;
 
         var licenseUrlElementValue = licenseUrlElement.Value;
-        await HandleLicenseUrlAsync(licenseInformationResult, licenseUrlElementValue);
+        await HandleLicenseUrlAsync(licenseInformationContext, licenseUrlElementValue);
     }
 
-    private async Task HandleLicenseUrlAsync(GetLicenseInformationResult licenseInformationResult, string licenseUrl)
+    private async Task HandleLicenseUrlAsync(GetLicenseInformationContext licenseInformationContext, string licenseUrl)
     {
-        if (!string.IsNullOrWhiteSpace(licenseInformationResult.LicenseUrl))
-            licenseInformationResult.LicenseUrl = licenseUrl;
-        
         var licenseUri = new Uri(licenseUrl, UriKind.RelativeOrAbsolute);
         if (licenseUri.IsFile)
-            await HandleLicenseFileAsync(licenseInformationResult, licenseUrl);
+            await HandleLicenseFileAsync(licenseInformationContext, licenseUrl);
         else
-            await HandleLicenseWebResourceAsync(licenseInformationResult, licenseUrl);
+            await HandleLicenseWebResourceAsync(licenseInformationContext, licenseUrl);
     }
 
     private async Task HandleLicenseFileAsync(
-        GetLicenseInformationResult licenseInformationResult,
+        GetLicenseInformationContext licenseInformationContext,
         string licenseElementValue)
     {
-        if (!string.IsNullOrWhiteSpace(licenseInformationResult.RawLicenseText)) return;
-        
         var licenseFile =
-            _fileSystem.Path.Combine(licenseInformationResult.ArtifactDirectory.FullName, licenseElementValue);
+            _fileSystem.Path.Combine(licenseInformationContext.ArtifactDirectory.FullName, licenseElementValue);
         var licenseFileInfo = _fileSystem.FileInfo.FromFileName(licenseFile);
         
         _logger.LogDebug($"Specified license file should be: '{licenseFileInfo}'");
@@ -124,20 +126,20 @@ internal sealed class EnrichLicenseInformationFromLicenseUrlElement : IEnrichLic
         }
 
         var rawLicenseTextFromFile = await _fileSystem.File.ReadAllTextAsync(licenseFileInfo.FullName);
-        licenseInformationResult.RawLicenseText = rawLicenseTextFromFile;
+        licenseInformationContext.LicenseInformation.Text = rawLicenseTextFromFile;
     }
     
-    private async Task HandleLicenseWebResourceAsync(GetLicenseInformationResult licenseInformationResult, string licenseUrl)
+    private async Task HandleLicenseWebResourceAsync(
+        GetLicenseInformationContext licenseInformationContext, 
+        string licenseUrl)
     {
-        if (!string.IsNullOrWhiteSpace(licenseInformationResult.RawLicenseText)) return;
-
         var httpClient = new HttpClient();
         _logger.LogDebug($"Downloading raw license-text from '{licenseUrl}'...");
 
         try
         {
             var rawLicenseText = await httpClient.GetStringAsync(licenseUrl);
-            licenseInformationResult.RawLicenseText = rawLicenseText;
+            licenseInformationContext.LicenseInformation.Text = rawLicenseText;
         }
         catch (Exception ex)
         {

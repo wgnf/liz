@@ -37,10 +37,10 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             cliToolExecutor,
             logger);
 
-        var enrichLicenseInformation = new IEnrichLicenseInformationResult[]
+        var enrichLicenseInformation = new ILicenseInformationSource[]
         {
-            new EnrichLicenseInformationFromLicenseElement(logger, fileSystem),
-            new EnrichLicenseInformationFromLicenseUrlElement(logger, fileSystem)
+            new LicenseElementLicenseInformationSource(logger, fileSystem),
+            new LicenseUrlElementLicenseInformationSource(logger, fileSystem)
         };
 
         var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
@@ -48,7 +48,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             logger, 
             enrichLicenseInformation);
         
-        var getLicenseInformation = new GetLicenseInformation(
+        var getLicenseInformation = new EnrichPackageReferenceWithLicenseInformation(
             downloadPackageReference, 
             getLicenseInformationFromArtifact, 
             logger);

@@ -8,54 +8,55 @@ using System.Xml.Linq;
 
 namespace Liz.Core.License.Sources;
 
-internal sealed class EnrichLicenseInformationFromLicenseElement : IEnrichLicenseInformationResult
+internal sealed class LicenseElementLicenseInformationSource : ILicenseInformationSource
 {
-    private readonly ILogger _logger;
     private readonly IFileSystem _fileSystem;
+    private readonly ILogger _logger;
 
-    public EnrichLicenseInformationFromLicenseElement(
+    public LicenseElementLicenseInformationSource(
         [NotNull] ILogger logger,
         [NotNull] IFileSystem fileSystem)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
-    
+
     // best to be at the start
     public int Order => 0;
-    
-    public async Task EnrichAsync(GetLicenseInformationResult licenseInformationResult)
-    {
-        ArgumentNullException.ThrowIfNull(licenseInformationResult);
 
-        if (licenseInformationResult.NugetSpecifiactionFileXml == null) return;
-        
+    public async Task GetInformationAsync(GetLicenseInformationContext licenseInformationContext)
+    {
+        ArgumentNullException.ThrowIfNull(licenseInformationContext);
+
+        if (licenseInformationContext.NugetSpecificationFileXml == null) return;
+
         _logger.LogDebug("Get license-information from 'license' element from the 'nuspec' file...");
 
-        await GetLicenseInformationFromLicenseElementAsync(licenseInformationResult,
-            licenseInformationResult.NugetSpecifiactionFileXml);
+        await GetLicenseInformationFromLicenseElementAsync(
+            licenseInformationContext,
+            licenseInformationContext.NugetSpecificationFileXml);
     }
-    
+
     private async Task GetLicenseInformationFromLicenseElementAsync(
-        GetLicenseInformationResult licenseInformationResult,
+        GetLicenseInformationContext licenseInformationContext,
         XContainer nugetSpecificationFileXml)
     {
         if (!TryGetLicenseElement(nugetSpecificationFileXml, out var licenseElement)) return;
 
         _logger.LogDebug("Found 'license' element");
-        await GetLicenseInformationBasedOnLicenseElementAsync(licenseInformationResult, licenseElement);
+        await GetLicenseInformationBasedOnLicenseElementAsync(licenseInformationContext, licenseElement);
     }
 
     private bool TryGetLicenseElement(XContainer nugetSpecificationXml, out XElement licenseElement)
     {
         licenseElement = null;
-        
+
         try
         {
             var packageElement = GetXmlElement(nugetSpecificationXml, "package");
             var metadataElement = GetXmlElement(packageElement, "metadata");
             licenseElement = GetXmlElement(metadataElement, "license");
-        
+
             return true;
         }
         catch (Exception ex)
@@ -78,16 +79,16 @@ internal sealed class EnrichLicenseInformationFromLicenseElement : IEnrichLicens
             .FirstOrDefault(element => element.Name.LocalName == elementName);
         if (packageElement == null)
             throw new InvalidOperationException($"Could not find a '{elementName}' element");
-        
+
         return packageElement;
     }
-    
+
     private async Task GetLicenseInformationBasedOnLicenseElementAsync(
-        GetLicenseInformationResult licenseInformationResult,
+        GetLicenseInformationContext licenseInformationContext,
         XElement licenseElement)
     {
         _logger.LogDebug("Getting license information from 'license' element...");
-        
+
         var licenseElementTypeAttribute = licenseElement.Attribute("type");
         if (licenseElementTypeAttribute == null)
         {
@@ -97,17 +98,17 @@ internal sealed class EnrichLicenseInformationFromLicenseElement : IEnrichLicens
 
         var licenseElementTypeAttributeValue = licenseElementTypeAttribute.Value;
         var licenseElementValue = licenseElement.Value;
-        
+
         _logger.LogDebug($"Attribute 'type' on element 'license' has value '{licenseElementTypeAttributeValue}' " +
                          $"and license element has value '{licenseElementValue}'");
-        
+
         switch (licenseElementTypeAttributeValue)
         {
             case "expression":
-                HandleLicenseExpression(licenseInformationResult, licenseElementValue);
+                HandleLicenseExpression(licenseInformationContext, licenseElementValue);
                 break;
             case "file":
-                await HandleLicenseFileAsync(licenseInformationResult, licenseElementValue);
+                await HandleLicenseFileAsync(licenseInformationContext, licenseElementValue);
                 break;
             default:
                 throw new InvalidOperationException(
@@ -116,24 +117,20 @@ internal sealed class EnrichLicenseInformationFromLicenseElement : IEnrichLicens
     }
 
     private static void HandleLicenseExpression(
-        GetLicenseInformationResult licenseInformationResult,
+        GetLicenseInformationContext licenseInformationContext,
         string licenseElementValue)
     {
-        if (!string.IsNullOrWhiteSpace(licenseInformationResult.LicenseType)) return;
-        
-        licenseInformationResult.LicenseType = licenseElementValue;
+        licenseInformationContext.LicenseInformation.Type = licenseElementValue;
     }
 
     private async Task HandleLicenseFileAsync(
-        GetLicenseInformationResult licenseInformationResult,
+        GetLicenseInformationContext licenseInformationContext,
         string licenseElementValue)
     {
-        if (!string.IsNullOrWhiteSpace(licenseInformationResult.RawLicenseText)) return;
-        
         var licenseFile =
-            _fileSystem.Path.Combine(licenseInformationResult.ArtifactDirectory.FullName, licenseElementValue);
+            _fileSystem.Path.Combine(licenseInformationContext.ArtifactDirectory.FullName, licenseElementValue);
         var licenseFileInfo = _fileSystem.FileInfo.FromFileName(licenseFile);
-        
+
         _logger.LogDebug($"Specified license file should be: '{licenseFileInfo}'");
 
         if (!licenseFileInfo.Exists)
@@ -143,6 +140,6 @@ internal sealed class EnrichLicenseInformationFromLicenseElement : IEnrichLicens
         }
 
         var rawLicenseTextFromFile = await _fileSystem.File.ReadAllTextAsync(licenseFileInfo.FullName);
-        licenseInformationResult.RawLicenseText = rawLicenseTextFromFile;
+        licenseInformationContext.LicenseInformation.Text = rawLicenseTextFromFile;
     }
 }
