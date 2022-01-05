@@ -92,14 +92,15 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
     {
         _logger.LogDebug("Getting license information from 'licenseUrl' element...");
 
+        var licenseUrlElementValue = licenseUrlElement.Value;
+        licenseInformationContext.LicenseInformation.Url = licenseUrlElementValue;
+        
         /*
          * NOTE:
          * We abort early here, to save time and resources when the license-text was already extracted.
-         * Because when it already was extracted we can assume that it's already the right one
+         * Because when it already was determined we can assume that it's already the right one
          */
         if (!string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text)) return;
-
-        var licenseUrlElementValue = licenseUrlElement.Value;
         await HandleLicenseUrlAsync(licenseInformationContext, licenseUrlElementValue);
     }
 

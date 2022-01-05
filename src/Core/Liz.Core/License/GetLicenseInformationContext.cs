@@ -1,8 +1,10 @@
-﻿using System.IO.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO.Abstractions;
 using System.Xml.Linq;
 
 namespace Liz.Core.License;
 
+[ExcludeFromCodeCoverage] // DTO
 internal sealed class GetLicenseInformationContext
 {
     public GetLicenseInformationContext()
@@ -10,9 +12,9 @@ internal sealed class GetLicenseInformationContext
         LicenseInformation = new LicenseInformation();
     }
     
-    public IDirectoryInfo ArtifactDirectory { get; set; }
+    public IDirectoryInfo ArtifactDirectory { get; init; }
 
-    public XDocument NugetSpecificationFileXml { get; set; }
+    public XDocument NugetSpecificationFileXml { get; init; }
 
     public LicenseInformation LicenseInformation { get; }
 }
