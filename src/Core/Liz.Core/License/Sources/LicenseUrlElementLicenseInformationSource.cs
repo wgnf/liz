@@ -25,7 +25,7 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
     
-    public int Order => 1;
+    public int Order => 2;
     
     public async Task GetInformationAsync(GetLicenseInformationContext licenseInformationContext)
     {

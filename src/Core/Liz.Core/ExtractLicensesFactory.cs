@@ -42,6 +42,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var enrichLicenseInformation = new ILicenseInformationSource[]
         {
             new LicenseElementLicenseInformationSource(logger, fileSystem),
+            new LicenseFileLicenseInformationSource(logger),
             new LicenseUrlElementLicenseInformationSource(logger, fileSystem, httpClient)
         };
 

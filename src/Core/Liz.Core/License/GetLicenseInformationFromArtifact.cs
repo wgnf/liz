@@ -69,18 +69,26 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
         return nugetSpecificationFileAsync;
     }
 
-    private static bool TryGetNugetSpecificationFile(IDirectoryInfo artifactDirectory,
+    private static bool TryGetNugetSpecificationFile(
+        IDirectoryInfo artifactDirectory,
         out IFileInfo nugetSpecificationFile)
     {
         nugetSpecificationFile = null;
 
         try
         {
-            var files = artifactDirectory.GetFiles(
-                $"*.{NugetSpecificationFileExtension}",
-                SearchOption.TopDirectoryOnly);
+            var candidates = artifactDirectory
+                .EnumerateFiles(
+                    $"*.{NugetSpecificationFileExtension}",
+                    new EnumerationOptions
+                    {
+                        MatchCasing = MatchCasing.CaseInsensitive,
+                        RecurseSubdirectories = false,
+                        IgnoreInaccessible = true,
+                        MatchType = MatchType.Simple
+                    });
 
-            var firstNuspec = files.FirstOrDefault();
+            var firstNuspec = candidates.FirstOrDefault();
             nugetSpecificationFile = firstNuspec;
             return nugetSpecificationFile is { Exists: true };
         }
