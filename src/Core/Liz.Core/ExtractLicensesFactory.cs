@@ -9,6 +9,7 @@ using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.Projects;
 using Liz.Core.Settings;
 using Liz.Core.Utils;
+using Liz.Core.Utils.Wrappers;
 using SlnParser;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
@@ -23,6 +24,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var logger = GetLogger(settings, loggerProvider);
         var fileSystem = new FileSystem();
         var cliToolExecutor = new DefaultCliToolExecutor(logger);
+        var httpClient = new HttpClientWrapper();
 
         var getProjects = new GetProjectsViaSlnParser(new SolutionParser(), fileSystem);
         var parseDotnetListPackage = new ParseDotnetListPackageResult();
@@ -40,7 +42,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var enrichLicenseInformation = new ILicenseInformationSource[]
         {
             new LicenseElementLicenseInformationSource(logger, fileSystem),
-            new LicenseUrlElementLicenseInformationSource(logger, fileSystem)
+            new LicenseUrlElementLicenseInformationSource(logger, fileSystem, httpClient)
         };
 
         var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(

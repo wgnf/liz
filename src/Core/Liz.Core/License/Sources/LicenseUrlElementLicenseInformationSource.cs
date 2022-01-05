@@ -1,9 +1,9 @@
 ﻿using JetBrains.Annotations;
 using Liz.Core.Logging;
+using Liz.Core.Utils.Wrappers;
 using System;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -13,13 +13,16 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
 {
     private readonly ILogger _logger;
     private readonly IFileSystem _fileSystem;
+    private readonly IHttpClient _httpClient;
 
     public LicenseUrlElementLicenseInformationSource(
         [NotNull] ILogger logger,
-        [NotNull] IFileSystem fileSystem)
+        [NotNull] IFileSystem fileSystem,
+        [NotNull] IHttpClient httpClient)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
     
     public int Order => 1;
@@ -133,12 +136,11 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
         GetLicenseInformationContext licenseInformationContext, 
         string licenseUrl)
     {
-        var httpClient = new HttpClient();
         _logger.LogDebug($"Downloading raw license-text from '{licenseUrl}'...");
 
         try
         {
-            var rawLicenseText = await httpClient.GetStringAsync(licenseUrl);
+            var rawLicenseText = await _httpClient.GetStringAsync(licenseUrl);
             licenseInformationContext.LicenseInformation.Text = rawLicenseText;
         }
         catch (Exception ex)
