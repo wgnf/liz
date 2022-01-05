@@ -106,7 +106,7 @@ internal sealed class DownloadPackageReferenceViaDotnetAddCli : IDownloadPackage
         var packageReferenceDownloadDirectory = _fileSystem.Path.Combine(
             targetDirectory,
             packageReference.Name.ToLower(), 
-            packageReference.Version);
+            packageReference.Version.ToLower());
         
         var packageReferenceDownloadDirectoryInfo = _fileSystem.DirectoryInfo.FromDirectoryName(packageReferenceDownloadDirectory);
         return packageReferenceDownloadDirectoryInfo;

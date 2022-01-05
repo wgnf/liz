@@ -16,7 +16,7 @@ namespace Liz.Core.Tests.PackageReferences.DotnetCli;
 public class GetPackageReferencesViaDotnetCliTests
 {
     [Fact]
-    public async Task GetFromProject_Should_Throw_On_Invalid()
+    public async Task GetFromProject_Should_Throw_On_Invalid_Parameters()
     {
         var context = new ArrangeContext<GetPackageReferencesViaDotnetCli>();
         var sut = context.Build();
