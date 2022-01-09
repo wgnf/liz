@@ -1,7 +1,9 @@
-﻿using FluentAssertions;
+﻿using ArrangeContext.Moq;
+using FluentAssertions;
 using Liz.Core.Settings;
 using Liz.Core.Utils;
 using System.Collections.Generic;
+using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;
 
@@ -17,10 +19,11 @@ public class ProvideTemporaryDirectoryTests
         var settings = new ExtractLicensesSettings(targetFile);
         var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData> { { targetFile, "" } });
 
-        // TODO: change this once the bug has been fixed in ArrangeContext
-        var sut = new ProvideTemporaryDirectory(
-            settings,
-            mockFileSystem);
+        var context = ArrangeContext<ProvideTemporaryDirectory>.Create();
+        context.Use(settings);
+        context.Use<IFileSystem>(mockFileSystem);
+
+        var sut = context.Build();
 
         var temporaryDirectory = sut.Get();
 
