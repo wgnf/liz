@@ -63,7 +63,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         try
         {
-            _logger.LogDebug($"Trying to get projects from {targetFile}...");
+            _logger.LogInformation($"Trying to get projects from {targetFile}...");
 
             var projects = _getProjects.GetFromFile(targetFile).ToList();
 
@@ -82,7 +82,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         var packageReferences = new List<PackageReference>();
 
-        _logger.LogDebug("Trying to get package-references for project(s)...");
+        _logger.LogInformation("Trying to get package-references for project(s)...");
         foreach (var project in projects)
         {
             var referencesFromProject = await GetPackageReferencesForProjectAsync(project);
@@ -96,7 +96,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         try
         {
-            _logger.LogDebug($"Trying to get package-references for project '{project.Name} ({project.File})'...");
+            _logger.LogInformation($"Trying to get package-references for project '{project.Name} ({project.File})'...");
 
             var packageReferences = (await _getPackageReferences
                 .GetFromProjectAsync(project, _settings.IncludeTransitiveDependencies)).ToList();
@@ -118,7 +118,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     private async Task EnrichWithLicenseInformationAsync(
         IEnumerable<PackageReference> packageReferences)
     {
-        _logger.LogDebug("Trying to get license information for package(s)...");
+        _logger.LogInformation("Trying to get license information for package(s)...");
 
         foreach (var packageReference in packageReferences)
             await EnrichWithLicenseInformationForPackageReferenceAsync(packageReference);
