@@ -51,9 +51,6 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
         if (line.StartsWith("["))
             context.CurrentTargetFramework = ParseTargetFramework(line);
 
-        if (line.StartsWith("Top-level Package") || line.StartsWith("Transitive Package"))
-            context.CurrentIndexOfResolvedVersionString = DetermineIndexOfResolvedVersionString(line);
-
         // > indicates line with Package-Reference
         if (!line.StartsWith(">")) return;
 
@@ -70,12 +67,6 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
                 .TakeWhile(character => character != ']'));
 
         return targetFramework;
-    }
-
-    private static int DetermineIndexOfResolvedVersionString(string line)
-    {
-        var index = line.IndexOf("Resolved", StringComparison.InvariantCultureIgnoreCase);
-        return index;
     }
 
     private static PackageReference ParsePackageReference(ParsePackageReferenceContext context, string line)
@@ -118,21 +109,21 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
             throw new InvalidOperationException(
                 $"Couldn't determine PackageReference for line '{line}' because the target framework is unknown. " +
                 "This should never have happened...");
-
-        if (context.CurrentIndexOfResolvedVersionString == null)
-            throw new InvalidOperationException(
-                "Couldn't determine index of 'Resolved' version string. This should never have happened...");
-
+        
         var packageName = string.Concat(
             line
                 .Skip(2)
                 .TakeWhile(character => character != ' '));
 
-        var lastElementsThatContainResolvedVersionCount =
-            line.Length - context.CurrentIndexOfResolvedVersionString.Value;
-        var resolvedVersion = string.Concat(
-            line
-                .TakeLast(lastElementsThatContainResolvedVersionCount));
+
+        var resolvedVersion = line
+            .Split(' ')
+            .Reverse()
+            .FirstOrDefault();
+
+        if (resolvedVersion == null)
+            throw new InvalidOperationException($"Couldn't determine PackageReference for line '{line}' " +
+                                                "because could not find resolved version. This should never have happened");
 
         var packageReference = new PackageReference(packageName, context.CurrentTargetFramework, resolvedVersion);
         return packageReference;
@@ -141,7 +132,5 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
     private class ParsePackageReferenceContext
     {
         public string CurrentTargetFramework { get; set; }
-
-        public int? CurrentIndexOfResolvedVersionString { get; set; }
     }
 }

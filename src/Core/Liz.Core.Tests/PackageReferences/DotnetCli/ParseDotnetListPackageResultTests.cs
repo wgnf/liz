@@ -119,4 +119,34 @@ public class ParseDotnetListPackageResultTests
             .Should()
             .BeEquivalentTo(expectedReferences);
     }
+    
+    [Fact]
+    // c.f.: https://github.com/wgnf/liz/issues/32
+    public void Should_Be_Able_To_Parse_Example_Output_With_A_Non_English_Output()
+    {
+        var context = new ArrangeContext<ParseDotnetListPackageResult>();
+        var sut = context.Build();
+
+        // ReSharper disable StringLiteralTypo
+        const string exampleOutput = @"Das Projekt 'SentimentAnalysis' enthält die folgenden Paketverweise.
+    [netcoreapp2.1]:
+    Paket oberster Ebene               Angefordert   Aufgelöst
+    > Microsoft.ML                     1.4.0         1.4.0
+    > Microsoft.NETCore.App   (A)      [2.1.0, )     2.1.0
+    
+    (A) : Auto-referenced package.";
+        // ReSharper restore StringLiteralTypo
+
+        var expectedReferences = new List<PackageReference>
+        {
+            new("Microsoft.ML", "netcoreapp2.1", "1.4.0"), 
+            new("Microsoft.NETCore.App", "netcoreapp2.1", "2.1.0")
+        };
+        
+        var packageReferences = sut.Parse(exampleOutput);
+
+        packageReferences
+            .Should()
+            .BeEquivalentTo(expectedReferences);
+    }
 }
