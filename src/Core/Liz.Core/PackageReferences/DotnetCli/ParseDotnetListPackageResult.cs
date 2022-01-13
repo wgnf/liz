@@ -117,8 +117,7 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
          * Example for case (3):
          * - [0] = "> "                             --> indicator for the package-reference line
          * - [1] = "Microsoft.NETCore.Platforms"    --> package name
-         * - [2] = "5.0.0"                          --> requested version
-         * - [3] = "5.0.0"                          --> resolved version
+         * - [2] = "5.0.0"                          --> resolved version
          *
          * So for case (2) we basically have to watch out for the "(A)" on position [2] (but this could also be
          * interesting if someone wants to filter out auto-referenced packages).
