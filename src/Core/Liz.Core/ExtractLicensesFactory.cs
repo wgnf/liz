@@ -1,11 +1,18 @@
 ﻿using Liz.Core.CliTool;
 using Liz.Core.Extract;
-using Liz.Core.Logging;
+using Liz.Core.Extract.Contracts;
+using Liz.Core.License;
+using Liz.Core.License.Contracts;
+using Liz.Core.License.Sources;
+using Liz.Core.Logging.Contracts;
 using Liz.Core.Logging.Null;
 using Liz.Core.PackageReferences;
+using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.Projects;
 using Liz.Core.Settings;
+using Liz.Core.Utils;
+using Liz.Core.Utils.Wrappers;
 using SlnParser;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
@@ -19,15 +26,46 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
     {
         var logger = GetLogger(settings, loggerProvider);
         var fileSystem = new FileSystem();
-        var cliToolExecutor = new DefaultCliToolExecutor();
+        var cliToolExecutor = new DefaultCliToolExecutor(logger);
+        var httpClient = new HttpClientWrapper();
 
         var getProjects = new GetProjectsViaSlnParser(new SolutionParser(), fileSystem);
         var parseDotnetListPackage = new ParseDotnetListPackageResult();
 
         var getPackageReferencesDotnetCli = new GetPackageReferencesViaDotnetCli(cliToolExecutor, parseDotnetListPackage);
         var getPackageReferences = new GetPackageReferencesFacade(logger, getPackageReferencesDotnetCli);
+
+        var provideTemporaryDirectory = new ProvideTemporaryDirectory(settings, fileSystem);
+        var downloadPackageReference = new DownloadPackageReferenceViaDotnetAddCli(
+            fileSystem, 
+            provideTemporaryDirectory,
+            cliToolExecutor,
+            logger);
+
+        var enrichLicenseInformation = new ILicenseInformationSource[]
+        {
+            new LicenseElementLicenseInformationSource(logger, fileSystem),
+            new LicenseFileLicenseInformationSource(logger),
+            new LicenseUrlElementLicenseInformationSource(logger, fileSystem, httpClient)
+        };
+
+        var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
+            fileSystem, 
+            logger, 
+            enrichLicenseInformation);
         
-        var extractLicenses = new ExtractLicenses(settings, logger, getProjects, getPackageReferences);
+        var getLicenseInformation = new EnrichPackageReferenceWithLicenseInformation(
+            downloadPackageReference, 
+            getLicenseInformationFromArtifact, 
+            logger);
+
+        var extractLicenses = new ExtractLicenses(
+            settings, 
+            logger, 
+            getProjects, 
+            getPackageReferences, 
+            getLicenseInformation, 
+            provideTemporaryDirectory);
         
         return extractLicenses;
     }

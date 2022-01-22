@@ -1,4 +1,4 @@
-﻿using Liz.Core.Logging;
+﻿using Liz.Core.Logging.Contracts;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Tool.Logging;

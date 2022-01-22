@@ -1,4 +1,4 @@
-﻿namespace Liz.Core.Projects;
+﻿namespace Liz.Core.Projects.Contracts.Models;
 
 internal enum ProjectFormatStyle
 {

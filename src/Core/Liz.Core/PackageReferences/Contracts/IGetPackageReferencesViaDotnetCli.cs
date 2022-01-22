@@ -1,4 +1,4 @@
-﻿namespace Liz.Core.PackageReferences.DotnetCli;
+﻿namespace Liz.Core.PackageReferences.Contracts;
 
 internal interface IGetPackageReferencesViaDotnetCli : IGetPackageReferences
 {

@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Liz.Core.Logging.Contracts;
 using System;
 
 namespace Liz.Core.Logging;

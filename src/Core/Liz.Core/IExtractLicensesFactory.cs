@@ -1,5 +1,5 @@
-﻿using Liz.Core.Extract;
-using Liz.Core.Logging;
+﻿using Liz.Core.Extract.Contracts;
+using Liz.Core.Logging.Contracts;
 using Liz.Core.Settings;
 
 namespace Liz.Core;

@@ -1,9 +1,10 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
-using Liz.Core.CliTool;
-using Liz.Core.PackageReferences;
+using Liz.Core.CliTool.Contracts;
+using Liz.Core.PackageReferences.Contracts;
+using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.PackageReferences.DotnetCli;
-using Liz.Core.Projects;
+using Liz.Core.Projects.Contracts.Models;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Liz.Core.Tests.PackageReferences.DotnetCli;
 public class GetPackageReferencesViaDotnetCliTests
 {
     [Fact]
-    public async Task GetFromProject_Should_Throw_On_Invalid()
+    public async Task GetFromProject_Should_Throw_On_Invalid_Parameters()
     {
         var context = new ArrangeContext<GetPackageReferencesViaDotnetCli>();
         var sut = context.Build();

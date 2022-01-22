@@ -1,4 +1,6 @@
 ﻿using JetBrains.Annotations;
+using Liz.Core.Projects.Contracts;
+using Liz.Core.Projects.Contracts.Models;
 using SlnParser.Contracts;
 using System;
 using System.Collections.Generic;
@@ -99,7 +101,7 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
     
     private bool IsSdkStyle(string projectFile)
     {
-        var fileStream = _fileSystem.FileStream.Create(projectFile, FileMode.Open, FileAccess.Read);
+        using var fileStream = _fileSystem.FileStream.Create(projectFile, FileMode.Open, FileAccess.Read);
         var xmlDocument = XDocument.Load(fileStream);
 
         var projectRoot = xmlDocument

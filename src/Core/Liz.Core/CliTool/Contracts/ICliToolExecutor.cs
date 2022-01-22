@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System.Threading.Tasks;
 
-namespace Liz.Core.CliTool;
+namespace Liz.Core.CliTool.Contracts;
 
 internal interface ICliToolExecutor
 {

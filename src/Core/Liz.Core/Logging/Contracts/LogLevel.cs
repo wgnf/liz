@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Liz.Core.Logging;
+namespace Liz.Core.Logging.Contracts;
 
 [PublicAPI]
 public enum LogLevel

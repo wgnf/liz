@@ -1,6 +1,8 @@
 ﻿using JetBrains.Annotations;
-using Liz.Core.CliTool;
-using Liz.Core.Projects;
+using Liz.Core.CliTool.Contracts;
+using Liz.Core.PackageReferences.Contracts;
+using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Projects.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -39,7 +41,7 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
     private async Task<string> RunDotNetListPackage(Project project, bool includeTransitive)
     {
         // c.f.: https://docs.microsoft.com/de-de/dotnet/core/tools/dotnet-list-package
-        var arguments = $"list {project.File} package {(includeTransitive ? "--include-transitive" : "")}";
+        var arguments = $"list \"{project.File}\" package {(includeTransitive ? "--include-transitive" : "")}";
         
         var result = await _cliToolExecutor.ExecuteWithResultAsync("dotnet", arguments);
         return result;

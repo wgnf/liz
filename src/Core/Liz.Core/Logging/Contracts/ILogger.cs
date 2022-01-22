@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System;
 
-namespace Liz.Core.Logging;
+namespace Liz.Core.Logging.Contracts;
 
 [PublicAPI]
 public interface ILogger

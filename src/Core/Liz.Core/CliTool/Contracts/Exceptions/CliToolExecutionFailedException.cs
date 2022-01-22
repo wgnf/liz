@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Liz.Core.CliTool;
+namespace Liz.Core.CliTool.Contracts.Exceptions;
 
 [ExcludeFromCodeCoverage] // exception
 internal sealed class CliToolExecutionFailedException : Exception

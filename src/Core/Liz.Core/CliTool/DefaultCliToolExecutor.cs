@@ -1,4 +1,8 @@
 ﻿using JetBrains.Annotations;
+using Liz.Core.CliTool.Contracts;
+using Liz.Core.CliTool.Contracts.Exceptions;
+using Liz.Core.Logging;
+using Liz.Core.Logging.Contracts;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -7,6 +11,13 @@ namespace Liz.Core.CliTool;
 
 internal sealed class DefaultCliToolExecutor : ICliToolExecutor
 {
+    private readonly ILogger _logger;
+
+    public DefaultCliToolExecutor([NotNull] ILogger logger)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+    
     public async Task ExecuteAsync(string fileName, string arguments)
     {
         ArgumentNullException.ThrowIfNull(arguments);
@@ -26,7 +37,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         return result;
     }
 
-    private async static Task<string> ExecuteInternalAsync([NotNull] string fileName, [NotNull] string arguments)
+    private async Task<string> ExecuteInternalAsync([NotNull] string fileName, [NotNull] string arguments)
     {
         var process = StartProcess(fileName, arguments);
         if (process == null)
@@ -53,7 +64,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         throw new CliToolExecutionFailedException(fileName, arguments, process.ExitCode, errorOutput);
     }
 
-    private static Process StartProcess(string fileName, string arguments)
+    private Process StartProcess(string fileName, string arguments)
     {
         try
         {
@@ -66,6 +77,8 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
                 RedirectStandardOutput = true,
                 UseShellExecute = false
             };
+            
+            _logger.LogDebug($"CLI: Executing file '{fileName}' with arguments '{arguments}'...");
 
             var process = Process.Start(processStartInfo);
             return process;

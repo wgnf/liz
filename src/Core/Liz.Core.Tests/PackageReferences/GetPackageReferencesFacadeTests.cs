@@ -1,8 +1,8 @@
 ﻿using ArrangeContext.Moq;
-using Liz.Core.Logging;
+using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences;
-using Liz.Core.PackageReferences.DotnetCli;
-using Liz.Core.Projects;
+using Liz.Core.PackageReferences.Contracts;
+using Liz.Core.Projects.Contracts.Models;
 using Moq;
 using System;
 using System.IO;

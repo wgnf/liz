@@ -1,8 +1,17 @@
 ﻿using JetBrains.Annotations;
+using Liz.Core.Extract.Contracts;
+using Liz.Core.License.Contracts;
+using Liz.Core.License.Contracts.Exceptions;
 using Liz.Core.Logging;
-using Liz.Core.PackageReferences;
-using Liz.Core.Projects;
+using Liz.Core.Logging.Contracts;
+using Liz.Core.PackageReferences.Contracts;
+using Liz.Core.PackageReferences.Contracts.Exceptions;
+using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Projects.Contracts;
+using Liz.Core.Projects.Contracts.Exceptions;
+using Liz.Core.Projects.Contracts.Models;
 using Liz.Core.Settings;
+using Liz.Core.Utils.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +22,8 @@ namespace Liz.Core.Extract;
 internal sealed class ExtractLicenses : IExtractLicenses
 {
     private readonly IGetPackageReferences _getPackageReferences;
+    private readonly IEnrichPackageReferenceWithLicenseInformation _enrichPackageReferenceWithLicenseInformation;
+    private readonly IProvideTemporaryDirectory _provideTemporaryDirectory;
     private readonly IGetProjects _getProjects;
     private readonly ILogger _logger;
     private readonly ExtractLicensesSettings _settings;
@@ -21,24 +32,37 @@ internal sealed class ExtractLicenses : IExtractLicenses
         [NotNull] ExtractLicensesSettings settings,
         [NotNull] ILogger logger,
         [NotNull] IGetProjects getProjects,
-        [NotNull] IGetPackageReferences getPackageReferences)
+        [NotNull] IGetPackageReferences getPackageReferences,
+        [NotNull] IEnrichPackageReferenceWithLicenseInformation enrichPackageReferenceWithLicenseInformation,
+        [NotNull] IProvideTemporaryDirectory provideTemporaryDirectory)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
         _getPackageReferences = getPackageReferences ?? throw new ArgumentNullException(nameof(getPackageReferences));
+        _enrichPackageReferenceWithLicenseInformation = enrichPackageReferenceWithLicenseInformation ?? throw new ArgumentNullException(nameof(enrichPackageReferenceWithLicenseInformation));
+        _provideTemporaryDirectory = provideTemporaryDirectory 
+                                     ?? throw new ArgumentNullException(nameof(provideTemporaryDirectory));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task ExtractAsync()
+    public async Task<IEnumerable<PackageReference>> ExtractAsync()
     {
         try
         {
             var projects = GetProjects(_settings.TargetFile);
-            var packageReferences = await GetPackageReferencesAsync(projects);
+            var packageReferences = (await GetPackageReferencesAsync(projects)).ToList();
+            await EnrichWithLicenseInformationAsync(packageReferences);
+
+            return packageReferences;
         }
         catch (Exception ex)
         {
             _logger.LogCritical($"Error occured while extracting licenses for '{_settings.TargetFile}'", ex);
+            throw;
+        }
+        finally
+        {
+            CleanUpTemporaryDirectory();
         }
     }
 
@@ -46,7 +70,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         try
         {
-            _logger.LogDebug($"Trying to get projects from {targetFile}...");
+            _logger.LogInformation($"Trying to get projects from {targetFile}...");
 
             var projects = _getProjects.GetFromFile(targetFile).ToList();
 
@@ -57,7 +81,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"Could not determine projects for file '{targetFile}'", ex);
+            throw new GetProjectsFailedException(targetFile, ex);
         }
     }
 
@@ -65,7 +89,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         var packageReferences = new List<PackageReference>();
 
-        _logger.LogDebug("Trying to get package-references for project(s)...");
+        _logger.LogInformation("Trying to get package-references for project(s)...");
         foreach (var project in projects)
         {
             var referencesFromProject = await GetPackageReferencesForProjectAsync(project);
@@ -79,7 +103,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         try
         {
-            _logger.LogDebug($"Trying to get package-references for project '{project.Name} ({project.File})'...");
+            _logger.LogInformation($"Trying to get package-references for project '{project.Name} ({project.File})'...");
 
             var packageReferences = (await _getPackageReferences
                 .GetFromProjectAsync(project, _settings.IncludeTransitiveDependencies)).ToList();
@@ -94,8 +118,37 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException(
-                $"Could not determine package-references for project '{project.Name} ({project.File})'", ex);
+            throw new GetPackageReferencesFailedException(project, ex);
         }
+    }
+
+    private async Task EnrichWithLicenseInformationAsync(
+        IEnumerable<PackageReference> packageReferences)
+    {
+        _logger.LogInformation("Trying to get license information for package(s)...");
+
+        foreach (var packageReference in packageReferences)
+            await EnrichWithLicenseInformationForPackageReferenceAsync(packageReference);
+    }
+
+    private async Task EnrichWithLicenseInformationForPackageReferenceAsync(PackageReference packageReference)
+    {
+        try
+        {
+            _logger.LogDebug($"Trying to get license information for {packageReference}...");
+
+            await _enrichPackageReferenceWithLicenseInformation.EnrichAsync(packageReference);
+            _logger.LogDebug($"Found following license-type: '{packageReference.LicenseInformation}'");
+        }
+        catch (Exception ex)
+        {
+            throw new GetLicenseInformationFailedException(packageReference, ex);
+        }
+    }
+
+    private void CleanUpTemporaryDirectory()
+    {
+        var temporaryDirectory = _provideTemporaryDirectory.Get();
+        temporaryDirectory.Delete(true);
     }
 }

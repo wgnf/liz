@@ -1,7 +1,9 @@
 ﻿using JetBrains.Annotations;
 using Liz.Core.Logging;
-using Liz.Core.PackageReferences.DotnetCli;
-using Liz.Core.Projects;
+using Liz.Core.Logging.Contracts;
+using Liz.Core.PackageReferences.Contracts;
+using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Projects.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
