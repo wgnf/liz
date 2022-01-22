@@ -38,7 +38,7 @@ internal sealed class LicenseFileLicenseInformationSource : ILicenseInformationS
         // we do not need to do this when there's already text
         if (!string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text)) return;
 
-        _logger.LogDebug("Get license-information from file containing 'license'");
+        _logger.LogDebug("Get license-information from a file containing 'license'");
 
         await GetLicenseInformationFromLicenseFileAsync(
             licenseInformationContext.ArtifactDirectory,
