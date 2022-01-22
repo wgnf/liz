@@ -80,7 +80,6 @@ internal sealed class DownloadPackageReferenceViaDotnetAddCli : IDownloadPackage
     }
 
     private async Task DownloadViaDotnetAddCliAsync(
-        // ReSharper disable once UseDeconstructionOnParameter
         PackageReference packageReference, 
         string dummyProjectFile,
         string targetDirectory)
