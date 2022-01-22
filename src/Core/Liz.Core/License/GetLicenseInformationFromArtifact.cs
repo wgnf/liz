@@ -61,7 +61,10 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
     private async Task<XDocument> GetNugetSpecificationFileXmlAsync(IDirectoryInfo artifactDirectory)
     {
         if (!TryGetNugetSpecificationFile(artifactDirectory, out var nugetSpecificationFile))
+        {
+            _logger.LogWarning("No nuspec file was found in downloaded package reference!");
             return null; // return null is okay here
+        }
 
         _logger.LogDebug($"Found '.nuspec' file: {nugetSpecificationFile}");
 
