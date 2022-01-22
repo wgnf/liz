@@ -63,34 +63,25 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
 
         try
         {
-            var packageElement = GetXmlElement(nugetSpecificationXml, "package");
-            var metadataElement = GetXmlElement(packageElement, "metadata");
-            licenseElement = GetXmlElement(metadataElement, "license");
+            /*
+             * NOTE:
+             * Unfortunately, because the "license" element belongs to a namespace it should be addressed with the
+             * namespace as the name. But this does not seem to work, so we'll have to use this approach
+             */
+            licenseElement = nugetSpecificationXml
+                .Descendants()
+                .FirstOrDefault(element => element.Name.LocalName == "license");
 
-            return true;
+            if (licenseElement != null) return true;
+            
+            _logger.LogDebug("Could not get 'license' element");
+            return false;
         }
         catch (Exception ex)
         {
             _logger.LogDebug("Could not get 'license' element", ex);
             return false;
         }
-    }
-
-    private static XElement GetXmlElement(XContainer xmlContainer, string elementName)
-    {
-        /*
-         * NOTE:
-         * This has to be done this way, because the actual name (which you also use in 'Element(name)' or
-         * 'Elements(name)' or 'XPathSelectElement(name)' actually look this way: '{some.xml.namespace}name' but i do
-         * not really want to use the XML-Namespace everywhere...
-         */
-        var packageElement = xmlContainer
-            .Elements()
-            .FirstOrDefault(element => element.Name.LocalName == elementName);
-        if (packageElement == null)
-            throw new InvalidOperationException($"Could not find a '{elementName}' element");
-
-        return packageElement;
     }
 
     private async Task GetLicenseInformationBasedOnLicenseElementAsync(
