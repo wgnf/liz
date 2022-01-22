@@ -1,9 +1,11 @@
-﻿using Liz.Core.PackageReferences.Contracts.Exceptions;
+﻿using Liz.Core.PackageReferences.Contracts;
+using Liz.Core.PackageReferences.Contracts.Exceptions;
+using Liz.Core.PackageReferences.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Liz.Core.PackageReferences.Contracts.Models;
+namespace Liz.Core.PackageReferences.DotnetCli;
 
 /*
  * Example output see:
