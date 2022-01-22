@@ -106,11 +106,11 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
 
     private async Task HandleLicenseUrlAsync(GetLicenseInformationContext licenseInformationContext, string licenseUrl)
     {
-        var licenseUri = new Uri(licenseUrl, UriKind.RelativeOrAbsolute);
-        if (licenseUri.IsFile)
-            await HandleLicenseFileAsync(licenseInformationContext, licenseUrl);
-        else
+        var isWebResource = licenseUrl.StartsWith("http");
+        if (isWebResource)
             await HandleLicenseWebResourceAsync(licenseInformationContext, licenseUrl);
+        else
+            await HandleLicenseFileAsync(licenseInformationContext, licenseUrl);
     }
 
     private async Task HandleLicenseFileAsync(
