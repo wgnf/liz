@@ -23,7 +23,7 @@ internal sealed class EnrichPackageReferenceWithLicenseInformation : IEnrichPack
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     
-    public async Task GetFromPackageReferenceAsync(PackageReference packageReference)
+    public async Task EnrichAsync(PackageReference packageReference)
     {
         ArgumentNullException.ThrowIfNull(packageReference);
 

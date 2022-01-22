@@ -130,7 +130,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         {
             _logger.LogDebug($"Trying to get license information for {packageReference}...");
 
-            await _enrichPackageReferenceWithLicenseInformation.GetFromPackageReferenceAsync(packageReference);
+            await _enrichPackageReferenceWithLicenseInformation.EnrichAsync(packageReference);
             _logger.LogDebug($"Found following license-type: '{packageReference.LicenseInformation.Type}'");
         }
         catch (Exception ex)

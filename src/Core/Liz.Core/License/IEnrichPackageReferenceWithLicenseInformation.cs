@@ -5,5 +5,5 @@ namespace Liz.Core.License;
 
 internal interface IEnrichPackageReferenceWithLicenseInformation
 {
-    Task GetFromPackageReferenceAsync(PackageReference packageReference);
+    Task EnrichAsync(PackageReference packageReference);
 }
