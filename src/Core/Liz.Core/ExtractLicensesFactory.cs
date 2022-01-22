@@ -1,10 +1,13 @@
 ﻿using Liz.Core.CliTool;
 using Liz.Core.Extract;
+using Liz.Core.Extract.Contracts;
 using Liz.Core.License;
+using Liz.Core.License.Contracts;
 using Liz.Core.License.Sources;
-using Liz.Core.Logging;
+using Liz.Core.Logging.Contracts;
 using Liz.Core.Logging.Null;
 using Liz.Core.PackageReferences;
+using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.Projects;
 using Liz.Core.Settings;

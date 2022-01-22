@@ -1,4 +1,5 @@
 ﻿using Liz.Core.Logging;
+using Liz.Core.Logging.Contracts;
 using Moq;
 using System;
 using Xunit;

@@ -1,8 +1,8 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
 using Liz.Core;
-using Liz.Core.Extract;
-using Liz.Core.Logging;
+using Liz.Core.Extract.Contracts;
+using Liz.Core.Logging.Contracts;
 using Liz.Core.Settings;
 using Liz.Tool.CommandLine;
 using Liz.Tool.Contracts.CommandLine;

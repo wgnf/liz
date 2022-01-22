@@ -1,7 +1,10 @@
 ﻿using JetBrains.Annotations;
-using Liz.Core.CliTool;
+using Liz.Core.CliTool.Contracts;
 using Liz.Core.Logging;
-using Liz.Core.Utils;
+using Liz.Core.Logging.Contracts;
+using Liz.Core.PackageReferences.Contracts;
+using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Utils.Contracts;
 using System;
 using System.IO;
 using System.IO.Abstractions;

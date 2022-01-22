@@ -1,10 +1,10 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
-using Liz.Core.CliTool;
-using Liz.Core.Logging;
-using Liz.Core.PackageReferences;
+using Liz.Core.CliTool.Contracts;
+using Liz.Core.Logging.Contracts;
+using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.PackageReferences.DotnetCli;
-using Liz.Core.Utils;
+using Liz.Core.Utils.Contracts;
 using Moq;
 using System;
 using System.IO.Abstractions;

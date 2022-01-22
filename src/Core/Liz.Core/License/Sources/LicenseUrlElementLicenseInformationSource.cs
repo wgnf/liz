@@ -1,6 +1,9 @@
 ﻿using JetBrains.Annotations;
+using Liz.Core.License.Contracts;
+using Liz.Core.License.Contracts.Models;
 using Liz.Core.Logging;
-using Liz.Core.Utils.Wrappers;
+using Liz.Core.Logging.Contracts;
+using Liz.Core.Utils.Contracts.Wrappers;
 using System;
 using System.IO.Abstractions;
 using System.Linq;

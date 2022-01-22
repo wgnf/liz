@@ -1,5 +1,5 @@
 ﻿using JetBrains.Annotations;
-using Liz.Core.Logging;
+using Liz.Core.Logging.Contracts;
 using System;
 using System.Diagnostics.CodeAnalysis;
 

@@ -1,5 +1,8 @@
 ﻿using JetBrains.Annotations;
+using Liz.Core.CliTool.Contracts;
+using Liz.Core.CliTool.Contracts.Exceptions;
 using Liz.Core.Logging;
+using Liz.Core.Logging.Contracts;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;

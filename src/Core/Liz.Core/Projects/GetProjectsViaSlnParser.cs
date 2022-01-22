@@ -1,4 +1,6 @@
 ﻿using JetBrains.Annotations;
+using Liz.Core.Projects.Contracts;
+using Liz.Core.Projects.Contracts.Models;
 using SlnParser.Contracts;
 using System;
 using System.Collections.Generic;

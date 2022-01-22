@@ -1,4 +1,4 @@
-﻿using Liz.Core.Logging;
+﻿using Liz.Core.Logging.Contracts;
 using Liz.Tool.Contracts.CommandLine;
 using System.Collections.Generic;
 using System.CommandLine;

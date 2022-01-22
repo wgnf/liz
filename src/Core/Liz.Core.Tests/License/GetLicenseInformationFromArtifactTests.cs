@@ -1,7 +1,8 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
 using Liz.Core.License;
-using Liz.Core.License.Sources;
+using Liz.Core.License.Contracts;
+using Liz.Core.License.Contracts.Models;
 using Moq;
 using System;
 using System.Collections.Generic;

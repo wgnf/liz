@@ -1,6 +1,8 @@
 ﻿using JetBrains.Annotations;
-using Liz.Core.License.Sources;
+using Liz.Core.License.Contracts;
+using Liz.Core.License.Contracts.Models;
 using Liz.Core.Logging;
+using Liz.Core.Logging.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -1,6 +1,7 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
 using Liz.Core.Projects;
+using Liz.Core.Projects.Contracts.Models;
 using Moq;
 using SlnParser.Contracts;
 using System;

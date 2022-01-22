@@ -1,6 +1,7 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
 using Liz.Core.CliTool;
+using Liz.Core.CliTool.Contracts.Exceptions;
 using System;
 using System.Threading.Tasks;
 using Xunit;

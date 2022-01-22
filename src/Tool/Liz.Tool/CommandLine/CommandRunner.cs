@@ -1,5 +1,5 @@
 ﻿using Liz.Core;
-using Liz.Core.Logging;
+using Liz.Core.Logging.Contracts;
 using Liz.Core.Settings;
 using Liz.Tool.Contracts.CommandLine;
 using Liz.Tool.Logging;

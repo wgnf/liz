@@ -1,7 +1,6 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
-using Liz.Core.PackageReferences;
-using Liz.Core.PackageReferences.DotnetCli;
+using Liz.Core.PackageReferences.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using Xunit;

@@ -1,8 +1,8 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
-using Liz.Core.License;
+using Liz.Core.License.Contracts.Models;
 using Liz.Core.License.Sources;
-using Liz.Core.Utils.Wrappers;
+using Liz.Core.Utils.Contracts.Wrappers;
 using Moq;
 using System;
 using System.IO.Abstractions;
