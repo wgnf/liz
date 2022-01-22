@@ -35,7 +35,7 @@ public class EnrichPackageReferenceWithLicenseInformationTests
             .Setup(download => download.DownloadAsync(packageReference))
             .ReturnsAsync(downloadedDirectory);
 
-        var licenseInformation = new LicenseInformation();
+        var licenseInformation = new LicenseInformation { Text = "abc", Type = "MIT", Url = "abc.de" };
         context
             .For<IGetLicenseInformationFromArtifact>()
             .Setup(getLicenseInformation =>

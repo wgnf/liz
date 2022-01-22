@@ -15,7 +15,7 @@ namespace Liz.Core.License;
 internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformationFromArtifact
 {
     private const string NugetSpecificationFileExtension = "nuspec";
-    private readonly IEnumerable<ILicenseInformationSource> _enrichLicenseInformationResults;
+    private readonly IEnumerable<ILicenseInformationSource> _licenseInformationSources;
     private readonly IFileSystem _fileSystem;
     private readonly ILogger _logger;
 
@@ -26,7 +26,7 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
     {
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _enrichLicenseInformationResults = enrichLicenseInformationResults
+        _licenseInformationSources = enrichLicenseInformationResults
                                            ?? throw new ArgumentNullException(nameof(enrichLicenseInformationResults));
     }
 
@@ -40,15 +40,15 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
 
     private async Task<LicenseInformation> GetFromArtifactAsync(IDirectoryInfo artifactDirectory)
     {
-        var licenseInformationContext = await GetContext(artifactDirectory);
+        var licenseInformationContext = await CreateContext(artifactDirectory);
 
-        foreach (var enrichLicenseInformationResult in _enrichLicenseInformationResults.OrderBy(e => e.Order))
-            await enrichLicenseInformationResult.GetInformationAsync(licenseInformationContext);
+        foreach (var licenseInformationSource in _licenseInformationSources.OrderBy(e => e.Order))
+            await licenseInformationSource.GetInformationAsync(licenseInformationContext);
 
         return licenseInformationContext.LicenseInformation;
     }
 
-    private async Task<GetLicenseInformationContext> GetContext(IDirectoryInfo artifactDirectory)
+    private async Task<GetLicenseInformationContext> CreateContext(IDirectoryInfo artifactDirectory)
     {
         var licenseInformationContext = new GetLicenseInformationContext
         {

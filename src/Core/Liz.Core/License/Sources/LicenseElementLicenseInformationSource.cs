@@ -137,9 +137,13 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
         GetLicenseInformationContext licenseInformationContext,
         string licenseElementValue)
     {
-        var licenseFile =
-            _fileSystem.Path.Combine(licenseInformationContext.ArtifactDirectory.FullName, licenseElementValue);
-        var licenseFileInfo = _fileSystem.FileInfo.FromFileName(licenseFile);
+        var licenseFile = _fileSystem
+            .Path
+            .Combine(licenseInformationContext.ArtifactDirectory.FullName, licenseElementValue);
+        
+        var licenseFileInfo = _fileSystem
+            .FileInfo
+            .FromFileName(licenseFile);
 
         _logger.LogDebug($"Specified license file should be: '{licenseFileInfo}'");
 
