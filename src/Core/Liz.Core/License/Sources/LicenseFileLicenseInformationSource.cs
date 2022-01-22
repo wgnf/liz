@@ -1,6 +1,6 @@
-﻿using JetBrains.Annotations;
-using Liz.Core.Logging;
+﻿using Liz.Core.Logging;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
@@ -8,12 +8,22 @@ using System.Threading.Tasks;
 
 namespace Liz.Core.License.Sources;
 
+/*
+ * NOTE / TODO:
+ * Unfortunately testing this is a huge pain in the ass right now, because this depends on
+ * "IDirectoryInfo.EnumerateFiles" with the option "MatchingCase.CaseInsensitive" AND the unit testing helpers
+ * of System.IO.Abstractions don't support "MatchingCase.CaseInsensitive" for their "MockDirectoryInfo" yet...
+ *
+ * So this will be tested once this works...
+ */
+
+[ExcludeFromCodeCoverage]
 internal sealed class LicenseFileLicenseInformationSource : ILicenseInformationSource
 {
     private readonly ILogger _logger;
 
     public LicenseFileLicenseInformationSource(
-        [NotNull] ILogger logger)
+        [JetBrains.Annotations.NotNull] ILogger logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
