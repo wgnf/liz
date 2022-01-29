@@ -10,7 +10,7 @@ namespace Liz.Core.PackageReferences.Contracts.Models;
 ///     Information about a dependency of a <see cref="Project"/>
 /// </summary>
 [ExcludeFromCodeCoverage] // DTO
-public sealed class PackageReference
+public sealed class PackageReference : IEquatable<PackageReference>
 {
     /// <summary>
     ///     Create a new instance of <see cref="PackageReference"/>
@@ -81,5 +81,32 @@ public sealed class PackageReference
 
         var objectString = builder.ToString();
         return objectString;
+    }
+    
+    public bool Equals(PackageReference other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return Name == other.Name && TargetFramework == other.TargetFramework && Version == other.Version;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return ReferenceEquals(this, obj) || obj is PackageReference other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Name, TargetFramework, Version);
+    }
+
+    public static bool operator ==(PackageReference left, PackageReference right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(PackageReference left, PackageReference right)
+    {
+        return !Equals(left, right);
     }
 }

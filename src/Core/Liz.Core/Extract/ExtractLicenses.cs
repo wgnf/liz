@@ -95,7 +95,11 @@ internal sealed class ExtractLicenses : IExtractLicenses
             var referencesFromProject = await GetPackageReferencesForProjectAsync(project);
             packageReferences.AddRange(referencesFromProject);
         }
-
+        
+        packageReferences = packageReferences
+            .Distinct()
+            .ToList();
+        
         return packageReferences;
     }
 

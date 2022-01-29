@@ -141,6 +141,43 @@ public class ExtractLicensesTests
             .Contain(new[] { packageReference1, packageReference2 });
     }
 
+    [Fact]
+    // https://github.com/wgnf/liz/issues/8
+    public async Task Extract_Makes_Package_References_Distinct()
+    {
+        var context = CreateContext();
+        var sut = context.Build();
+
+        var project = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
+
+        context
+            .For<IGetProjects>()
+            .Setup(getProjects => getProjects.GetFromFile(It.IsAny<string>()))
+            .Returns(new[] { project });
+
+        var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0");
+        var packageReference2 = new PackageReference("Something", "net5.0", "1.1.0");
+
+        context
+            .For<IGetPackageReferences>()
+            .Setup(getPackageReferences =>
+                getPackageReferences.GetFromProjectAsync(project, It.IsAny<bool>()))
+            .ReturnsAsync(new[] { packageReference1, packageReference2 });
+
+        context
+            .For<IEnrichPackageReferenceWithLicenseInformation>()
+            .Setup(enrich => enrich.EnrichAsync(It.IsAny<PackageReference>()))
+            .Returns(Task.CompletedTask);
+
+        var expectedResult = new[] { new PackageReference("Something", "net5.0", "1.1.0") };
+
+        var result = await sut.ExtractAsync();
+
+        result
+            .Should()
+            .BeEquivalentTo(expectedResult);
+    }
+
     private static ArrangeContext<ExtractLicenses> CreateContext()
     {
         var settings = new ExtractLicensesSettings("TargetFile.csproj");
