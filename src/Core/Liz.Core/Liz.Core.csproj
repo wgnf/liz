@@ -15,4 +15,19 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="CliTool\cli-bin\dotnet.exe" />
+      <EmbeddedResource Include="CliTool\cli-bin\dotnet.exe">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="CliTool\cli-bin\nuget.exe" />
+      <EmbeddedResource Include="CliTool\cli-bin\nuget.exe">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="CliTool\cli-bin\host\fxr\6.0.1\hostfxr.dll" />
+      <EmbeddedResource Include="CliTool\cli-bin\host\fxr\6.0.1\hostfxr.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>

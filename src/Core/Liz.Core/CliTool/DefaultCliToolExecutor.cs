@@ -1,21 +1,28 @@
-﻿using JetBrains.Annotations;
-using Liz.Core.CliTool.Contracts;
+﻿using Liz.Core.CliTool.Contracts;
 using Liz.Core.CliTool.Contracts.Exceptions;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.IO.Abstractions;
 using System.Threading.Tasks;
 
 namespace Liz.Core.CliTool;
 
+[ExcludeFromCodeCoverage] // hard to test because it directly starts a process
 internal sealed class DefaultCliToolExecutor : ICliToolExecutor
 {
     private readonly ILogger _logger;
+    private readonly IFileSystem _fileSystem;
 
-    public DefaultCliToolExecutor([NotNull] ILogger logger)
+    public DefaultCliToolExecutor(
+        [JetBrains.Annotations.NotNull] ILogger logger,
+        [JetBrains.Annotations.NotNull] IFileSystem fileSystem)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
     
     public async Task ExecuteAsync(string fileName, string arguments)
@@ -37,12 +44,13 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         return result;
     }
 
-    private async Task<string> ExecuteInternalAsync([NotNull] string fileName, [NotNull] string arguments)
+    private async Task<string> ExecuteInternalAsync([JetBrains.Annotations.NotNull] string fileName, [JetBrains.Annotations.NotNull] string arguments)
     {
-        var process = StartProcess(fileName, arguments);
+        var localFileName = GetFilenameFromLocalCliBin(fileName);
+        var process = StartProcess(localFileName, arguments);
         if (process == null)
             throw new CliToolExecutionFailedException(
-                fileName,
+                localFileName,
                 arguments, 
                 "Tool could not be started properly");
 
@@ -61,7 +69,20 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         // NOTE: We can generally assume that an exit code of 0 indicates the success of a process 
         if (process.ExitCode == 0) return standardOutput;
         
-        throw new CliToolExecutionFailedException(fileName, arguments, process.ExitCode, errorOutput);
+        throw new CliToolExecutionFailedException(localFileName, arguments, process.ExitCode, errorOutput);
+    }
+
+    private string GetFilenameFromLocalCliBin(string fileName)
+    {
+        if (!fileName.EndsWith(".exe"))
+            fileName = $"{fileName}.exe";
+        
+        var localCliBinFileName = _fileSystem.Path.Combine("CliTool", "cli-bin", fileName);
+        if (!_fileSystem.File.Exists(localCliBinFileName))
+            throw new FileNotFoundException("The cli-tool to execute could not be found in the local cli-bin", 
+                localCliBinFileName);
+        
+        return localCliBinFileName;
     }
 
     private Process StartProcess(string fileName, string arguments)
