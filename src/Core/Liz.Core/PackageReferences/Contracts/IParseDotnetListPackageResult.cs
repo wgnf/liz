@@ -1,6 +1,6 @@
-﻿using JetBrains.Annotations;
-using Liz.Core.PackageReferences.Contracts.Models;
+﻿using Liz.Core.PackageReferences.Contracts.Models;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Core.PackageReferences.Contracts;
 

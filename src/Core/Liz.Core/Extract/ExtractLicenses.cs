@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Liz.Core.Extract.Contracts;
+﻿using Liz.Core.Extract.Contracts;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Exceptions;
 using Liz.Core.Logging;
@@ -14,6 +13,7 @@ using Liz.Core.Settings;
 using Liz.Core.Utils.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 

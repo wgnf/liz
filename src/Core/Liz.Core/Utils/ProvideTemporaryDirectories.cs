@@ -1,7 +1,7 @@
-﻿using JetBrains.Annotations;
-using Liz.Core.Settings;
+﻿using Liz.Core.Settings;
 using Liz.Core.Utils.Contracts;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 
 namespace Liz.Core.Utils;

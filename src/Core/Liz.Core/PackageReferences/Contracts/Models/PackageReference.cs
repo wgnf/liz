@@ -22,9 +22,9 @@ public sealed class PackageReference : IEquatable<PackageReference>
     ///     All parameters are mandatory so an Exception will be thrown when any of those are not provided
     /// </exception>
     public PackageReference(
-        [JetBrains.Annotations.NotNull] string name,
-        [JetBrains.Annotations.NotNull] string targetFramework,
-        [JetBrains.Annotations.NotNull] string version)
+        [NotNull] string name,
+        [NotNull] string targetFramework,
+        [NotNull] string version)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));

@@ -1,11 +1,11 @@
-﻿using JetBrains.Annotations;
-using Liz.Core.CliTool.Contracts;
+﻿using Liz.Core.CliTool.Contracts;
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Projects.Contracts.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Liz.Core.PackageReferences.DotnetCli;

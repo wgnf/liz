@@ -1,8 +1,8 @@
-﻿using JetBrains.Annotations;
-using Liz.Core.CliTool.Contracts;
+﻿using Liz.Core.CliTool.Contracts;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.Projects.Contracts.Models;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 

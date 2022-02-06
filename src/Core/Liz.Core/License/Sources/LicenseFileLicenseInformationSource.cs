@@ -26,7 +26,7 @@ internal sealed class LicenseFileLicenseInformationSource : ILicenseInformationS
     private readonly ILogger _logger;
 
     public LicenseFileLicenseInformationSource(
-        [JetBrains.Annotations.NotNull] ILogger logger)
+        [NotNull] ILogger logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }

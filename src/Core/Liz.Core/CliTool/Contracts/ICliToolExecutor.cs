@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Liz.Core.CliTool.Contracts;

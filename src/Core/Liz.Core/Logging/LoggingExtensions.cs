@@ -1,10 +1,9 @@
-﻿using JetBrains.Annotations;
-using Liz.Core.Logging.Contracts;
+﻿using Liz.Core.Logging.Contracts;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Core.Logging;
 
-[PublicAPI]
 public static class LoggingExtensions
 {
     public static void LogTrace([NotNull] this ILogger logger, string message, Exception exception = null)

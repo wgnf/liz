@@ -18,8 +18,8 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
     private readonly IFileSystem _fileSystem;
 
     public DefaultCliToolExecutor(
-        [JetBrains.Annotations.NotNull] ILogger logger,
-        [JetBrains.Annotations.NotNull] IFileSystem fileSystem)
+        [NotNull] ILogger logger,
+        [NotNull] IFileSystem fileSystem)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -44,7 +44,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         return result;
     }
 
-    private async Task<string> ExecuteInternalAsync([JetBrains.Annotations.NotNull] string fileName, [JetBrains.Annotations.NotNull] string arguments)
+    private async Task<string> ExecuteInternalAsync([NotNull] string fileName, [NotNull] string arguments)
     {
         var localFileName = GetFilenameFromLocalCliBin(fileName);
         var process = StartProcess(localFileName, arguments);
