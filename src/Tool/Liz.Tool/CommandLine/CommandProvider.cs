@@ -30,9 +30,18 @@ internal sealed class CommandProvider
         foreach (var option in options) rootCommand.AddOption(option);
         symbols.AddRange(options);
 
-        rootCommand.SetHandler( async (FileInfo targetFile, LogLevel logLevel, bool includeTransitive) =>
+        rootCommand.SetHandler( async (
+            FileInfo targetFile, 
+            LogLevel logLevel, 
+            bool includeTransitive, 
+            bool suppressPrintDetails) =>
         {
-            await _commandRunner.RunAsync(targetFile, logLevel, includeTransitive).ConfigureAwait(false);
+            await _commandRunner.RunAsync(
+                targetFile, 
+                logLevel, 
+                includeTransitive, 
+                suppressPrintDetails)
+                .ConfigureAwait(false);
         }, symbols.ToArray());
 
         return rootCommand;
@@ -43,7 +52,8 @@ internal sealed class CommandProvider
         var options = new List<Option>
         {
             GetLogLevelOption(),
-            GetIncludeTransitiveOption()
+            GetIncludeTransitiveOption(),
+            GetSuppressPrintDetailsOption()
         };
         return options;
     }
@@ -71,6 +81,15 @@ internal sealed class CommandProvider
             new[] { "--include-transitive", "-i" },
             () => false,
             "If transitive dependencies should be included or not");
+        return option;
+    }
+
+    private static Option GetSuppressPrintDetailsOption()
+    {
+        var option = new Option<bool>(
+            new[] { "--suppress-print-details", "-sp" },
+            () => false,
+            "If printing the license and package-reference details should be suppressed or not");
         return option;
     }
 }

@@ -66,6 +66,8 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             logger,
             getDownloadedPackageReferenceArtifact);
 
+        var packageReferencePrinter = new PackageReferencePrinter(settings, logger);
+
         var extractLicenses = new ExtractLicenses(
             settings,
             logger,
@@ -73,7 +75,8 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             getPackageReferences,
             enrichPackageReferenceWithLicenseInformation,
             provideTemporaryDirectories,
-            downloadPackageReferences);
+            downloadPackageReferences,
+            packageReferencePrinter);
         
         return extractLicenses;
     }

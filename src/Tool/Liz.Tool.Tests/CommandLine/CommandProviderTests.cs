@@ -101,4 +101,32 @@ public sealed class CommandProviderTests
                 alias == "--include-transitive" ||
                 alias == "-i");
     }
+    
+    [Fact]
+    public void Provided_Root_Command_Should_Have_Suppress_Print_Details_Option()
+    {
+        var sut = new ArrangeContext<CommandProvider>().Build();
+
+        var rootCommand = sut.Get();
+
+        var includeTransitiveOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-print-details");
+        Assert.NotNull(includeTransitiveOption);
+
+        includeTransitiveOption
+            .Description
+            .Should()
+            .NotBeNullOrWhiteSpace();
+
+        includeTransitiveOption
+            .ValueType
+            .Should()
+            .Be<bool>();
+
+        includeTransitiveOption
+            .Aliases
+            .Should()
+            .Contain(alias =>
+                alias == "--suppress-print-details" ||
+                alias == "-sp");
+    }
 }

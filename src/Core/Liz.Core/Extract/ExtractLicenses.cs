@@ -25,6 +25,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     private readonly IEnrichPackageReferenceWithLicenseInformation _enrichPackageReferenceWithLicenseInformation;
     private readonly IProvideTemporaryDirectories _provideTemporaryDirectories;
     private readonly IDownloadPackageReferences _downloadPackageReferences;
+    private readonly IPackageReferencePrinter _packageReferencePrinter;
     private readonly IGetProjects _getProjects;
     private readonly ILogger _logger;
     private readonly ExtractLicensesSettings _settings;
@@ -36,15 +37,18 @@ internal sealed class ExtractLicenses : IExtractLicenses
         [NotNull] IGetPackageReferences getPackageReferences,
         [NotNull] IEnrichPackageReferenceWithLicenseInformation enrichPackageReferenceWithLicenseInformation,
         [NotNull] IProvideTemporaryDirectories provideTemporaryDirectories,
-        [NotNull] IDownloadPackageReferences downloadPackageReferences)
+        [NotNull] IDownloadPackageReferences downloadPackageReferences,
+        [NotNull] IPackageReferencePrinter packageReferencePrinter)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
         _getPackageReferences = getPackageReferences ?? throw new ArgumentNullException(nameof(getPackageReferences));
-        _enrichPackageReferenceWithLicenseInformation = enrichPackageReferenceWithLicenseInformation ?? throw new ArgumentNullException(nameof(enrichPackageReferenceWithLicenseInformation));
+        _enrichPackageReferenceWithLicenseInformation = enrichPackageReferenceWithLicenseInformation ?? 
+                                                        throw new ArgumentNullException(nameof(enrichPackageReferenceWithLicenseInformation));
         _provideTemporaryDirectories = provideTemporaryDirectories 
                                      ?? throw new ArgumentNullException(nameof(provideTemporaryDirectories));
         _downloadPackageReferences = downloadPackageReferences ?? throw new ArgumentNullException(nameof(downloadPackageReferences));
+        _packageReferencePrinter = packageReferencePrinter ?? throw new ArgumentNullException(nameof(packageReferencePrinter));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -58,6 +62,8 @@ internal sealed class ExtractLicenses : IExtractLicenses
             
             var packageReferences = (await GetPackageReferencesAsync(projects)).ToList();
             await EnrichWithLicenseInformationAsync(packageReferences);
+            
+            _packageReferencePrinter.PrintPackageReferences(packageReferences);
 
             return packageReferences;
         }
@@ -121,7 +127,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         try
         {
-            _logger.LogInformation($"Trying to get package-references for project '{project.Name} ({project.File})'...");
+            _logger.LogDebug($"Trying to get package-references for project '{project.Name} ({project.File})'...");
 
             var packageReferences = (await _getPackageReferences
                 .GetFromProjectAsync(project, _settings.IncludeTransitiveDependencies)).ToList();

@@ -139,6 +139,10 @@ public class ExtractLicensesTests
         result
             .Should()
             .Contain(new[] { packageReference1, packageReference2 });
+        
+        context
+            .For<IPackageReferencePrinter>()
+            .Verify(printer => printer.PrintPackageReferences(It.IsAny<IEnumerable<PackageReference>>()), Times.Once);
     }
 
     [Fact]

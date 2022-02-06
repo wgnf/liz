@@ -20,4 +20,6 @@ public sealed class ExtractLicensesSettings
     public bool IncludeTransitiveDependencies { get; init; }
 
     public LogLevel LogLevel { get; init; } = LogLevel.Information;
+    
+    public bool SuppressPrintDetails { get; init; }
 }
