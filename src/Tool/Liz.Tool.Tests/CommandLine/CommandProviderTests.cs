@@ -41,7 +41,7 @@ public sealed class CommandProviderTests
             .NotBeNullOrWhiteSpace();
 
         targetFileArgument
-            .ArgumentType
+            .ValueType
             .Should()
             .Be<FileInfo>();
     }

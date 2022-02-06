@@ -2,8 +2,9 @@
 using Liz.Tool.Contracts.CommandLine;
 using System.Collections.Generic;
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.Binding;
 using System.IO;
+using System.Linq;
 
 namespace Liz.Tool.CommandLine;
 
@@ -19,14 +20,20 @@ internal sealed class CommandProvider
     public RootCommand Get()
     {
         var rootCommand = new RootCommand("dotnet-tool to analyze the licenses of your project(s)");
+        var symbols = new List<IValueDescriptor>();
 
         var targetFileArgument = GetTargetFileArgument();
         rootCommand.AddArgument(targetFileArgument);
-            
-        var options = GetOptions();
-        foreach (var option in options) rootCommand.AddOption(option);
+        symbols.Add(targetFileArgument);
 
-        rootCommand.Handler = CommandHandler.Create<FileInfo, LogLevel, bool>(_commandRunner.RunAsync);
+        var options = GetOptions().ToList();
+        foreach (var option in options) rootCommand.AddOption(option);
+        symbols.AddRange(options);
+
+        rootCommand.SetHandler( async (FileInfo targetFile, LogLevel logLevel, bool includeTransitive) =>
+        {
+            await _commandRunner.RunAsync(targetFile, logLevel, includeTransitive).ConfigureAwait(false);
+        }, symbols.ToArray());
 
         return rootCommand;
     }
@@ -55,8 +62,6 @@ internal sealed class CommandProvider
             new[] { "--log-level", "-l" },
             () => LogLevel.Information,
             "The Log-Level that describes which messages are displayed when running the tool");
-
-        option.AddSuggestions(LogLevel.Information.ToString(), LogLevel.Error.ToString());
         return option;
     }
 
