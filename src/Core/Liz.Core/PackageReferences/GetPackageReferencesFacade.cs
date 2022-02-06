@@ -2,6 +2,7 @@
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences.Contracts;
+using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Projects.Contracts.Models;
 using System;
