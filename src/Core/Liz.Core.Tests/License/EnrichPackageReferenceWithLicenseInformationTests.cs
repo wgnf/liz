@@ -25,7 +25,7 @@ public class EnrichPackageReferenceWithLicenseInformationTests
     }
 
     [Fact]
-    public async Task Enrich_Sets_License_Information_From_Downloaded_Artifact()
+    public async Task Enrich_Sets_License_Information_From_Downloaded_Artifact_When_Artifact_Could_Be_Found()
     {
         var context = ArrangeContext<EnrichPackageReferenceWithLicenseInformation>.Create();
         var sut = context.Build();
@@ -34,9 +34,9 @@ public class EnrichPackageReferenceWithLicenseInformationTests
         
         var downloadedDirectory = Mock.Of<IDirectoryInfo>();
         context
-            .For<IDownloadPackageReference>()
-            .Setup(download => download.DownloadAsync(packageReference))
-            .ReturnsAsync(downloadedDirectory);
+            .For<IGetDownloadedPackageReferenceArtifact>()
+            .Setup(getArtifact => getArtifact.TryGetFor(packageReference, out downloadedDirectory))
+            .Returns(true);
 
         var licenseInformation = new LicenseInformation { Text = "abc", Type = "MIT", Url = "abc.de" };
         context
@@ -51,5 +51,28 @@ public class EnrichPackageReferenceWithLicenseInformationTests
             .LicenseInformation
             .Should()
             .Be(licenseInformation);
+    }
+
+    [Fact]
+    public async Task Enrich_Does_Not_Do_Anything_When_Artifact_Could_Not_Be_Found()
+    {
+        var context = ArrangeContext<EnrichPackageReferenceWithLicenseInformation>.Create();
+        var sut = context.Build();
+
+        var packageReference = new PackageReference("Something", "net472", "1.0.0");
+        
+        var downloadedDirectory = Mock.Of<IDirectoryInfo>();
+        context
+            .For<IGetDownloadedPackageReferenceArtifact>()
+            .Setup(getArtifact => getArtifact.TryGetFor(packageReference, out downloadedDirectory))
+            .Returns(false);
+
+        await sut.EnrichAsync(packageReference);
+
+        context
+            .For<IGetLicenseInformationFromArtifact>()
+            .Verify(
+                getLicenseInformation =>
+                    getLicenseInformation.GetFromDownloadedPackageReferenceAsync(downloadedDirectory), Times.Never);
     }
 }

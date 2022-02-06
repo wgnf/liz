@@ -186,8 +186,8 @@ public class ExtractLicensesTests
         context.Use(settings);
 
         context
-            .For<IProvideTemporaryDirectory>()
-            .Setup(provideTemporaryDirectory => provideTemporaryDirectory.Get())
+            .For<IProvideTemporaryDirectories>()
+            .Setup(provideTemporaryDirectory => provideTemporaryDirectory.GetRootDirectory())
             .Returns(Mock.Of<IDirectoryInfo>());
 
         return context;

@@ -34,12 +34,16 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var getPackageReferencesDotnetCli = new GetPackageReferencesViaDotnetCli(cliToolExecutor, parseDotnetListPackage);
         var getPackageReferences = new GetPackageReferencesFacade(logger, getPackageReferencesDotnetCli);
 
-        var provideTemporaryDirectory = new ProvideTemporaryDirectory(settings, fileSystem);
-        var downloadPackageReference = new DownloadPackageReferenceViaDotnetAddCli(
-            fileSystem, 
-            provideTemporaryDirectory,
-            cliToolExecutor,
-            logger);
+        var provideTemporaryDirectories = new ProvideTemporaryDirectories(settings, fileSystem);
+
+        var downloadPackageReferencesDotnet = new DownloadPackageReferencesViaDotnetCli(cliToolExecutor);
+        var downloadPackageReferencesNuget = new DownloadPackageReferencesViaNugetCli(cliToolExecutor);
+
+        var downloadPackageReferences = new DownloadPackageReferencesFacade(
+            provideTemporaryDirectories,
+            logger,
+            downloadPackageReferencesDotnet,
+            downloadPackageReferencesNuget);
 
         var enrichLicenseInformation = new ILicenseInformationSource[]
         {
@@ -52,19 +56,24 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             fileSystem, 
             logger, 
             enrichLicenseInformation);
+
+        var getDownloadedPackageReferenceArtifact = new GetDownloadedPackageReferenceArtifact(
+            provideTemporaryDirectories, 
+            fileSystem);
         
-        var getLicenseInformation = new EnrichPackageReferenceWithLicenseInformation(
-            downloadPackageReference, 
+        var enrichPackageReferenceWithLicenseInformation = new EnrichPackageReferenceWithLicenseInformation(
             getLicenseInformationFromArtifact, 
-            logger);
+            logger,
+            getDownloadedPackageReferenceArtifact);
 
         var extractLicenses = new ExtractLicenses(
-            settings, 
-            logger, 
-            getProjects, 
-            getPackageReferences, 
-            getLicenseInformation, 
-            provideTemporaryDirectory);
+            settings,
+            logger,
+            getProjects,
+            getPackageReferences,
+            enrichPackageReferenceWithLicenseInformation,
+            provideTemporaryDirectories,
+            downloadPackageReferences);
         
         return extractLicenses;
     }

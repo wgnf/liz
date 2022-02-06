@@ -12,20 +12,20 @@ namespace Liz.Core.Tests.Utils;
 public class ProvideTemporaryDirectoryTests
 {
     [Fact]
-    public void Get_Should_Provide_A_Temporary_Directory_Next_To_The_Target_File()
+    public void GetRootDirectory_Provides_A_Temporary_Directory_Next_To_The_Target_File()
     {
         const string targetFile = "TargetFile.csproj";
 
         var settings = new ExtractLicensesSettings(targetFile);
         var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData> { { targetFile, "" } });
 
-        var context = ArrangeContext<ProvideTemporaryDirectory>.Create();
+        var context = ArrangeContext<ProvideTemporaryDirectories>.Create();
         context.Use(settings);
         context.Use<IFileSystem>(mockFileSystem);
 
         var sut = context.Build();
 
-        var temporaryDirectory = sut.Get();
+        var temporaryDirectory = sut.GetRootDirectory();
 
         temporaryDirectory
             .Should()
@@ -34,5 +34,30 @@ public class ProvideTemporaryDirectoryTests
             .FullName
             .Should()
             .Contain("liz_tmp");
+    }
+    
+    [Fact]
+    public void GetDownloadDirectory_Provides_A_Temporary_Download_Directory_Underneath_The_Root_Directory()
+    {
+        const string targetFile = "TargetFile.csproj";
+
+        var settings = new ExtractLicensesSettings(targetFile);
+        var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData> { { targetFile, "" } });
+
+        var context = ArrangeContext<ProvideTemporaryDirectories>.Create();
+        context.Use(settings);
+        context.Use<IFileSystem>(mockFileSystem);
+
+        var sut = context.Build();
+
+        var temporaryDownloadDirectory = sut.GetDownloadDirectory();
+
+        temporaryDownloadDirectory
+            .Should()
+            .NotBeNull();
+        temporaryDownloadDirectory
+            .FullName
+            .Should()
+            .Contain("liz_tmp\\download");
     }
 }

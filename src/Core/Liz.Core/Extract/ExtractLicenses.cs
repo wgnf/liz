@@ -23,7 +23,8 @@ internal sealed class ExtractLicenses : IExtractLicenses
 {
     private readonly IGetPackageReferences _getPackageReferences;
     private readonly IEnrichPackageReferenceWithLicenseInformation _enrichPackageReferenceWithLicenseInformation;
-    private readonly IProvideTemporaryDirectory _provideTemporaryDirectory;
+    private readonly IProvideTemporaryDirectories _provideTemporaryDirectories;
+    private readonly IDownloadPackageReferences _downloadPackageReferences;
     private readonly IGetProjects _getProjects;
     private readonly ILogger _logger;
     private readonly ExtractLicensesSettings _settings;
@@ -34,14 +35,16 @@ internal sealed class ExtractLicenses : IExtractLicenses
         [NotNull] IGetProjects getProjects,
         [NotNull] IGetPackageReferences getPackageReferences,
         [NotNull] IEnrichPackageReferenceWithLicenseInformation enrichPackageReferenceWithLicenseInformation,
-        [NotNull] IProvideTemporaryDirectory provideTemporaryDirectory)
+        [NotNull] IProvideTemporaryDirectories provideTemporaryDirectories,
+        [NotNull] IDownloadPackageReferences downloadPackageReferences)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
         _getPackageReferences = getPackageReferences ?? throw new ArgumentNullException(nameof(getPackageReferences));
         _enrichPackageReferenceWithLicenseInformation = enrichPackageReferenceWithLicenseInformation ?? throw new ArgumentNullException(nameof(enrichPackageReferenceWithLicenseInformation));
-        _provideTemporaryDirectory = provideTemporaryDirectory 
-                                     ?? throw new ArgumentNullException(nameof(provideTemporaryDirectory));
+        _provideTemporaryDirectories = provideTemporaryDirectories 
+                                     ?? throw new ArgumentNullException(nameof(provideTemporaryDirectories));
+        _downloadPackageReferences = downloadPackageReferences ?? throw new ArgumentNullException(nameof(downloadPackageReferences));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -49,7 +52,10 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         try
         {
-            var projects = GetProjects(_settings.TargetFile);
+            var projects = GetProjects(_settings.TargetFile).ToList();
+
+            await DownloadPackageReferencesFor(projects);
+            
             var packageReferences = (await GetPackageReferencesAsync(projects)).ToList();
             await EnrichWithLicenseInformationAsync(packageReferences);
 
@@ -83,6 +89,14 @@ internal sealed class ExtractLicenses : IExtractLicenses
         {
             throw new GetProjectsFailedException(targetFile, ex);
         }
+    }
+
+    private async Task DownloadPackageReferencesFor(IEnumerable<Project> projects)
+    {
+        _logger.LogInformation("Downloading package-references for project(s)...");
+
+        foreach (var project in projects)
+            await _downloadPackageReferences.DownloadForProjectAsync(project).ConfigureAwait(false);
     }
 
     private async Task<IEnumerable<PackageReference>> GetPackageReferencesAsync(IEnumerable<Project> projects)
@@ -126,8 +140,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
     }
 
-    private async Task EnrichWithLicenseInformationAsync(
-        IEnumerable<PackageReference> packageReferences)
+    private async Task EnrichWithLicenseInformationAsync(IEnumerable<PackageReference> packageReferences)
     {
         _logger.LogInformation("Trying to get license information for package(s)...");
 
@@ -152,7 +165,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
 
     private void CleanUpTemporaryDirectory()
     {
-        var temporaryDirectory = _provideTemporaryDirectory.Get();
+        var temporaryDirectory = _provideTemporaryDirectories.GetRootDirectory();
         temporaryDirectory.Delete(true);
     }
 }

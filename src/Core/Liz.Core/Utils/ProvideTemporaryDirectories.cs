@@ -6,12 +6,12 @@ using System.IO.Abstractions;
 
 namespace Liz.Core.Utils;
 
-internal sealed class ProvideTemporaryDirectory : IProvideTemporaryDirectory
+internal sealed class ProvideTemporaryDirectories : IProvideTemporaryDirectories
 {
     private readonly ExtractLicensesSettings _settings;
     private readonly IFileSystem _fileSystem;
 
-    public ProvideTemporaryDirectory(
+    public ProvideTemporaryDirectories(
         [NotNull] ExtractLicensesSettings settings,
         [NotNull] IFileSystem fileSystem)
     {
@@ -19,12 +19,21 @@ internal sealed class ProvideTemporaryDirectory : IProvideTemporaryDirectory
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
     
-    public IDirectoryInfo Get()
+    public IDirectoryInfo GetRootDirectory()
     {
         var targetFileDirectory = _fileSystem.Path.GetDirectoryName(_settings.TargetFile);
         var lizTemporaryDirectory = _fileSystem.Path.Combine(targetFileDirectory, ".liz_tmp");
         var lizTemporaryDirectoryInfo = _fileSystem.DirectoryInfo.FromDirectoryName(lizTemporaryDirectory);
 
         return lizTemporaryDirectoryInfo;
+    }
+
+    public IDirectoryInfo GetDownloadDirectory()
+    {
+        var rootDirectory = GetRootDirectory();
+        var temporaryDownloadDirectoryName = _fileSystem.Path.Combine(rootDirectory.FullName, "download");
+        var temporaryDownloadDirectory = _fileSystem.DirectoryInfo.FromDirectoryName(temporaryDownloadDirectoryName);
+
+        return temporaryDownloadDirectory;
     }
 }
