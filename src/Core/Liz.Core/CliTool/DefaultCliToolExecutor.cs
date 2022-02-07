@@ -69,7 +69,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         // NOTE: We can generally assume that an exit code of 0 indicates the success of a process 
         if (process.ExitCode == 0) return standardOutput;
         
-        throw new CliToolExecutionFailedException(localFileName, arguments, process.ExitCode, errorOutput);
+        throw new CliToolExecutionFailedException(localFileName, arguments, process.ExitCode, errorOutput, standardOutput);
     }
 
     private string GetFilenameFromLocalCliBin(string fileName)

@@ -19,8 +19,10 @@ internal sealed class CliToolExecutionFailedException : Exception
         string fileName,
         string arguments,
         int exitCode,
-        string errorOutput)
-        : this(fileName, arguments, $"Exit code {exitCode} does not indicate success. Error-Output:\n{errorOutput}")
+        string errorOutput,
+        string standardOutput)
+        : this(fileName, arguments, $"Exit code {exitCode} does not indicate success. " +
+                                    $"Error-Output:\n{errorOutput}\n\nStandard-Output:\n{standardOutput}")
     {
     }
 }
