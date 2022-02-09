@@ -18,11 +18,16 @@ internal sealed class CommandRunner : ICommandRunner
         _extractLicensesFactory = extractLicensesFactory ?? new ExtractLicensesFactory();
     }
     
-    public async Task RunAsync(FileInfo targetFile, LogLevel logLevel, bool includeTransitive, bool suppressPrintDetails)
+    public async Task RunAsync(
+        FileInfo targetFile, 
+        LogLevel logLevel, 
+        bool includeTransitive, 
+        bool suppressPrintDetails,
+        bool suppressPrintIssues)
     {
         ArgumentNullException.ThrowIfNull(targetFile);
 
-        var settings = CreateSettings(targetFile, logLevel, includeTransitive, suppressPrintDetails);
+        var settings = CreateSettings(targetFile, logLevel, includeTransitive, suppressPrintDetails, suppressPrintIssues);
         var loggerProvider = new CommandLineLoggerProvider();
         
         var extractLicenses = _extractLicensesFactory.Create(settings, loggerProvider);
@@ -33,13 +38,15 @@ internal sealed class CommandRunner : ICommandRunner
         FileSystemInfo targetFile,
         LogLevel logLevel,
         bool includeTransitive,
-        bool suppressPrintDetails)
+        bool suppressPrintDetails,
+        bool suppressPrintIssues)
     {
         var settings = new ExtractLicensesSettings(targetFile.FullName)
         {
             LogLevel = logLevel,
             IncludeTransitiveDependencies = includeTransitive,
-            SuppressPrintDetails = suppressPrintDetails
+            SuppressPrintDetails = suppressPrintDetails,
+            SuppressPrintIssues = suppressPrintIssues
         };
 
         return settings;

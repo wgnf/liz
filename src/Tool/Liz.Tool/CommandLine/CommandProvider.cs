@@ -34,13 +34,15 @@ internal sealed class CommandProvider
             FileInfo targetFile, 
             LogLevel logLevel, 
             bool includeTransitive, 
-            bool suppressPrintDetails) =>
+            bool suppressPrintDetails,
+            bool suppressPrintIssues) =>
         {
             await _commandRunner.RunAsync(
                 targetFile, 
                 logLevel, 
                 includeTransitive, 
-                suppressPrintDetails)
+                suppressPrintDetails,
+                suppressPrintIssues)
                 .ConfigureAwait(false);
         }, symbols.ToArray());
 
@@ -53,7 +55,8 @@ internal sealed class CommandProvider
         {
             GetLogLevelOption(),
             GetIncludeTransitiveOption(),
-            GetSuppressPrintDetailsOption()
+            GetSuppressPrintDetailsOption(),
+            GetSuppressPrintIssuesOption()
         };
         return options;
     }
@@ -90,6 +93,15 @@ internal sealed class CommandProvider
             new[] { "--suppress-print-details", "-sp" },
             () => false,
             "If printing the license and package-reference details should be suppressed or not");
+        return option;
+    }
+
+    private static Option GetSuppressPrintIssuesOption()
+    {
+        var option = new Option<bool>(
+            new[] { "--suppress-print-issues", "-si" },
+            () => false,
+            "If printing the license-information issues should be suppressed or not");
         return option;
     }
 }

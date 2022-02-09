@@ -143,6 +143,10 @@ public class ExtractLicensesTests
         context
             .For<IPackageReferencePrinter>()
             .Verify(printer => printer.PrintPackageReferences(It.IsAny<IEnumerable<PackageReference>>()), Times.Once);
+        
+        context
+            .For<IPackageReferencePrinter>()
+            .Verify(printer => printer.PrintPackageReferencesIssues(It.IsAny<IEnumerable<PackageReference>>()), Times.Once);
     }
 
     [Fact]

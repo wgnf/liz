@@ -109,24 +109,52 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var includeTransitiveOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-print-details");
-        Assert.NotNull(includeTransitiveOption);
+        var suppressPrintDetailsOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-print-details");
+        Assert.NotNull(suppressPrintDetailsOption);
 
-        includeTransitiveOption
+        suppressPrintDetailsOption
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        includeTransitiveOption
+        suppressPrintDetailsOption
             .ValueType
             .Should()
             .Be<bool>();
 
-        includeTransitiveOption
+        suppressPrintDetailsOption
             .Aliases
             .Should()
             .Contain(alias =>
                 alias == "--suppress-print-details" ||
                 alias == "-sp");
+    }
+    
+    [Fact]
+    public void Provided_Root_Command_Should_Have_Suppress_Print_Issues_Option()
+    {
+        var sut = new ArrangeContext<CommandProvider>().Build();
+
+        var rootCommand = sut.Get();
+
+        var suppressPrintIssuesOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-print-issues");
+        Assert.NotNull(suppressPrintIssuesOption);
+
+        suppressPrintIssuesOption
+            .Description
+            .Should()
+            .NotBeNullOrWhiteSpace();
+
+        suppressPrintIssuesOption
+            .ValueType
+            .Should()
+            .Be<bool>();
+
+        suppressPrintIssuesOption
+            .Aliases
+            .Should()
+            .Contain(alias =>
+                alias == "--suppress-print-issues" ||
+                alias == "-si");
     }
 }

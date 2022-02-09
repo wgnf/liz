@@ -64,6 +64,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
             await EnrichWithLicenseInformationAsync(packageReferences);
             
             _packageReferencePrinter.PrintPackageReferences(packageReferences);
+            _packageReferencePrinter.PrintPackageReferencesIssues(packageReferences);
 
             return packageReferences;
         }

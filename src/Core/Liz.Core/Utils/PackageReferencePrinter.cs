@@ -6,6 +6,8 @@ using Liz.Core.Utils.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
 
 namespace Liz.Core.Utils;
 
@@ -27,12 +29,32 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
         ArgumentNullException.ThrowIfNull(packageReferences);
 
         if (_settings.SuppressPrintDetails) return;
+
+        var packageReferencesList = packageReferences.ToList();
+        
+        if (!packageReferencesList.Any()) return;
         
         // to make some visual space to the rest of the output
         _logger.LogInformation("\n\n\n");
 
-        foreach (var packageReference in packageReferences)
+        foreach (var packageReference in packageReferencesList)
             PrintPackageReference(packageReference);
+    }
+
+    public void PrintPackageReferencesIssues(IEnumerable<PackageReference> packageReferences)
+    {
+        ArgumentNullException.ThrowIfNull(packageReferences);
+
+        if (_settings.SuppressPrintIssues) return;
+        
+        var packageReferencesList = packageReferences.ToList();
+        
+        if (!packageReferencesList.Any()) return;
+
+        var issuesMessage = GatherIssuesMessage(packageReferencesList);
+        if (string.IsNullOrWhiteSpace(issuesMessage)) return;
+        
+        _logger.LogWarning($"\n\n\n--- Issues ---\n{issuesMessage}");
     }
 
     private void PrintPackageReference(PackageReference packageReference)
@@ -46,5 +68,37 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
         var licenseTextPortion = $"Text={licenseText}";
         
         _logger.LogInformation($"> {namePortion} ({versionPortion}): {licenseTypePortion}, {licenseUrlPortion}, {licenseTextPortion}");
+    }
+
+    private static string GatherIssuesMessage(IEnumerable<PackageReference> packageReferences)
+    {
+        var issueMessageStringBuilder = new StringBuilder();
+
+        foreach (var packageReference in packageReferences)
+            GatherLicenseInformationIssuesMessage(packageReference, issueMessageStringBuilder);
+
+        return issueMessageStringBuilder.ToString();
+    }
+
+    private static void GatherLicenseInformationIssuesMessage(
+        PackageReference packageReference,
+        StringBuilder stringBuilder)
+    {
+        var issues = new List<string>();
+        
+        if (string.IsNullOrWhiteSpace(packageReference.LicenseInformation?.Type))
+            issues.Add("Type");
+        
+        if (string.IsNullOrWhiteSpace(packageReference.LicenseInformation?.Url))
+            issues.Add("URL");
+        
+        if (string.IsNullOrWhiteSpace(packageReference.LicenseInformation?.Text))
+            issues.Add("Text");
+
+        if (!issues.Any()) return;
+
+        stringBuilder.AppendLine(
+            $"> {packageReference.Name} ({packageReference.Version}): " +
+            $"Following license-information could not be determined: {string.Join(", ", issues)}");
     }
 }

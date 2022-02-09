@@ -22,4 +22,6 @@ public sealed class ExtractLicensesSettings
     public LogLevel LogLevel { get; init; } = LogLevel.Information;
     
     public bool SuppressPrintDetails { get; init; }
+    
+    public bool SuppressPrintIssues { get; init; }
 }

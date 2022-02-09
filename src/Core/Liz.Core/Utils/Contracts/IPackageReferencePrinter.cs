@@ -7,4 +7,5 @@ namespace Liz.Core.Utils.Contracts;
 internal interface IPackageReferencePrinter
 {
     void PrintPackageReferences([NotNull] IEnumerable<PackageReference> packageReferences);
+    void PrintPackageReferencesIssues([NotNull] IEnumerable<PackageReference> packageReferences);
 }
