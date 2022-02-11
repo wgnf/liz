@@ -57,6 +57,6 @@ public class ProvideTemporaryDirectoriesTests
         temporaryDownloadDirectory
             .FullName
             .Should()
-            .Contain($"liz_tmp{Path.PathSeparator}download");
+            .Contain($"liz_tmp{Path.DirectorySeparatorChar}download");
     }
 }
