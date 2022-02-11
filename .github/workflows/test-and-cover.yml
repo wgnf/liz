@@ -20,4 +20,4 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Run Tests and Coverage with Nuke
-        run: ./build.ps1 -Target UploadCoverage -Configuration Release
+        run: ./build.sh -Target UploadCoverage -Configuration Release
