@@ -14,7 +14,7 @@ internal sealed class CommandLineLogger : ILogger
         _configuredLogLevel = configuredLogLevel;
     }
     
-    public void Log(LogLevel level, string message, Exception exception = null)
+    public void Log(LogLevel level, string message, Exception? exception = null)
     {
         if (!IsEnabled(level)) return;
 

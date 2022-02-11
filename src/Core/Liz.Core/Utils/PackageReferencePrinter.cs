@@ -5,7 +5,6 @@ using Liz.Core.Settings;
 using Liz.Core.Utils.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
@@ -16,9 +15,7 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
     private readonly ExtractLicensesSettings _settings;
     private readonly ILogger _logger;
 
-    public PackageReferencePrinter(
-        [NotNull] ExtractLicensesSettings settings,
-        [NotNull] ILogger logger)
+    public PackageReferencePrinter(ExtractLicensesSettings settings, ILogger logger)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -61,10 +58,10 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
     {
         var namePortion = packageReference.Name;
         var versionPortion = packageReference.Version;
-        var licenseTypePortion = $"Type={packageReference.LicenseInformation?.Type ?? "-"}";
-        var licenseUrlPortion = $"URL={packageReference.LicenseInformation?.Url ?? "-"}";
+        var licenseTypePortion = $"Type={(string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Text) ? "-" : packageReference.LicenseInformation.Type)}";
+        var licenseUrlPortion = $"URL={(string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Url) ? "-" : packageReference.LicenseInformation.Url)}";
 
-        var licenseText = string.IsNullOrWhiteSpace(packageReference.LicenseInformation?.Text) ? "-" : "[...]";
+        var licenseText = string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Text) ? "-" : "[...]";
         var licenseTextPortion = $"Text={licenseText}";
         
         _logger.LogInformation($"> {namePortion} ({versionPortion}): {licenseTypePortion}, {licenseUrlPortion}, {licenseTextPortion}");
@@ -86,13 +83,13 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
     {
         var issues = new List<string>();
         
-        if (string.IsNullOrWhiteSpace(packageReference.LicenseInformation?.Type))
+        if (string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Type))
             issues.Add("Type");
         
-        if (string.IsNullOrWhiteSpace(packageReference.LicenseInformation?.Url))
+        if (string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Url))
             issues.Add("URL");
         
-        if (string.IsNullOrWhiteSpace(packageReference.LicenseInformation?.Text))
+        if (string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Text))
             issues.Add("Text");
 
         if (!issues.Any()) return;

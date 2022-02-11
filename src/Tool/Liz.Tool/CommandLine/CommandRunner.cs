@@ -13,7 +13,7 @@ internal sealed class CommandRunner : ICommandRunner
 {
     private readonly IExtractLicensesFactory _extractLicensesFactory;
     
-    public CommandRunner(IExtractLicensesFactory extractLicensesFactory = null)
+    public CommandRunner(IExtractLicensesFactory? extractLicensesFactory = null)
     {
         _extractLicensesFactory = extractLicensesFactory ?? new ExtractLicensesFactory();
     }

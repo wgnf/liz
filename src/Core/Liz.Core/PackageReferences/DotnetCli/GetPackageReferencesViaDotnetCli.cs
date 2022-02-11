@@ -5,7 +5,6 @@ using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Projects.Contracts.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Liz.Core.PackageReferences.DotnetCli;
@@ -16,8 +15,8 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
     private readonly IParseDotnetListPackageResult _parseDotnetListPackageResult;
 
     public GetPackageReferencesViaDotnetCli(
-        [NotNull] ICliToolExecutor cliToolExecutor,
-        [NotNull] IParseDotnetListPackageResult parseDotnetListPackageResult)
+        ICliToolExecutor cliToolExecutor,
+        IParseDotnetListPackageResult parseDotnetListPackageResult)
     {
         _cliToolExecutor = cliToolExecutor ?? throw new ArgumentNullException(nameof(cliToolExecutor));
         _parseDotnetListPackageResult = parseDotnetListPackageResult ?? throw new ArgumentNullException(nameof(parseDotnetListPackageResult));

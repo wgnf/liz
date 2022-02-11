@@ -3,7 +3,6 @@ using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Utils.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Linq;
 
@@ -15,14 +14,14 @@ internal sealed class GetDownloadedPackageReferenceArtifact : IGetDownloadedPack
     private readonly IFileSystem _fileSystem;
 
     public GetDownloadedPackageReferenceArtifact(
-        [NotNull] IProvideTemporaryDirectories provideTemporaryDirectories,
-        [NotNull] IFileSystem fileSystem)
+        IProvideTemporaryDirectories provideTemporaryDirectories,
+        IFileSystem fileSystem)
     {
         _provideTemporaryDirectories = provideTemporaryDirectories ?? throw new ArgumentNullException(nameof(provideTemporaryDirectories));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
     
-    public bool TryGetFor(PackageReference packageReference, out IDirectoryInfo packageReferenceDownloadDirectory)
+    public bool TryGetFor(PackageReference packageReference, out IDirectoryInfo? packageReferenceDownloadDirectory)
     {
         ArgumentNullException.ThrowIfNull(packageReference);
         

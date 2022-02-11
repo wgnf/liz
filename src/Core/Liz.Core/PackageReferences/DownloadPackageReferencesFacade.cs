@@ -5,7 +5,6 @@ using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.Projects.Contracts.Models;
 using Liz.Core.Utils.Contracts;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 
@@ -26,10 +25,10 @@ internal sealed class DownloadPackageReferencesFacade : IDownloadPackageReferenc
     private readonly IProvideTemporaryDirectories _provideTemporaryDirectories;
 
     public DownloadPackageReferencesFacade(
-        [NotNull] IProvideTemporaryDirectories provideTemporaryDirectories,
-        [NotNull] ILogger logger,
-        [NotNull] IDownloadPackageReferencesViaDotnetCli downloadPackageReferencesViaDotnetCli,
-        [NotNull] IDownloadPackageReferencesViaNugetCli downloadPackageReferencesViaNugetCli)
+        IProvideTemporaryDirectories provideTemporaryDirectories,
+        ILogger logger,
+        IDownloadPackageReferencesViaDotnetCli downloadPackageReferencesViaDotnetCli,
+        IDownloadPackageReferencesViaNugetCli downloadPackageReferencesViaNugetCli)
     {
         _provideTemporaryDirectories = provideTemporaryDirectories
                                      ?? throw new ArgumentNullException(nameof(provideTemporaryDirectories));

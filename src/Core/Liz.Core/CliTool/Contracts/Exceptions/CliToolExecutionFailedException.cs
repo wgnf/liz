@@ -10,7 +10,7 @@ internal sealed class CliToolExecutionFailedException : Exception
         string fileName,
         string arguments,
         string reason,
-        Exception inner = null)
+        Exception? inner = null)
         : base($"Execution of '{fileName} {arguments}' failed, because: {reason}", inner)
     {
     }

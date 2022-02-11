@@ -1,10 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Liz.Core.CliTool.Contracts;
 
 internal interface ICliToolExecutor
 {
-    Task<string> ExecuteWithResultAsync([NotNull] string fileName, [NotNull] string arguments);
-    Task ExecuteAsync([NotNull] string fileName, [NotNull] string arguments);
+    Task<string> ExecuteWithResultAsync(string fileName, string arguments);
+    Task ExecuteAsync(string fileName, string arguments);
 }

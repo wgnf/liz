@@ -25,8 +25,7 @@ internal sealed class LicenseFileLicenseInformationSource : ILicenseInformationS
 {
     private readonly ILogger _logger;
 
-    public LicenseFileLicenseInformationSource(
-        [NotNull] ILogger logger)
+    public LicenseFileLicenseInformationSource(ILogger logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
@@ -52,7 +51,7 @@ internal sealed class LicenseFileLicenseInformationSource : ILicenseInformationS
         IDirectoryInfo artifactDirectory,
         GetLicenseInformationContext licenseInformationContext)
     {
-        if (!TryGetLicenseFile(artifactDirectory, out var licenseFile))
+        if (!TryGetLicenseFile(artifactDirectory, out var licenseFile) || licenseFile == null)
         {
             _logger.LogDebug("Could not find a possible license-file. Aborting!");
             return;
@@ -68,7 +67,7 @@ internal sealed class LicenseFileLicenseInformationSource : ILicenseInformationS
 
     private static bool TryGetLicenseFile(
         IDirectoryInfo artifactDirectory,
-        out IFileInfo licenseFile)
+        out IFileInfo? licenseFile)
     {
         licenseFile = null;
 

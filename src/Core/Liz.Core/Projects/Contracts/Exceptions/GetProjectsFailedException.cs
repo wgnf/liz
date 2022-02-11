@@ -15,7 +15,7 @@ public sealed class GetProjectsFailedException : Exception
     /// </summary>
     /// <param name="targetFile">The target-file which was used to get the projects</param>
     /// <param name="innerException">An optional inner <see cref="Exception" /></param>
-    public GetProjectsFailedException(string targetFile, Exception innerException = null)
+    public GetProjectsFailedException(string targetFile, Exception? innerException = null)
         : base($"Unable to determine projects for target-file '{targetFile}'", innerException)
     {
     }

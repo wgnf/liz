@@ -4,7 +4,6 @@ using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
@@ -22,9 +21,9 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
     private readonly ILogger _logger;
 
     public GetLicenseInformationFromArtifact(
-        [NotNull] IFileSystem fileSystem,
-        [NotNull] ILogger logger,
-        [NotNull] IEnumerable<ILicenseInformationSource> enrichLicenseInformationResults)
+        IFileSystem fileSystem,
+        ILogger logger,
+        IEnumerable<ILicenseInformationSource> enrichLicenseInformationResults)
     {
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -60,9 +59,9 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
         return licenseInformationContext;
     }
 
-    private async Task<XDocument> GetNugetSpecificationFileXmlAsync(IDirectoryInfo artifactDirectory)
+    private async Task<XDocument?> GetNugetSpecificationFileXmlAsync(IDirectoryInfo artifactDirectory)
     {
-        if (!TryGetNugetSpecificationFile(artifactDirectory, out var nugetSpecificationFile))
+        if (!TryGetNugetSpecificationFile(artifactDirectory, out var nugetSpecificationFile) || nugetSpecificationFile == null)
         {
             _logger.LogWarning("No nuspec file was found in downloaded package reference!");
             return null; // return null is okay here
@@ -76,7 +75,7 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
 
     private static bool TryGetNugetSpecificationFile(
         IDirectoryInfo artifactDirectory,
-        out IFileInfo nugetSpecificationFile)
+        out IFileInfo? nugetSpecificationFile)
     {
         nugetSpecificationFile = null;
 

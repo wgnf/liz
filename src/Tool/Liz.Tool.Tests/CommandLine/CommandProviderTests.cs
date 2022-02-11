@@ -35,12 +35,12 @@ public sealed class CommandProviderTests
         var targetFileArgument = rootCommand.Arguments.FirstOrDefault(opt => opt.Name == "targetFile");
         Assert.NotNull(targetFileArgument);
 
-        targetFileArgument
+        targetFileArgument?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        targetFileArgument
+        targetFileArgument?
             .ValueType
             .Should()
             .Be<FileInfo>();
@@ -56,17 +56,17 @@ public sealed class CommandProviderTests
         var logLevelOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "log-level");
         Assert.NotNull(logLevelOption);
 
-        logLevelOption
+        logLevelOption?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        logLevelOption
+        logLevelOption?
             .ValueType
             .Should()
             .Be<LogLevel>();
 
-        logLevelOption
+        logLevelOption?
             .Aliases
             .Should()
             .Contain(alias =>
@@ -84,17 +84,17 @@ public sealed class CommandProviderTests
         var includeTransitiveOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "include-transitive");
         Assert.NotNull(includeTransitiveOption);
 
-        includeTransitiveOption
+        includeTransitiveOption?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        includeTransitiveOption
+        includeTransitiveOption?
             .ValueType
             .Should()
             .Be<bool>();
 
-        includeTransitiveOption
+        includeTransitiveOption?
             .Aliases
             .Should()
             .Contain(alias =>
@@ -112,17 +112,17 @@ public sealed class CommandProviderTests
         var suppressPrintDetailsOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-print-details");
         Assert.NotNull(suppressPrintDetailsOption);
 
-        suppressPrintDetailsOption
+        suppressPrintDetailsOption?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        suppressPrintDetailsOption
+        suppressPrintDetailsOption?
             .ValueType
             .Should()
             .Be<bool>();
 
-        suppressPrintDetailsOption
+        suppressPrintDetailsOption?
             .Aliases
             .Should()
             .Contain(alias =>
@@ -140,17 +140,17 @@ public sealed class CommandProviderTests
         var suppressPrintIssuesOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-print-issues");
         Assert.NotNull(suppressPrintIssuesOption);
 
-        suppressPrintIssuesOption
+        suppressPrintIssuesOption?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        suppressPrintIssuesOption
+        suppressPrintIssuesOption?
             .ValueType
             .Should()
             .Be<bool>();
 
-        suppressPrintIssuesOption
+        suppressPrintIssuesOption?
             .Aliases
             .Should()
             .Contain(alias =>

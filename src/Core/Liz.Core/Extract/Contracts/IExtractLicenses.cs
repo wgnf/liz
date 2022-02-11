@@ -1,13 +1,7 @@
-﻿using Liz.Core.License;
-using Liz.Core.License.Contracts;
-using Liz.Core.License.Contracts.Exceptions;
+﻿using Liz.Core.License.Contracts.Exceptions;
 using Liz.Core.License.Contracts.Models;
-using Liz.Core.PackageReferences;
-using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Exceptions;
 using Liz.Core.PackageReferences.Contracts.Models;
-using Liz.Core.Projects;
-using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Exceptions;
 using Liz.Core.Projects.Contracts.Models;
 using System.Collections.Generic;

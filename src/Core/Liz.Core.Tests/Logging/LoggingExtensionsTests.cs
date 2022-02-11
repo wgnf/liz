@@ -11,7 +11,7 @@ public class LoggingExtensionsTests
     [Fact]
     public void Log_Trace_Should_Fail_When_Logger_Null()
     {
-        Assert.Throws<ArgumentNullException>(() => ((ILogger)null)!.LogTrace("message"));
+        Assert.Throws<ArgumentNullException>(() => ((ILogger)null!).LogTrace("message"));
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class LoggingExtensionsTests
     [Fact]
     public void Log_Debug_Should_Fail_When_Logger_Null()
     {
-        Assert.Throws<ArgumentNullException>(() => ((ILogger)null)!.LogDebug("message"));
+        Assert.Throws<ArgumentNullException>(() => ((ILogger)null!).LogDebug("message"));
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public class LoggingExtensionsTests
     [Fact]
     public void Log_Information_Should_Fail_When_Logger_Null()
     {
-        Assert.Throws<ArgumentNullException>(() => ((ILogger)null)!.LogInformation("message"));
+        Assert.Throws<ArgumentNullException>(() => ((ILogger)null!).LogInformation("message"));
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class LoggingExtensionsTests
     [Fact]
     public void Log_Warning_Should_Fail_When_Logger_Null()
     {
-        Assert.Throws<ArgumentNullException>(() => ((ILogger)null)!.LogWarning("message"));
+        Assert.Throws<ArgumentNullException>(() => ((ILogger)null!).LogWarning("message"));
     }
 
     [Fact]
@@ -99,7 +99,7 @@ public class LoggingExtensionsTests
     [Fact]
     public void Log_Error_Should_Fail_When_Logger_Null()
     {
-        Assert.Throws<ArgumentNullException>(() => ((ILogger)null)!.LogError("message"));
+        Assert.Throws<ArgumentNullException>(() => ((ILogger)null!).LogError("message"));
     }
 
     [Fact]
@@ -121,7 +121,7 @@ public class LoggingExtensionsTests
     [Fact]
     public void Log_Critical_Should_Fail_When_Logger_Null()
     {
-        Assert.Throws<ArgumentNullException>(() => ((ILogger)null)!.LogCritical("message"));
+        Assert.Throws<ArgumentNullException>(() => ((ILogger)null!).LogCritical("message"));
     }
 
     [Fact]

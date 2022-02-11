@@ -32,7 +32,7 @@ public sealed class CommandRunnerTests
         var sut = new ArrangeContext<CommandRunner>().Build();
 
         await Assert.ThrowsAsync<ArgumentNullException>(() => sut.RunAsync(
-            null, 
+            null!, 
             LogLevel.Information,
             true, 
             true, 

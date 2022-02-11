@@ -2,7 +2,6 @@
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.Projects.Contracts.Models;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Abstractions;
 using System.IO.Compression;
@@ -27,7 +26,7 @@ internal sealed class DownloadPackageReferencesViaNugetCli : IDownloadPackageRef
 {
     private readonly ICliToolExecutor _cliToolExecutor;
 
-    public DownloadPackageReferencesViaNugetCli([NotNull] ICliToolExecutor cliToolExecutor)
+    public DownloadPackageReferencesViaNugetCli(ICliToolExecutor cliToolExecutor)
     {
         _cliToolExecutor = cliToolExecutor ?? throw new ArgumentNullException(nameof(cliToolExecutor));
     }

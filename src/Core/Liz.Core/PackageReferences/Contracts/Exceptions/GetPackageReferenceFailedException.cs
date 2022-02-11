@@ -19,7 +19,7 @@ public class GetPackageReferenceFailedException : Exception
     ///     <see cref="PackageReference" />
     /// </param>
     /// <param name="innerException">An optional inner <see cref="Exception" /></param>
-    internal GetPackageReferenceFailedException(string line, string reason, Exception innerException = null)
+    internal GetPackageReferenceFailedException(string line, string reason, Exception? innerException = null)
         : base($"Unable to parse package-reference from line '{line}', because: {reason}", innerException)
     {
     }

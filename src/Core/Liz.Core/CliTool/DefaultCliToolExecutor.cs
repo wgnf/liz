@@ -17,9 +17,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
     private readonly ILogger _logger;
     private readonly IFileSystem _fileSystem;
 
-    public DefaultCliToolExecutor(
-        [NotNull] ILogger logger,
-        [NotNull] IFileSystem fileSystem)
+    public DefaultCliToolExecutor(ILogger logger, IFileSystem fileSystem)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -44,7 +42,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         return result;
     }
 
-    private async Task<string> ExecuteInternalAsync([NotNull] string fileName, [NotNull] string arguments)
+    private async Task<string> ExecuteInternalAsync(string fileName, string arguments)
     {
         var localFileName = GetFilenameFromLocalCliBin(fileName);
         var process = StartProcess(localFileName, arguments);
@@ -102,6 +100,9 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
             _logger.LogDebug($"CLI: Executing file '{fileName}' with arguments '{arguments}'...");
 
             var process = Process.Start(processStartInfo);
+            if (process == null)
+                throw new InvalidOperationException("Could not start process");
+            
             return process;
         }
         catch (Exception ex)

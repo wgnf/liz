@@ -75,7 +75,7 @@ public class GetDownloadedPackageReferenceArtifactTests
             .Should()
             .BeTrue();
 
-        result
+        result?
             .FullName
             .Should()
             .ContainAll(packageReference.Name.ToLower(), packageReference.Version.ToLower());
@@ -109,7 +109,7 @@ public class GetDownloadedPackageReferenceArtifactTests
             .Should()
             .BeTrue();
 
-        result
+        result?
             .FullName
             .Should()
             .ContainAll(packageReference.Name, packageReference.Version);

@@ -12,7 +12,7 @@ internal sealed class CommandProvider
 {
     private readonly ICommandRunner _commandRunner;
 
-    public CommandProvider(ICommandRunner commandRunner = null)
+    public CommandProvider(ICommandRunner? commandRunner = null)
     {
         _commandRunner = commandRunner ?? new CommandRunner();
     }

@@ -3,7 +3,6 @@ using Liz.Core.License.Contracts.Models;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,9 +25,7 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
     private readonly IFileSystem _fileSystem;
     private readonly ILogger _logger;
 
-    public LicenseElementLicenseInformationSource(
-        [NotNull] ILogger logger,
-        [NotNull] IFileSystem fileSystem)
+    public LicenseElementLicenseInformationSource(ILogger logger, IFileSystem fileSystem)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -54,13 +51,14 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
         GetLicenseInformationContext licenseInformationContext,
         XContainer nugetSpecificationFileXml)
     {
-        if (!TryGetLicenseElement(nugetSpecificationFileXml, out var licenseElement)) return;
+        if (!TryGetLicenseElement(nugetSpecificationFileXml, out var licenseElement) || licenseElement == null) 
+            return;
 
         _logger.LogDebug("Found 'license' element");
         await GetLicenseInformationBasedOnLicenseElementAsync(licenseInformationContext, licenseElement);
     }
 
-    private bool TryGetLicenseElement(XContainer nugetSpecificationXml, out XElement licenseElement)
+    private bool TryGetLicenseElement(XContainer nugetSpecificationXml, out XElement? licenseElement)
     {
         licenseElement = null;
 
@@ -131,6 +129,8 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
         GetLicenseInformationContext licenseInformationContext,
         string licenseElementValue)
     {
+        if (licenseInformationContext.ArtifactDirectory == null) return;
+        
         var licenseFile = _fileSystem
             .Path
             .Combine(licenseInformationContext.ArtifactDirectory.FullName, licenseElementValue);

@@ -17,7 +17,7 @@ public sealed class GetPackageReferencesFailedException : Exception
     /// </summary>
     /// <param name="project">The target project which was used to determine the <see cref="PackageReference"/>s</param>
     /// <param name="innerException">An optional inner <see cref="Exception" /></param>
-    internal GetPackageReferencesFailedException(Project project, Exception innerException = null)
+    internal GetPackageReferencesFailedException(Project project, Exception? innerException = null)
         : base($"Unable to determine project-references for target project {project}", innerException)
     {
     }

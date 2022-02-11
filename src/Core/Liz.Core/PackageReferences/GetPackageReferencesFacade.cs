@@ -6,7 +6,6 @@ using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Projects.Contracts.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,9 +17,7 @@ internal sealed class GetPackageReferencesFacade : IGetPackageReferences
     private readonly IGetPackageReferencesViaDotnetCli _getPackageReferencesViaDotnetCli;
     private readonly ILogger _logger;
 
-    public GetPackageReferencesFacade(
-        [NotNull] ILogger logger,
-        [NotNull] IGetPackageReferencesViaDotnetCli getPackageReferencesViaDotnetCli)
+    public GetPackageReferencesFacade(ILogger logger, IGetPackageReferencesViaDotnetCli getPackageReferencesViaDotnetCli)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _getPackageReferencesViaDotnetCli = getPackageReferencesViaDotnetCli ??

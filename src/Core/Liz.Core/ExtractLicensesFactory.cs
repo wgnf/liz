@@ -21,7 +21,7 @@ namespace Liz.Core;
 [ExcludeFromCodeCoverage] // Factory
 public sealed class ExtractLicensesFactory : IExtractLicensesFactory
 {
-    public IExtractLicenses Create(ExtractLicensesSettings settings, ILoggerProvider loggerProvider = null)
+    public IExtractLicenses Create(ExtractLicensesSettings settings, ILoggerProvider? loggerProvider = null)
     {
         var logger = GetLogger(settings, loggerProvider);
         var fileSystem = new FileSystem();
@@ -83,7 +83,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
 
     private static ILogger GetLogger(
         ExtractLicensesSettings settings, 
-        ILoggerProvider loggerProvider)
+        ILoggerProvider? loggerProvider)
     {
         loggerProvider ??= new NullLoggerProvider();
 

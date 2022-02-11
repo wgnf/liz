@@ -4,7 +4,6 @@ using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.Utils.Contracts.Wrappers;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,10 +17,7 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
     private readonly IFileSystem _fileSystem;
     private readonly IHttpClient _httpClient;
 
-    public LicenseUrlElementLicenseInformationSource(
-        [NotNull] ILogger logger,
-        [NotNull] IFileSystem fileSystem,
-        [NotNull] IHttpClient httpClient)
+    public LicenseUrlElementLicenseInformationSource(ILogger logger, IFileSystem fileSystem, IHttpClient httpClient)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -47,13 +43,14 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
         GetLicenseInformationContext licenseInformationContext, 
         XContainer nugetSpecificationFileXml)
     {
-        if (!TryGetLicenseUrlElement(nugetSpecificationFileXml, out var licenseUrlElement)) return;
+        if (!TryGetLicenseUrlElement(nugetSpecificationFileXml, out var licenseUrlElement) || licenseUrlElement == null) 
+            return;
         
         _logger.LogDebug("Found 'licenseUrl' element");
         await GetLicenseInformationBasedOnLicenseUrlElementAsync(licenseInformationContext, licenseUrlElement);
     }
 
-    private bool TryGetLicenseUrlElement(XContainer nugetSpecificationXml, out XElement licenseUrlElement)
+    private bool TryGetLicenseUrlElement(XContainer nugetSpecificationXml, out XElement? licenseUrlElement)
     {
         licenseUrlElement = null;
         
@@ -111,6 +108,9 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
         GetLicenseInformationContext licenseInformationContext,
         string licenseElementValue)
     {
+        if (licenseInformationContext.ArtifactDirectory == null)
+            return;
+        
         var licenseFile =
             _fileSystem.Path.Combine(licenseInformationContext.ArtifactDirectory.FullName, licenseElementValue);
         var licenseFileInfo = _fileSystem.FileInfo.FromFileName(licenseFile);

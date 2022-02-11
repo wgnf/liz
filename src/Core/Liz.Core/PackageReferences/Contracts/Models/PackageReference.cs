@@ -21,10 +21,7 @@ public sealed class PackageReference : IEquatable<PackageReference>
     /// <exception cref="ArgumentException">
     ///     All parameters are mandatory so an Exception will be thrown when any of those are not provided
     /// </exception>
-    public PackageReference(
-        [NotNull] string name,
-        [NotNull] string targetFramework,
-        [NotNull] string version)
+    public PackageReference(string name, string targetFramework, string version)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
@@ -83,14 +80,14 @@ public sealed class PackageReference : IEquatable<PackageReference>
         return objectString;
     }
     
-    public bool Equals(PackageReference other)
+    public bool Equals(PackageReference? other)
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
         return Name == other.Name && TargetFramework == other.TargetFramework && Version == other.Version;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         return ReferenceEquals(this, obj) || obj is PackageReference other && Equals(other);
     }

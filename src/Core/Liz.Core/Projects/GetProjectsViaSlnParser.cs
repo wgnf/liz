@@ -3,7 +3,6 @@ using Liz.Core.Projects.Contracts.Models;
 using SlnParser.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
@@ -16,9 +15,7 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
     private readonly IFileSystem _fileSystem;
     private readonly ISolutionParser _solutionParser;
 
-    public GetProjectsViaSlnParser(
-        [NotNull] ISolutionParser solutionParser,
-        [NotNull] IFileSystem fileSystem)
+    public GetProjectsViaSlnParser(ISolutionParser solutionParser, IFileSystem fileSystem)
     {
         _solutionParser = solutionParser ?? throw new ArgumentNullException(nameof(solutionParser));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));

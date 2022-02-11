@@ -20,7 +20,7 @@ public sealed class GetLicenseInformationFailedException : Exception
     ///     <see cref="LicenseInformation" />
     /// </param>
     /// <param name="innerException">An optional inner <see cref="Exception" /></param>
-    internal GetLicenseInformationFailedException(PackageReference packageReference, Exception innerException = null)
+    internal GetLicenseInformationFailedException(PackageReference packageReference, Exception? innerException = null)
         : base($"Unable to determine license information for package-reference {packageReference}", innerException)
     {
     }

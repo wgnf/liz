@@ -5,7 +5,6 @@ using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 
@@ -18,9 +17,9 @@ internal sealed class EnrichPackageReferenceWithLicenseInformation : IEnrichPack
     private readonly ILogger _logger;
 
     public EnrichPackageReferenceWithLicenseInformation(
-        [NotNull] IGetLicenseInformationFromArtifact getLicenseInformationFromArtifact,
-        [NotNull] ILogger logger,
-        [NotNull] IGetDownloadedPackageReferenceArtifact getDownloadedPackageReferenceArtifact)
+        IGetLicenseInformationFromArtifact getLicenseInformationFromArtifact,
+        ILogger logger,
+        IGetDownloadedPackageReferenceArtifact getDownloadedPackageReferenceArtifact)
     {
         _getLicenseInformationFromArtifact = getLicenseInformationFromArtifact ??
                                              throw new ArgumentNullException(nameof(getLicenseInformationFromArtifact));
@@ -36,7 +35,7 @@ internal sealed class EnrichPackageReferenceWithLicenseInformation : IEnrichPack
 
         if (!_getDownloadedPackageReferenceArtifact.TryGetFor(
                 packageReference,
-                out var downloadedPackageReferenceDirectory))
+                out var downloadedPackageReferenceDirectory) || downloadedPackageReferenceDirectory == null)
         {
             var message = $"Could not find downloaded artifacts for {packageReference}, this can be due to:\n" +
                           "- it actually being a project-reference\n" +

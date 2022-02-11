@@ -13,7 +13,6 @@ using Liz.Core.Settings;
 using Liz.Core.Utils.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,14 +30,14 @@ internal sealed class ExtractLicenses : IExtractLicenses
     private readonly ExtractLicensesSettings _settings;
 
     public ExtractLicenses(
-        [NotNull] ExtractLicensesSettings settings,
-        [NotNull] ILogger logger,
-        [NotNull] IGetProjects getProjects,
-        [NotNull] IGetPackageReferences getPackageReferences,
-        [NotNull] IEnrichPackageReferenceWithLicenseInformation enrichPackageReferenceWithLicenseInformation,
-        [NotNull] IProvideTemporaryDirectories provideTemporaryDirectories,
-        [NotNull] IDownloadPackageReferences downloadPackageReferences,
-        [NotNull] IPackageReferencePrinter packageReferencePrinter)
+        ExtractLicensesSettings settings,
+        ILogger logger,
+        IGetProjects getProjects,
+        IGetPackageReferences getPackageReferences,
+        IEnrichPackageReferenceWithLicenseInformation enrichPackageReferenceWithLicenseInformation,
+        IProvideTemporaryDirectories provideTemporaryDirectories,
+        IDownloadPackageReferences downloadPackageReferences,
+        IPackageReferencePrinter packageReferencePrinter)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));

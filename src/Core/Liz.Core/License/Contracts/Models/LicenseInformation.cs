@@ -10,6 +10,16 @@ namespace Liz.Core.License.Contracts.Models;
 public sealed class LicenseInformation
 {
     /// <summary>
+    ///     Creates a new instance of <see cref="LicenseInformation"/>
+    /// </summary>
+    public LicenseInformation()
+    {
+        Type = string.Empty;
+        Url = string.Empty;
+        Text = string.Empty;
+    }
+    
+    /// <summary>
     ///     The type of a license
     /// </summary>
     /// <example>MIT</example>

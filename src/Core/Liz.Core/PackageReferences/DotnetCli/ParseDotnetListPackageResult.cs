@@ -149,6 +149,6 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
 
     private class ParsePackageReferenceContext
     {
-        public string CurrentTargetFramework { get; set; }
+        public string CurrentTargetFramework { get; set; } = string.Empty;
     }
 }

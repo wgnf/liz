@@ -6,5 +6,5 @@ namespace Liz.Core;
 
 public interface IExtractLicensesFactory
 {
-    IExtractLicenses Create(ExtractLicensesSettings settings, ILoggerProvider loggerProvider = null);
+    IExtractLicenses Create(ExtractLicensesSettings settings, ILoggerProvider? loggerProvider = null);
 }
