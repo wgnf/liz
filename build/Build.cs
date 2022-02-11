@@ -72,6 +72,7 @@ class Build : NukeBuild
                     .EnableBlameHang()
                     .SetBlameHangTimeout("60s")
                     .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
+                    .SetDataCollector("XPlat Code Coverage")
                     .EnableNoBuild()
                     .EnableNoRestore());
         });
