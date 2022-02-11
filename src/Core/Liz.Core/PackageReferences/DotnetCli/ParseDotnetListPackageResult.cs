@@ -26,7 +26,7 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
     private static IEnumerable<string> SplitIntoLines(string input)
     {
         var inputSplitIntoLines = input
-            .Split("\r\n", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            .Split(Environment.NewLine, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         return inputSplitIntoLines;
     }
 

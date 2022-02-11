@@ -35,8 +35,8 @@ internal sealed class EnrichPackageReferenceWithLicenseInformation : IEnrichPack
                 packageReference,
                 out var downloadedPackageReferenceDirectory) || downloadedPackageReferenceDirectory == null)
         {
-            var message = $"Could not find downloaded artifacts for {packageReference}, this can be due to:\n" +
-                          "- it actually being a project-reference\n" +
+            var message = $"Could not find downloaded artifacts for {packageReference}, this can be due to:{Environment.NewLine}" +
+                          $"- it actually being a project-reference{Environment.NewLine}" +
                           "- it being a manually added reference which was not being downloaded via restoring";
             
             _logger.LogDebug(message);
