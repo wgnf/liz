@@ -79,6 +79,7 @@ class Build : NukeBuild
                     .EnableNoRestore());
         });
 
+    // ReSharper disable once UnusedMember.Local -- called from GitHub Action
     Target UploadCoverage => _ => _
         .DependsOn(Test)
         .Executes(() =>
