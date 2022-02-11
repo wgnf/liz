@@ -1,0 +1,29 @@
+name: Run Tests and Coverage
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-cover:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Run Tests with nuke
+        run: ./build/build.sh -Target Test -Configuration Release
+
+      - name: Coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: coverage.cobertura.xml

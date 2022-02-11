@@ -19,7 +19,7 @@ internal sealed class CommandLineLogger : ILogger
 
         var color = GetConsoleColorFromLevel(level);
         
-        var text = exception != null ? $"{message}\n{exception}" : message;
+        var text = exception != null ? $"{message}{Environment.NewLine}{exception}" : message;
         WriteLine(text, color);
     }
 

@@ -21,7 +21,9 @@ internal sealed class CliToolExecutionFailedException : Exception
         string errorOutput,
         string standardOutput)
         : this(fileName, arguments, $"Exit code {exitCode} does not indicate success. " +
-                                    $"Error-Output:\n{errorOutput}\n\nStandard-Output:\n{standardOutput}")
+                                    $"Error-Output:{Environment.NewLine}{errorOutput}" +
+                                    $"{Environment.NewLine}{Environment.NewLine}Standard-Output:" +
+                                    $"{Environment.NewLine}{standardOutput}")
     {
     }
 }

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Liz.Core.Tests.Utils;
 
-public class ProvideTemporaryDirectoryTests
+public class ProvideTemporaryDirectoriesTests
 {
     [Fact]
     public void GetRootDirectory_Provides_A_Temporary_Directory_Next_To_The_Target_File()
@@ -57,6 +57,6 @@ public class ProvideTemporaryDirectoryTests
         temporaryDownloadDirectory
             .FullName
             .Should()
-            .Contain("liz_tmp\\download");
+            .Contain($"liz_tmp{Path.DirectorySeparatorChar}download");
     }
 }

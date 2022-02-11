@@ -29,7 +29,7 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
         if (!packageReferencesList.Any()) return;
         
         // to make some visual space to the rest of the output
-        _logger.LogInformation("\n\n\n");
+        _logger.LogInformation($"{Enumerable.Repeat(Environment.NewLine, 3)}");
 
         foreach (var packageReference in packageReferencesList)
             PrintPackageReference(packageReference);
@@ -48,7 +48,7 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
         var issuesMessage = GatherIssuesMessage(packageReferencesList);
         if (string.IsNullOrWhiteSpace(issuesMessage)) return;
         
-        _logger.LogWarning($"\n\n\n--- Issues ---\n{issuesMessage}");
+        _logger.LogWarning($"{Enumerable.Repeat(Environment.NewLine, 3)}--- Issues ---{Environment.NewLine}{issuesMessage}");
     }
 
     private void PrintPackageReference(PackageReference packageReference)

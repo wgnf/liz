@@ -82,8 +82,8 @@ internal sealed class ExtractLicenses : IExtractLicenses
 
             var projects = _getProjects.GetFromFile(targetFile).ToList();
 
-            var foundProjectsLogString = string.Join("\n", projects.Select(project => $"\t- {project.File.FullName}"));
-            _logger.LogDebug($"Found following projects for '{targetFile}':\n{foundProjectsLogString}");
+            var foundProjectsLogString = string.Join(Environment.NewLine, projects.Select(project => $"\t- {project.File.FullName}"));
+            _logger.LogDebug($"Found following projects for '{targetFile}':{Environment.NewLine}{foundProjectsLogString}");
 
             return projects;
         }
@@ -128,11 +128,11 @@ internal sealed class ExtractLicenses : IExtractLicenses
             var packageReferences = (await _getPackageReferences
                 .GetFromProjectAsync(project, _settings.IncludeTransitiveDependencies)).ToList();
 
-            var foundReferencesLogString = string.Join("\n",
+            var foundReferencesLogString = string.Join($"{Environment.NewLine}",
                 packageReferences.Select(reference =>
                     $"\t- [{reference.TargetFramework}] {reference.Name} ({reference.Version})"));
             _logger.LogDebug(
-                $"Found following package-references for '{project.Name} ({project.File})':\n{foundReferencesLogString}");
+                $"Found following package-references for '{project.Name} ({project.File})':{Environment.NewLine}{foundReferencesLogString}");
 
             return packageReferences;
         }
