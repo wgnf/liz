@@ -71,6 +71,7 @@ class Build : NukeBuild
             DotNetTest(settings =>
                 settings
                     .SetProjectFile(Solution)
+                    .SetConfiguration(Configuration)
                     .EnableCollectCoverage()
                     .EnableBlameHang()
                     .SetBlameHangTimeout("60s")
