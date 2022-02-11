@@ -74,7 +74,8 @@
               "Clean",
               "Compile",
               "Restore",
-              "Test"
+              "Test",
+              "UploadCoverage"
             ]
           }
         },
@@ -91,7 +92,8 @@
               "Clean",
               "Compile",
               "Restore",
-              "Test"
+              "Test",
+              "UploadCoverage"
             ]
           }
         },
