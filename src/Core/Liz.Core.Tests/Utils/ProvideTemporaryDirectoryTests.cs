@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Liz.Core.Settings;
 using Liz.Core.Utils;
-using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;

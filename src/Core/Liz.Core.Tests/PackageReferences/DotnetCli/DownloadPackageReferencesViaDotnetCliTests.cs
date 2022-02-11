@@ -2,9 +2,7 @@
 using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.Projects.Contracts.Models;
 using Moq;
-using System;
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 using Xunit;
 using ArrangeContext.Moq;
 

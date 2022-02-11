@@ -3,9 +3,6 @@ using Liz.Core.Logging.Contracts;
 using Liz.Core.Settings;
 using Liz.Tool.Contracts.CommandLine;
 using Liz.Tool.Logging;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Liz.Tool.CommandLine;
 

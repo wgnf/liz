@@ -7,9 +7,6 @@ using Liz.Core.Settings;
 using Liz.Tool.CommandLine;
 using Liz.Tool.Contracts.CommandLine;
 using Moq;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Liz.Tool.Tests.CommandLine;

@@ -4,11 +4,8 @@ using Liz.Core.License;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Liz.Core.Tests.License;

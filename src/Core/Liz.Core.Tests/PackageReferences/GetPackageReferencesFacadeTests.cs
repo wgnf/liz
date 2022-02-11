@@ -1,14 +1,10 @@
 ﻿using ArrangeContext.Moq;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences;
-using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.Projects.Contracts.Models;
 using Moq;
-using System;
-using System.IO;
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Liz.Core.Tests.PackageReferences;

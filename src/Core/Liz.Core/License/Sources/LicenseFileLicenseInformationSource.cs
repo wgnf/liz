@@ -2,12 +2,8 @@
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.IO.Abstractions;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Liz.Core.License.Sources;
 

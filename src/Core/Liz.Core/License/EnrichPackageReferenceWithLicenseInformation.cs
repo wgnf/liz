@@ -4,9 +4,7 @@ using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
-using System;
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 
 namespace Liz.Core.License;
 

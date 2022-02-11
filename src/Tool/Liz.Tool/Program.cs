@@ -1,7 +1,6 @@
 ﻿using Liz.Tool.CommandLine;
 using System.CommandLine;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 
 namespace Liz.Tool;
 

@@ -1,10 +1,7 @@
 ﻿using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Utils.Contracts;
-using System;
-using System.Collections.Generic;
 using System.IO.Abstractions;
-using System.Linq;
 
 namespace Liz.Core.PackageReferences;
 

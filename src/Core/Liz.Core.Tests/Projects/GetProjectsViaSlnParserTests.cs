@@ -4,8 +4,6 @@ using Liz.Core.Projects;
 using Liz.Core.Projects.Contracts.Models;
 using Moq;
 using SlnParser.Contracts;
-using System;
-using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;
@@ -169,9 +167,7 @@ public class GetProjectsViaSlnParserTests
         var projects = sut.GetFromFile(targetFile);
         projects
             .Should()
-            .ContainSingle(project =>
-                project.Name == existingFsproj.Name &&
-                project.File != null);
+            .ContainSingle(project => project.Name == existingFsproj.Name);
     }
     
     [Fact]

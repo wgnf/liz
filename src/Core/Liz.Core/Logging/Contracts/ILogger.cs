@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Liz.Core.Logging.Contracts;
+﻿namespace Liz.Core.Logging.Contracts;
 
 public interface ILogger
 {

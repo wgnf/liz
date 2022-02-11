@@ -1,5 +1,4 @@
 ﻿using Liz.Core.Projects.Contracts.Models;
-using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Core.Projects.Contracts.Exceptions;

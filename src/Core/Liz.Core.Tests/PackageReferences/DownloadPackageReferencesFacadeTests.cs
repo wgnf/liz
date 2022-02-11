@@ -4,9 +4,7 @@ using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.Projects.Contracts.Models;
 using Liz.Core.Utils.Contracts;
 using Moq;
-using System;
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Liz.Core.Tests.PackageReferences;

@@ -1,11 +1,7 @@
 ﻿using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Models;
 using SlnParser.Contracts;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Abstractions;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Liz.Core.Projects;

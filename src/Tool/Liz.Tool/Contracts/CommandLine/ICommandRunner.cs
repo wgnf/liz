@@ -1,6 +1,4 @@
 ﻿using Liz.Core.Logging.Contracts;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Liz.Tool.Contracts.CommandLine;
 

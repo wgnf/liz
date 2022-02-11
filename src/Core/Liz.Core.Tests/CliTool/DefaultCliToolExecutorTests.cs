@@ -1,7 +1,5 @@
 ﻿using ArrangeContext.Moq;
 using Liz.Core.CliTool;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Liz.Core.Tests.CliTool;

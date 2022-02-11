@@ -1,5 +1,4 @@
 ﻿using Liz.Core.Logging.Contracts;
-using System;
 
 namespace Liz.Core.Logging;
 

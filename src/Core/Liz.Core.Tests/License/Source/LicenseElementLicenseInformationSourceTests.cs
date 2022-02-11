@@ -2,10 +2,8 @@
 using FluentAssertions;
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.License.Sources;
-using System;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using Xunit;
 

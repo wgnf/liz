@@ -1,10 +1,7 @@
 ﻿using Liz.Core.Logging.Contracts;
 using Liz.Tool.Contracts.CommandLine;
-using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Binding;
-using System.IO;
-using System.Linq;
 
 namespace Liz.Tool.CommandLine;
 

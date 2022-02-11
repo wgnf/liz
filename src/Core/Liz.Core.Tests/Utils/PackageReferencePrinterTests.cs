@@ -5,8 +5,6 @@ using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Settings;
 using Liz.Core.Utils;
 using Moq;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace Liz.Core.Tests.Utils;

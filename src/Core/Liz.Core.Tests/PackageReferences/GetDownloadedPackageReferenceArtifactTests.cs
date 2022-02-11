@@ -3,7 +3,6 @@ using FluentAssertions;
 using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Utils.Contracts;
-using System;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;

@@ -2,8 +2,6 @@
 using FluentAssertions;
 using Liz.Core.Logging.Contracts;
 using Liz.Tool.CommandLine;
-using System.IO;
-using System.Linq;
 using Xunit;
 
 namespace Liz.Tool.Tests.CommandLine;

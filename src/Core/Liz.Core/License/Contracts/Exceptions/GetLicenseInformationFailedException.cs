@@ -1,6 +1,5 @@
 ﻿using Liz.Core.License.Contracts.Models;
 using Liz.Core.PackageReferences.Contracts.Models;
-using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Core.License.Contracts.Exceptions;

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Liz.Core.Utils.Contracts.Wrappers;
+﻿namespace Liz.Core.Utils.Contracts.Wrappers;
 
 internal interface IHttpClient
 {

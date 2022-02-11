@@ -12,10 +12,7 @@ using Liz.Core.Projects.Contracts.Models;
 using Liz.Core.Settings;
 using Liz.Core.Utils.Contracts;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Liz.Core.Tests.Extract;

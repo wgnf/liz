@@ -1,6 +1,5 @@
 ﻿using Liz.Core.Settings;
 using Liz.Core.Utils.Contracts;
-using System;
 using System.IO.Abstractions;
 
 namespace Liz.Core.Utils;

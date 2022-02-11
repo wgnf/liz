@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Liz.Core.CliTool.Contracts;
+﻿namespace Liz.Core.CliTool.Contracts;
 
 internal interface ICliToolExecutor
 {

@@ -6,9 +6,7 @@ using Liz.Core.License.Contracts.Models;
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
 using Moq;
-using System;
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Liz.Core.Tests.License;

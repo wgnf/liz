@@ -1,12 +1,8 @@
 ﻿using Liz.Core.CliTool.Contracts;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.Projects.Contracts.Models;
-using System;
-using System.IO;
 using System.IO.Abstractions;
 using System.IO.Compression;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Liz.Core.PackageReferences.DotnetCli;
 

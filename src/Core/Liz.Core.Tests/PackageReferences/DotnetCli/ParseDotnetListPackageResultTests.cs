@@ -2,8 +2,6 @@
 using FluentAssertions;
 using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.PackageReferences.DotnetCli;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace Liz.Core.Tests.PackageReferences.DotnetCli;

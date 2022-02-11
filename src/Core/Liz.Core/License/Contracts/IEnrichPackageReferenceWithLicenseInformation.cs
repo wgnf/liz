@@ -1,5 +1,4 @@
 ﻿using Liz.Core.PackageReferences.Contracts.Models;
-using System.Threading.Tasks;
 
 namespace Liz.Core.License.Contracts;
 

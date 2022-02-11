@@ -3,9 +3,7 @@ using Liz.Core.CliTool.Contracts;
 using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.Projects.Contracts.Models;
 using Moq;
-using System;
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Liz.Core.Tests.PackageReferences.DotnetCli;

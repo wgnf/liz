@@ -4,9 +4,7 @@ using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.Projects.Contracts.Models;
 using Liz.Core.Utils.Contracts;
-using System;
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 
 namespace Liz.Core.PackageReferences;
 
