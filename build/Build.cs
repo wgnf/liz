@@ -3,6 +3,7 @@ using Nuke.Common.CI;
 using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
@@ -57,5 +58,20 @@ class Build : NukeBuild
                     .EnableNoRestore());
         });
 
-    public static int Main() => Execute<Build>(x => x.Compile);
+    Target Test => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTest(settings =>
+                settings
+                    .SetProjectFile(Solution)
+                    .EnableCollectCoverage()
+                    .EnableBlameHang()
+                    .SetBlameHangTimeout("60s")
+                    .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
+                    .EnableNoBuild()
+                    .EnableNoRestore());
+        });
+
+    public static int Main() => Execute<Build>(x => x.Test);
 }
