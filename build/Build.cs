@@ -1,11 +1,8 @@
 using Nuke.Common;
 using Nuke.Common.CI;
-using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Execution;
-using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-using Nuke.Common.Tools.Codecov;
 using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
@@ -25,7 +22,6 @@ class Build : NukeBuild
     [Secret] readonly string? CodeCovToken;
     
     [GitVersion] readonly GitVersion? GitVersion;
-    [GitRepository] readonly GitRepository? GitRepository;
     [Solution] readonly Solution? Solution;
 
     static AbsolutePath SourceDirectory => RootDirectory / "src";
@@ -78,22 +74,6 @@ class Build : NukeBuild
                     .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
                     .EnableNoBuild()
                     .EnableNoRestore());
-        });
-
-    // ReSharper disable once UnusedMember.Local -- called from GitHub Action
-    Target UploadCoverage => _ => _
-        .DependsOn(Test)
-        .Executes(() =>
-        {
-            CodecovTasks
-                .Codecov(settings =>
-                    settings
-                        .SetToken(CodeCovToken)
-                        .SetFiles("coverage.cobertura.xml")
-                        .SetBranch(GitRepository?.Branch)
-                        .SetBuild(GitHubActions.Instance.JobId.ToString())
-                        .SetPullRequest(GitHubActions.Instance.PullRequestNumber?.ToString())
-                        .SetTag(GitHubActions.Instance.Ref));
         });
 
     public static int Main() => Execute<Build>(x => x.Test);
