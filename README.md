@@ -1,6 +1,9 @@
 # 📃 liz (ˈlɪz)
 
-[![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)  
+[![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Uses SemVer 2.0.0](https://img.shields.io/badge/Uses%20SemVer-2.0.0-green)](https://semver.org/spec/v2.0.0.html)
+[![Latest Release](https://img.shields.io/github/v/release/wgnf/liz?label=latest%20release&sort=semver)](https://github.com/wgnf/liz/releases)
+[![codecov](https://codecov.io/gh/wgnf/liz/branch/main/graph/badge.svg?token=NMGXDYZMFA)](https://codecov.io/gh/wgnf/liz)  
 [![GitHub stars](https://img.shields.io/github/stars/wgnf/liz?style=social)](https://github.com/wgnf/liz/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/wgnf/liz?style=social)](https://github.com/wgnf/liz/network/members)
 [![GitHub watchers](https://img.shields.io/github/watchers/wgnf/liz?style=social)](https://github.com/wgnf/liz/watchers)
