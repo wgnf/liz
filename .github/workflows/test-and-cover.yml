@@ -26,4 +26,4 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage.cobertura.xml
+          file: .src/coverage.cobertura.xml
