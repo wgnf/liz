@@ -1,8 +1,12 @@
 {
   "profiles": {
-    "Liz.Tool": {
+    "Liz-Solution": {
       "commandName": "Project",
       "commandLineArgs": "../../../../../Liz.sln -l Trace -i"
+    },
+    "TestingGround-Solution": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../../../../test-data/sln/TestingGround.sln -l Trace -i"
     }
   }
 }

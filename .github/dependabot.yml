@@ -1,6 +1,10 @@
 version: 2
 updates:
   - package-ecosystem: "nuget"
-    directory: "/"
+    directory: "/src"
     schedule:
       interval: "weekly"
+  - package-ecosystem: "nuget"
+    directory: "/build"
+    schedule:
+      interval: weekly
