@@ -3,21 +3,16 @@ using Liz.Core.CliTool.Contracts.Exceptions;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.IO.Abstractions;
 
 namespace Liz.Core.CliTool;
 
-[ExcludeFromCodeCoverage] // hard to test because it directly starts a process
 internal sealed class DefaultCliToolExecutor : ICliToolExecutor
 {
     private readonly ILogger _logger;
-    private readonly IFileSystem _fileSystem;
 
-    public DefaultCliToolExecutor(ILogger logger, IFileSystem fileSystem)
+    public DefaultCliToolExecutor(ILogger logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
     
     public async Task ExecuteAsync(string fileName, string arguments)
@@ -41,11 +36,10 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
 
     private async Task<string> ExecuteInternalAsync(string fileName, string arguments)
     {
-        var localFileName = GetFilenameFromLocalCliBin(fileName);
-        var process = StartProcess(localFileName, arguments);
+        var process = StartProcess(fileName, arguments);
         if (process == null)
             throw new CliToolExecutionFailedException(
-                localFileName,
+                fileName,
                 arguments, 
                 "Tool could not be started properly");
 
@@ -64,20 +58,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         // NOTE: We can generally assume that an exit code of 0 indicates the success of a process 
         if (process.ExitCode == 0) return standardOutput;
         
-        throw new CliToolExecutionFailedException(localFileName, arguments, process.ExitCode, errorOutput, standardOutput);
-    }
-
-    private string GetFilenameFromLocalCliBin(string fileName)
-    {
-        if (!fileName.EndsWith(".exe"))
-            fileName = $"{fileName}.exe";
-        
-        var localCliBinFileName = _fileSystem.Path.Combine("CliTool", "cli-bin", fileName);
-        if (!_fileSystem.File.Exists(localCliBinFileName))
-            throw new FileNotFoundException("The cli-tool to execute could not be found in the local cli-bin", 
-                localCliBinFileName);
-        
-        return localCliBinFileName;
+        throw new CliToolExecutionFailedException(fileName, arguments, process.ExitCode, errorOutput, standardOutput);
     }
 
     private Process StartProcess(string fileName, string arguments)

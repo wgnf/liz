@@ -25,7 +25,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
     {
         var logger = GetLogger(settings, loggerProvider);
         var fileSystem = new FileSystem();
-        var cliToolExecutor = new DefaultCliToolExecutor(logger, fileSystem);
+        var cliToolExecutor = new DefaultCliToolExecutor(logger);
         var httpClient = new HttpClientWrapper();
 
         var getProjects = new GetProjectsViaSlnParser(new SolutionParser(), fileSystem);

@@ -18,6 +18,28 @@ Coming Soon ™️
 
 Coming Soon ™️
 
+## 🛠️ Requirements
+
+### SDK-Style projects
+
+Analyzing SDK-Style projects at least requires:
+
+- .NET Core SDK **2.2** (for the `dotnet` CLI)
+  - Get it here:
+    - [Official Website](https://dotnet.microsoft.com/en-us/download/dotnet/2.2)
+    - [Chocolatey](https://community.chocolatey.org/packages/dotnetcore-2.2-sdk)
+- It has to be globally available through the command line (verify with `dotnet --version`)
+
+### Non-SDK-Style projects
+
+Analyzing Non-SDK-Style projects at least requires:
+
+- NuGet CLI (aka `nuget.exe`) **2.7**
+  - Get it here:
+    - [Official Website](https://www.nuget.org/downloads)
+    - [Chocolatey](https://community.chocolatey.org/packages/NuGet.CommandLine)
+- It has to be globally available through the command line (verify with `nuget help`)
+
 ## ⌨️ Developing
 
 To develop and work with **liz** you just need to clone this Repo somewhere on your PC and then open the Solution or the complete Source-Folder (under `src`) with your favorite IDE. No additional tools required.  
