@@ -73,7 +73,7 @@ internal sealed class DownloadPackageReferencesViaNugetCli : IDownloadPackageRef
     private static void UnzipNugetPackage(IFileInfo fileInfo)
     {
         var fileStream = fileInfo.OpenRead();
-        var zipArchive = new ZipArchive(fileStream);
+        using var zipArchive = new ZipArchive(fileStream);
         
         zipArchive.ExtractToDirectory(fileInfo.Directory.FullName, true);
     }
