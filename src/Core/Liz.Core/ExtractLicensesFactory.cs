@@ -31,9 +31,12 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
 
         var getProjects = new GetProjectsViaSlnParser(new SolutionParser(), fileSystem);
         var parseDotnetListPackage = new ParseDotnetListPackageResult();
+        var parsePackagesConfigFile = new ParsePackagesConfigFile();
 
         var getPackageReferencesDotnetCli = new GetPackageReferencesViaDotnetCli(cliToolExecutor, parseDotnetListPackage);
-        var getPackageReferences = new GetPackageReferencesFacade(logger, getPackageReferencesDotnetCli);
+        var getPackageReferencesPackagesConfig = new GetPackageReferencesViaPackagesConfig(logger, fileSystem, parsePackagesConfigFile);
+        
+        var getPackageReferences = new GetPackageReferencesFacade(logger, getPackageReferencesDotnetCli, getPackageReferencesPackagesConfig);
 
         var provideTemporaryDirectories = new ProvideTemporaryDirectories(settings, fileSystem);
 
