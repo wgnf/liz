@@ -1,6 +1,7 @@
 ﻿using ArrangeContext.Moq;
 using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
+using Liz.Core.PackageReferences.Contracts.NuGetCli;
 using Liz.Core.Projects.Contracts.Models;
 using Liz.Core.Utils.Contracts;
 using Moq;

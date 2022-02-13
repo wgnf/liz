@@ -2,6 +2,7 @@
 using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
+using Liz.Core.PackageReferences.Contracts.NuGetCli;
 using Liz.Core.Projects.Contracts.Models;
 using Liz.Core.Utils.Contracts;
 using System.IO.Abstractions;

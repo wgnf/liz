@@ -8,6 +8,7 @@ using Liz.Core.Logging.Contracts;
 using Liz.Core.Logging.Null;
 using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.DotnetCli;
+using Liz.Core.PackageReferences.NuGetCli;
 using Liz.Core.Projects;
 using Liz.Core.Settings;
 using Liz.Core.Utils;

@@ -1,10 +1,10 @@
 ﻿using Liz.Core.CliTool.Contracts;
-using Liz.Core.PackageReferences.Contracts.DotnetCli;
+using Liz.Core.PackageReferences.Contracts.NuGetCli;
 using Liz.Core.Projects.Contracts.Models;
 using System.IO.Abstractions;
 using System.IO.Compression;
 
-namespace Liz.Core.PackageReferences.DotnetCli;
+namespace Liz.Core.PackageReferences.NuGetCli;
 
 /*
  * NOTE:
