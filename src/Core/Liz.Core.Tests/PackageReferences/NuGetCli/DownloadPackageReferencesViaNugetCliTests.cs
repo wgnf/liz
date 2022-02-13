@@ -1,13 +1,12 @@
 ﻿using ArrangeContext.Moq;
 using Liz.Core.CliTool.Contracts;
-using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.PackageReferences.NuGetCli;
 using Liz.Core.Projects.Contracts.Models;
 using Moq;
 using System.IO.Abstractions;
 using Xunit;
 
-namespace Liz.Core.Tests.PackageReferences.DotnetCli;
+namespace Liz.Core.Tests.PackageReferences.NuGetCli;
 
 public class DownloadPackageReferencesViaNugetCliTests
 {

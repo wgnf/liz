@@ -1,7 +1,7 @@
 ﻿using ArrangeContext.Moq;
-using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
+using Liz.Core.PackageReferences.Contracts.NuGetCli;
 using Liz.Core.Projects.Contracts.Models;
 using Moq;
 using System.IO.Abstractions;
@@ -75,8 +75,10 @@ public class GetPackageReferencesFacadeTests
                 Times.Once);
     }
     
-    [Fact]
-    public async Task GetFromProject_And_Log_Warning_On_NonSdk_Style_Format()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task GetFromProject_And_Get_From_Packages_Config_On_Non_Sdk_Style_Format(bool includeTransitive)
     {
         var context = new ArrangeContext<GetPackageReferencesFacade>();
         var sut = context.Build();
@@ -88,11 +90,11 @@ public class GetPackageReferencesFacadeTests
 
         var project = new Project("Something", projectFileMock.Object, ProjectFormatStyle.NonSdkStyle);
 
-        await sut.GetFromProjectAsync(project, false);
+        await sut.GetFromProjectAsync(project, includeTransitive);
         
         context
-            .For<ILogger>()
-            .Verify(logger => logger.Log(LogLevel.Warning, It.IsAny<string>(), null),
+            .For<IGetPackageReferencesViaPackagesConfig>()
+            .Verify(getPackage => getPackage.GetFromProjectAsync(project, includeTransitive),
                 Times.Once);
     }
 }
