@@ -348,6 +348,10 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+
 src/.idea
 src/.liz_tmp
 test-data/sln/.idea
+test-data/local-nuget-packages/.idea
+!test-data/local-nuget-packages/.packages/*.nupkg
