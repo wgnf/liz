@@ -96,12 +96,12 @@ public sealed class PackageReference : IEquatable<PackageReference>
         return HashCode.Combine(Name, TargetFramework, Version);
     }
 
-    public static bool operator ==(PackageReference left, PackageReference right)
+    public static bool operator ==(PackageReference? left, PackageReference? right)
     {
         return Equals(left, right);
     }
 
-    public static bool operator !=(PackageReference left, PackageReference right)
+    public static bool operator !=(PackageReference? left, PackageReference? right)
     {
         return !Equals(left, right);
     }
