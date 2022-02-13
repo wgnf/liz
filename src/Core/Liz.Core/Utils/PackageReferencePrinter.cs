@@ -55,7 +55,7 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
     {
         var namePortion = packageReference.Name;
         var versionPortion = packageReference.Version;
-        var licenseTypePortion = $"Type={(string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Text) ? "-" : packageReference.LicenseInformation.Type)}";
+        var licenseTypePortion = $"Type={(string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Type) ? "-" : packageReference.LicenseInformation.Type)}";
         var licenseUrlPortion = $"URL={(string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Url) ? "-" : packageReference.LicenseInformation.Url)}";
 
         var licenseText = string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Text) ? "-" : "[...]";
