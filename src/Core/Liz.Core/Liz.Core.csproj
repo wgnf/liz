@@ -9,6 +9,24 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <WarningLevel>5</WarningLevel>
     </PropertyGroup>
+    
+    <!-- NuGet Package relevant stuff -->
+    <PropertyGroup>
+        <SignAssembly>true</SignAssembly>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        
+        <Authors>Martin Wagenführ</Authors>
+        <Description>
+            The Core-Component of the Liz-Tool - which helps to extract license-information from your solution/project
+            aimed on a fast and correct process.
+        </Description>
+        <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>Core;License;Extract;Extract;Information;Liz</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="SlnParser" Version="2.0.0" />
@@ -16,9 +34,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="CliTool\cli-bin\dotnet.exe" />
-      <None Remove="CliTool\cli-bin\nuget.exe" />
-      <None Remove="CliTool\cli-bin\host\fxr\6.0.1\hostfxr.dll" />
+        <None Include="../../../LICENSE" Pack="true" PackagePath="" />
     </ItemGroup>
 
 </Project>

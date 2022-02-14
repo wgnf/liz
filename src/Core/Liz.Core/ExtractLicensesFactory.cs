@@ -19,9 +19,11 @@ using System.IO.Abstractions;
 
 namespace Liz.Core;
 
+/// <inheritdoc />
 [ExcludeFromCodeCoverage] // Factory
 public sealed class ExtractLicensesFactory : IExtractLicensesFactory
 {
+    /// <inheritdoc />
     public IExtractLicenses Create(ExtractLicensesSettings settings, ILoggerProvider? loggerProvider = null)
     {
         var logger = GetLogger(settings, loggerProvider);

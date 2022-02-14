@@ -78,7 +78,8 @@ public sealed class PackageReference : IEquatable<PackageReference>
         var objectString = builder.ToString();
         return objectString;
     }
-    
+
+    /// <inheritdoc />
     public bool Equals(PackageReference? other)
     {
         if (ReferenceEquals(null, other)) return false;
@@ -86,21 +87,35 @@ public sealed class PackageReference : IEquatable<PackageReference>
         return Name == other.Name && TargetFramework == other.TargetFramework && Version == other.Version;
     }
 
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         return ReferenceEquals(this, obj) || obj is PackageReference other && Equals(other);
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return HashCode.Combine(Name, TargetFramework, Version);
     }
 
+    /// <summary>
+    ///     Indicates whether the <paramref name="left"/> object is equal to the <paramref name="right"/> object
+    /// </summary>
+    /// <param name="left">The first object to compare</param>
+    /// <param name="right">The second object to compare</param>
+    /// <returns>Whether or not the objects are equal to each other</returns>
     public static bool operator ==(PackageReference? left, PackageReference? right)
     {
         return Equals(left, right);
     }
 
+    /// <summary>
+    ///     Indicates whether the <paramref name="left"/> object is not equal to the <paramref name="right"/> object
+    /// </summary>
+    /// <param name="left">The first object to compare</param>
+    /// <param name="right">The second object to compare</param>
+    /// <returns>Whether or not the objects are not equal to each other</returns>
     public static bool operator !=(PackageReference? left, PackageReference? right)
     {
         return !Equals(left, right);
