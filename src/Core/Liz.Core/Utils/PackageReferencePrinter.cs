@@ -34,18 +34,19 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
         messageBuilder.AppendLine();
         messageBuilder.AppendLine();
         
-        messageBuilder.AppendLine($"{"Name",-60} {"Text?",-5} {"Type",-20} URL");
+        messageBuilder.AppendLine($"{"Name",-60} {"Version",-15} {"Text?",-5} {"Type",-20} URL");
 
         messageBuilder.AppendLine();
 
         foreach (var packageReference in packageReferencesList)
         {
             var name = packageReference.Name;
+            var version = packageReference.Version;
             var hasText = string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Text) ? "No" : "Yes";
             var type = packageReference.LicenseInformation.Type;
             var url = packageReference.LicenseInformation.Url;
 
-            messageBuilder.AppendLine($"{name,-60} {hasText,-5} {type,-20} {url}");
+            messageBuilder.AppendLine($"{name,-60} {version,-15} {hasText,-5} {type,-20} {url}");
         }
         
         _logger.LogInformation(messageBuilder.ToString());
@@ -71,7 +72,7 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
         
         messageBuilder.AppendLine();
 
-        var issuesMessage = GatherIssuesMessage(packageReferencesList);
+        var issuesMessage = GatherLicenseInformationIssuesMessage(packageReferencesList);
         if (string.IsNullOrWhiteSpace(issuesMessage)) return;
 
         messageBuilder.AppendLine(issuesMessage);
@@ -79,17 +80,21 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
         _logger.LogWarning(messageBuilder.ToString());
     }
 
-    private static string GatherIssuesMessage(IEnumerable<PackageReference> packageReferences)
+    private static string GatherLicenseInformationIssuesMessage(IEnumerable<PackageReference> packageReferences)
     {
         var issueMessageStringBuilder = new StringBuilder();
-        
-        issueMessageStringBuilder.AppendLine($"{"Name",-60} missing license-information");
-        issueMessageStringBuilder.AppendLine();
-        
+
         foreach (var packageReference in packageReferences)
             GatherLicenseInformationIssuesMessage(packageReference, issueMessageStringBuilder);
 
-        return issueMessageStringBuilder.ToString();
+        var issueMessageDetails = issueMessageStringBuilder.ToString();
+        if (string.IsNullOrWhiteSpace(issueMessageDetails)) return string.Empty;
+
+        var message =
+            $"{"Name",-60} {"Version",-15} missing license-information{Environment.NewLine}{Environment.NewLine}" +
+            $"{issueMessageDetails}";
+        
+        return message;
     }
 
     private static void GatherLicenseInformationIssuesMessage(
@@ -109,6 +114,6 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
 
         if (!issues.Any()) return;
 
-        stringBuilder.AppendLine($"{packageReference.Name,-60} {string.Join(", ", issues)}");
+        stringBuilder.AppendLine($"{packageReference.Name,-60} {packageReference.Version,-15} {string.Join(", ", issues)}");
     }
 }
