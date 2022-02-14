@@ -22,7 +22,7 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
     {
         ArgumentNullException.ThrowIfNull(packageReferences);
 
-        var packageReferencesList = packageReferences.ToList();
+        var packageReferencesList = packageReferences.OrderBy(packageReference => packageReference.Name).ToList();
         
         if (_settings.SuppressPrintDetails) return;
         if (!packageReferencesList.Any()) return;
@@ -56,7 +56,7 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
     {
         ArgumentNullException.ThrowIfNull(packageReferences);
 
-        var packageReferencesList = packageReferences.ToList();
+        var packageReferencesList = packageReferences.OrderBy(packageReference => packageReference.Name).ToList();
         
         if (_settings.SuppressPrintIssues) return;
         if (!packageReferencesList.Any()) return;
