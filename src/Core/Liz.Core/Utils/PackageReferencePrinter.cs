@@ -22,52 +22,70 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
     {
         ArgumentNullException.ThrowIfNull(packageReferences);
 
-        if (_settings.SuppressPrintDetails) return;
-
         var packageReferencesList = packageReferences.ToList();
         
+        if (_settings.SuppressPrintDetails) return;
         if (!packageReferencesList.Any()) return;
-        
+
+        var messageBuilder = new StringBuilder();
+
         // to make some visual space to the rest of the output
-        _logger.LogInformation($"{Environment.NewLine}{Environment.NewLine}{Environment.NewLine}");
+        messageBuilder.AppendLine();
+        messageBuilder.AppendLine();
+        messageBuilder.AppendLine();
+        
+        messageBuilder.AppendLine($"{"Name",-60} {"Text?",-5} {"Type",-20} URL");
+
+        messageBuilder.AppendLine();
 
         foreach (var packageReference in packageReferencesList)
-            PrintPackageReference(packageReference);
+        {
+            var name = packageReference.Name;
+            var hasText = string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Text) ? "No" : "Yes";
+            var type = packageReference.LicenseInformation.Type;
+            var url = packageReference.LicenseInformation.Url;
+
+            messageBuilder.AppendLine($"{name,-60} {hasText,-5} {type,-20} {url}");
+        }
+        
+        _logger.LogInformation(messageBuilder.ToString());
     }
 
     public void PrintPackageReferencesIssues(IEnumerable<PackageReference> packageReferences)
     {
         ArgumentNullException.ThrowIfNull(packageReferences);
 
-        if (_settings.SuppressPrintIssues) return;
-        
         var packageReferencesList = packageReferences.ToList();
         
+        if (_settings.SuppressPrintIssues) return;
         if (!packageReferencesList.Any()) return;
+
+        var messageBuilder = new StringBuilder();
+        
+        // to make some visual space to the rest of the output
+        messageBuilder.AppendLine();
+        messageBuilder.AppendLine();
+        messageBuilder.AppendLine();
+
+        messageBuilder.AppendLine("====== Issues ======");
+        
+        messageBuilder.AppendLine();
 
         var issuesMessage = GatherIssuesMessage(packageReferencesList);
         if (string.IsNullOrWhiteSpace(issuesMessage)) return;
-        
-        _logger.LogWarning($"{Environment.NewLine}{Environment.NewLine}{Environment.NewLine}--- Issues ---{Environment.NewLine}{issuesMessage}");
-    }
 
-    private void PrintPackageReference(PackageReference packageReference)
-    {
-        var namePortion = packageReference.Name;
-        var versionPortion = packageReference.Version;
-        var licenseTypePortion = $"Type={(string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Type) ? "-" : packageReference.LicenseInformation.Type)}";
-        var licenseUrlPortion = $"URL={(string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Url) ? "-" : packageReference.LicenseInformation.Url)}";
-
-        var licenseText = string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Text) ? "-" : "[...]";
-        var licenseTextPortion = $"Text={licenseText}";
+        messageBuilder.AppendLine(issuesMessage);
         
-        _logger.LogInformation($"> {namePortion} ({versionPortion}): {licenseTypePortion}, {licenseUrlPortion}, {licenseTextPortion}");
+        _logger.LogWarning(messageBuilder.ToString());
     }
 
     private static string GatherIssuesMessage(IEnumerable<PackageReference> packageReferences)
     {
         var issueMessageStringBuilder = new StringBuilder();
-
+        
+        issueMessageStringBuilder.AppendLine($"{"Name",-60} missing license-information");
+        issueMessageStringBuilder.AppendLine();
+        
         foreach (var packageReference in packageReferences)
             GatherLicenseInformationIssuesMessage(packageReference, issueMessageStringBuilder);
 
@@ -91,8 +109,6 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
 
         if (!issues.Any()) return;
 
-        stringBuilder.AppendLine(
-            $"> {packageReference.Name} ({packageReference.Version}): " +
-            $"Following license-information could not be determined: {string.Join(", ", issues)}");
+        stringBuilder.AppendLine($"{packageReference.Name,-60} {string.Join(", ", issues)}");
     }
 }
