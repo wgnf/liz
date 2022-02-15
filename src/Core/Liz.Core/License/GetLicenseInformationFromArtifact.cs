@@ -27,7 +27,7 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
 
     public async Task<LicenseInformation> GetFromDownloadedPackageReferenceAsync(IDirectoryInfo downloadDirectory)
     {
-        ArgumentNullException.ThrowIfNull(downloadDirectory);
+        if (downloadDirectory == null) throw new ArgumentNullException(nameof(downloadDirectory));
 
         var licenseInformation = await GetFromArtifactAsync(downloadDirectory);
         return licenseInformation;

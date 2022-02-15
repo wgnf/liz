@@ -1,5 +1,4 @@
 ﻿using Liz.Core.Logging.Contracts;
-using Microsoft.VisualBasic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Core.Settings;
@@ -31,20 +30,20 @@ public sealed class ExtractLicensesSettings
     /// <summary>
     ///     Whether or not to include transitive (dependencies of dependencies) dependencies
     /// </summary>
-    public bool IncludeTransitiveDependencies { get; init; }
+    public bool IncludeTransitiveDependencies { get; set; }
 
     /// <summary>
-    ///     The log level on which to log on (default: <see cref="Information"/>)
+    ///     The log level on which to log on (default: <see cref="F:LogLevel.Information"/>)
     /// </summary>
-    public LogLevel LogLevel { get; init; } = LogLevel.Information;
+    public LogLevel LogLevel { get; set; } = LogLevel.Information;
     
     /// <summary>
     ///     Whether or not to suppress printing details of analyzed package-references and license-information
     /// </summary>
-    public bool SuppressPrintDetails { get; init; }
+    public bool SuppressPrintDetails { get; set; }
     
     /// <summary>
     ///     Whether or not to suppress printing found issues of analyzed package-references and license-information
     /// </summary>
-    public bool SuppressPrintIssues { get; init; }
+    public bool SuppressPrintIssues { get; set; }
 }

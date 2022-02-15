@@ -12,7 +12,7 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
 {
     public IEnumerable<PackageReference> Parse(string input)
     {
-        ArgumentNullException.ThrowIfNull(input);
+        if (input == null) throw new ArgumentNullException(nameof(input));
 
         if (string.IsNullOrWhiteSpace(input))
             return Enumerable.Empty<PackageReference>();
@@ -26,7 +26,8 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
     private static IEnumerable<string> SplitIntoLines(string input)
     {
         var inputSplitIntoLines = input
-            .Split(Environment.NewLine, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+            .Select(line => line.Trim());
         return inputSplitIntoLines;
     }
 
@@ -131,7 +132,9 @@ internal sealed class ParseDotnetListPackageResult : IParseDotnetListPackageResu
             throw new GetPackageReferenceFailedException(line, "the target framework is unknown");
             
         var lineSplit = line
-            .Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Select(splitLine => splitLine.Trim())
+            .ToList();
 
         var packageName = lineSplit.ElementAtOrDefault(1);
         var resolvedVersion = lineSplit.LastOrDefault();

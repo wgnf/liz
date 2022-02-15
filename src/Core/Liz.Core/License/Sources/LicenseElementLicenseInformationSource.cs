@@ -33,7 +33,7 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
 
     public async Task GetInformationAsync(GetLicenseInformationContext licenseInformationContext)
     {
-        ArgumentNullException.ThrowIfNull(licenseInformationContext);
+        if (licenseInformationContext == null) throw new ArgumentNullException(nameof(licenseInformationContext));
 
         if (licenseInformationContext.NugetSpecificationFileXml == null) return;
 

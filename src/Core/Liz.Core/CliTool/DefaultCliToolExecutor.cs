@@ -17,7 +17,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
     
     public async Task ExecuteAsync(string fileName, string arguments)
     {
-        ArgumentNullException.ThrowIfNull(arguments);
+        if (arguments == null) throw new ArgumentNullException(nameof(arguments));
         if (string.IsNullOrWhiteSpace(fileName))
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(fileName));
 
@@ -26,7 +26,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
     
     public async Task<string> ExecuteWithResultAsync(string fileName, string arguments)
     {
-        ArgumentNullException.ThrowIfNull(arguments);
+        if (arguments == null) throw new ArgumentNullException(nameof(arguments));
         if (string.IsNullOrWhiteSpace(fileName))
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(fileName));
 
@@ -53,7 +53,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         var standardOutput = await GatherStandardOutput(process);
         var errorOutput = await GatherErrorOutput(process);
         
-        await process.WaitForExitAsync();
+        process.WaitForExit();
 
         // NOTE: We can generally assume that an exit code of 0 indicates the success of a process 
         if (process.ExitCode == 0) return standardOutput;

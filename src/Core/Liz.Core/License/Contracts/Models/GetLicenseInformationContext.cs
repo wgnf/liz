@@ -12,9 +12,9 @@ internal sealed class GetLicenseInformationContext
         LicenseInformation = new LicenseInformation();
     }
     
-    public IDirectoryInfo? ArtifactDirectory { get; init; }
+    public IDirectoryInfo? ArtifactDirectory { get; set; }
 
-    public XDocument? NugetSpecificationFileXml { get; init; }
+    public XDocument? NugetSpecificationFileXml { get; set; }
 
     public LicenseInformation LicenseInformation { get; }
 }

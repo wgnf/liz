@@ -29,8 +29,8 @@ internal sealed class DownloadPackageReferencesViaNugetCli : IDownloadPackageRef
     
     public async Task DownloadForProjectAsync(Project project, IDirectoryInfo targetDirectory)
     {
-        ArgumentNullException.ThrowIfNull(project);
-        ArgumentNullException.ThrowIfNull(targetDirectory);
+        if (project == null) throw new ArgumentNullException(nameof(project));
+        if (targetDirectory == null) throw new ArgumentNullException(nameof(targetDirectory));
 
         var projectFileName = project.File.FullName;
         var nugetTargetDirectory = GetNugetTargetDirectory(targetDirectory);

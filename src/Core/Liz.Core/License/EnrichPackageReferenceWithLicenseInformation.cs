@@ -29,7 +29,7 @@ internal sealed class EnrichPackageReferenceWithLicenseInformation : IEnrichPack
 
     public async Task EnrichAsync(PackageReference packageReference)
     {
-        ArgumentNullException.ThrowIfNull(packageReference);
+        if (packageReference == null) throw new ArgumentNullException(nameof(packageReference));
 
         if (!_getDownloadedPackageReferenceArtifact.TryGetFor(
                 packageReference,

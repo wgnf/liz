@@ -15,7 +15,7 @@ public static class LoggingExtensions
     /// <param name="exception">An additional <see cref="Exception"/> to log</param>
     public static void LogTrace(this ILogger logger, string message, Exception? exception = null)
     {
-        ArgumentNullException.ThrowIfNull(logger);
+        if (logger == null) throw new ArgumentNullException(nameof(logger));
         
         logger.Log(LogLevel.Trace, message, exception);
     }
@@ -28,7 +28,7 @@ public static class LoggingExtensions
     /// <param name="exception">An additional <see cref="Exception"/> to log</param>
     public static void LogDebug(this ILogger logger, string message, Exception? exception = null)
     {
-        ArgumentNullException.ThrowIfNull(logger);
+        if (logger == null) throw new ArgumentNullException(nameof(logger));
 
         logger.Log(LogLevel.Debug, message, exception);
     }
@@ -41,7 +41,7 @@ public static class LoggingExtensions
     /// <param name="exception">An additional <see cref="Exception"/> to log</param>
     public static void LogInformation(this ILogger logger, string message, Exception? exception = null)
     {
-        ArgumentNullException.ThrowIfNull(logger);
+        if (logger == null) throw new ArgumentNullException(nameof(logger));
         
         logger.Log(LogLevel.Information, message, exception);
     }
@@ -54,7 +54,7 @@ public static class LoggingExtensions
     /// <param name="exception">An additional <see cref="Exception"/> to log</param>
     public static void LogWarning(this ILogger logger, string message, Exception? exception = null)
     {
-        ArgumentNullException.ThrowIfNull(logger);
+        if (logger == null) throw new ArgumentNullException(nameof(logger));
         
         logger.Log(LogLevel.Warning, message, exception);
     }
@@ -67,7 +67,7 @@ public static class LoggingExtensions
     /// <param name="exception">An additional <see cref="Exception"/> to log</param>
     public static void LogError(this ILogger logger, string message, Exception? exception = null)
     {
-        ArgumentNullException.ThrowIfNull(logger);
+        if (logger == null) throw new ArgumentNullException(nameof(logger));
         
         logger.Log(LogLevel.Error, message, exception);
     }
@@ -80,7 +80,7 @@ public static class LoggingExtensions
     /// <param name="exception">An additional <see cref="Exception"/> to log</param>
     public static void LogCritical(this ILogger logger, string message, Exception? exception = null)
     {
-        ArgumentNullException.ThrowIfNull(logger);
+        if (logger == null) throw new ArgumentNullException(nameof(logger));
         
         logger.Log(LogLevel.Critical, message, exception);
     }

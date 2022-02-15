@@ -25,7 +25,7 @@ internal sealed class GetPackageReferencesViaPackagesConfig : IGetPackageReferen
     
     public Task<IEnumerable<PackageReference>> GetFromProjectAsync(Project project, bool includeTransitive)
     {
-        ArgumentNullException.ThrowIfNull(project);
+        if (project == null) throw new ArgumentNullException(nameof(project));
 
         if (!includeTransitive)
             _logger.LogWarning("The option 'include-transitive' is disabled, but you're analyzing a " +

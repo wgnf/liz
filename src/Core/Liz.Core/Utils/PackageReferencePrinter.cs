@@ -20,7 +20,7 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
     
     public void PrintPackageReferences(IEnumerable<PackageReference> packageReferences)
     {
-        ArgumentNullException.ThrowIfNull(packageReferences);
+        if (packageReferences == null) throw new ArgumentNullException(nameof(packageReferences));
 
         var packageReferencesList = packageReferences.OrderBy(packageReference => packageReference.Name).ToList();
         
@@ -54,7 +54,7 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
 
     public void PrintPackageReferencesIssues(IEnumerable<PackageReference> packageReferences)
     {
-        ArgumentNullException.ThrowIfNull(packageReferences);
+        if (packageReferences == null) throw new ArgumentNullException(nameof(packageReferences));
 
         var packageReferencesList = packageReferences.OrderBy(packageReference => packageReference.Name).ToList();
         

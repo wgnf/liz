@@ -20,7 +20,7 @@ internal sealed class GetDownloadedPackageReferenceArtifact : IGetDownloadedPack
     
     public bool TryGetFor(PackageReference packageReference, out IDirectoryInfo? packageReferenceDownloadDirectory)
     {
-        ArgumentNullException.ThrowIfNull(packageReference);
+        if (packageReference == null) throw new ArgumentNullException(nameof(packageReference));
         
         packageReferenceDownloadDirectory = null;
 

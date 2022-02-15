@@ -9,7 +9,7 @@ internal sealed class ParsePackagesConfigFile : IParsePackagesConfigFile
 {
     public IEnumerable<PackageReference> GetPackageReferences(IFileInfo packagesConfigFile)
     {
-        ArgumentNullException.ThrowIfNull(packagesConfigFile);
+        if (packagesConfigFile == null) throw new ArgumentNullException(nameof(packagesConfigFile));
 
         if (!packagesConfigFile.Exists)
             throw new ArgumentException("The provided file does not exist", nameof(packagesConfigFile));

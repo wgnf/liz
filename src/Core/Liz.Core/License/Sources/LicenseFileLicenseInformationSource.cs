@@ -30,7 +30,7 @@ internal sealed class LicenseFileLicenseInformationSource : ILicenseInformationS
 
     public async Task GetInformationAsync(GetLicenseInformationContext licenseInformationContext)
     {
-        ArgumentNullException.ThrowIfNull(licenseInformationContext);
+        if (licenseInformationContext == null) throw new ArgumentNullException(nameof(licenseInformationContext));
 
         if (licenseInformationContext.ArtifactDirectory == null) return;
         // we do not need to do this when there's already text

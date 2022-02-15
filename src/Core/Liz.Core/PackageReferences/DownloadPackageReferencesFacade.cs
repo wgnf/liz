@@ -42,7 +42,7 @@ internal sealed class DownloadPackageReferencesFacade : IDownloadPackageReferenc
 
     public async Task DownloadForProjectAsync(Project project)
     {
-        ArgumentNullException.ThrowIfNull(project);
+        if (project == null) throw new ArgumentNullException(nameof(project));
 
         var targetDirectory = PrepareDownloadTargetDirectory();
 
