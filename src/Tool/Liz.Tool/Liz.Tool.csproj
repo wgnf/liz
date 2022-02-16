@@ -10,6 +10,25 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <WarningLevel>5</WarningLevel>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>liz</ToolCommandName>
+
+        <SignAssembly>true</SignAssembly>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+
+        <Authors>Martin Wagenführ</Authors>
+        <Description>
+            The dotnet-CLI-tool of the Liz-Tool - which helps to extract license-information from your solution/project
+            aimed on a fast and correct process.
+        </Description>
+        <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>dotnet;CLI;Tool;License;Extract;Extract;Information;Liz</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="ShellProgressBar" Version="5.1.0" />
