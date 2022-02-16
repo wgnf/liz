@@ -12,6 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="ShellProgressBar" Version="5.1.0" />
         <PackageReference Include="System.CommandLine" Version="2.0.0-beta3.22106.2" />
     </ItemGroup>
 

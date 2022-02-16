@@ -155,4 +155,32 @@ public sealed class CommandProviderTests
                 alias == "--suppress-print-issues" ||
                 alias == "-si");
     }
+    
+    [Fact]
+    public void Provided_Root_Command_Should_Have_Suppress_Progressbar_Option()
+    {
+        var sut = new ArrangeContext<CommandProvider>().Build();
+
+        var rootCommand = sut.Get();
+
+        var suppressPrintIssuesOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-progressbar");
+        Assert.NotNull(suppressPrintIssuesOption);
+
+        suppressPrintIssuesOption?
+            .Description
+            .Should()
+            .NotBeNullOrWhiteSpace();
+
+        suppressPrintIssuesOption?
+            .ValueType
+            .Should()
+            .Be<bool>();
+
+        suppressPrintIssuesOption?
+            .Aliases
+            .Should()
+            .Contain(alias =>
+                alias == "--suppress-progressbar" ||
+                alias == "-sb");
+    }
 }

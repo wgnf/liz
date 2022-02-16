@@ -1,8 +1,10 @@
 ﻿using Liz.Core;
 using Liz.Core.Logging.Contracts;
+using Liz.Core.Progress;
 using Liz.Core.Settings;
 using Liz.Tool.Contracts.CommandLine;
 using Liz.Tool.Logging;
+using Liz.Tool.Progress;
 
 namespace Liz.Tool.CommandLine;
 
@@ -20,14 +22,29 @@ internal sealed class CommandRunner : ICommandRunner
         LogLevel logLevel, 
         bool includeTransitive, 
         bool suppressPrintDetails,
-        bool suppressPrintIssues)
+        bool suppressPrintIssues,
+        bool suppressProgressbar)
     {
         ArgumentNullException.ThrowIfNull(targetFile);
 
         var settings = CreateSettings(targetFile, logLevel, includeTransitive, suppressPrintDetails, suppressPrintIssues);
-        var loggerProvider = new CommandLineLoggerProvider();
+
+        ILoggerProvider? loggerProvider;
+        IProgressHandler? progressHandler;
+
+        var commandLineLoggerProvider = new CommandLineLoggerProvider();
         
-        var extractLicenses = _extractLicensesFactory.Create(settings, loggerProvider);
+        if (suppressProgressbar)
+        {
+            loggerProvider = commandLineLoggerProvider;
+            progressHandler = null;
+        }
+        else
+        {
+            loggerProvider = new ProgressBarLoggerProvider(commandLineLoggerProvider);
+            progressHandler = (IProgressHandler) loggerProvider.Get(logLevel);
+        }
+        var extractLicenses = _extractLicensesFactory.Create(settings, loggerProvider, progressHandler);
         await extractLicenses.ExtractAsync();
     }
 

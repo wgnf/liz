@@ -32,14 +32,16 @@ internal sealed class CommandProvider
             LogLevel logLevel, 
             bool includeTransitive, 
             bool suppressPrintDetails,
-            bool suppressPrintIssues) =>
+            bool suppressPrintIssues,
+            bool suppressProgressbar) =>
         {
             await _commandRunner.RunAsync(
                 targetFile, 
                 logLevel, 
                 includeTransitive, 
                 suppressPrintDetails,
-                suppressPrintIssues)
+                suppressPrintIssues,
+                suppressProgressbar)
                 .ConfigureAwait(false);
         }, symbols.ToArray());
 
@@ -53,7 +55,8 @@ internal sealed class CommandProvider
             GetLogLevelOption(),
             GetIncludeTransitiveOption(),
             GetSuppressPrintDetailsOption(),
-            GetSuppressPrintIssuesOption()
+            GetSuppressPrintIssuesOption(),
+            GetSuppressProgressBar()
         };
         return options;
     }
@@ -99,6 +102,15 @@ internal sealed class CommandProvider
             new[] { "--suppress-print-issues", "-si" },
             () => false,
             "If printing the license-information issues should be suppressed or not");
+        return option;
+    }
+
+    private static Option GetSuppressProgressBar()
+    {
+        var option = new Option<bool>(
+            new[] { "--suppress-progressbar", "-sb" },
+            () => false,
+            "If the display of the progressbar should be suppressed or not. Should be disabled if errors need to be analyzed (i.e. with a higher log-level)");
         return option;
     }
 }

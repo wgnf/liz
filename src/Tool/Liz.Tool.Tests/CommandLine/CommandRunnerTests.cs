@@ -3,6 +3,7 @@ using FluentAssertions;
 using Liz.Core;
 using Liz.Core.Extract.Contracts;
 using Liz.Core.Logging.Contracts;
+using Liz.Core.Progress;
 using Liz.Core.Settings;
 using Liz.Tool.CommandLine;
 using Liz.Tool.Contracts.CommandLine;
@@ -33,16 +34,23 @@ public sealed class CommandRunnerTests
             LogLevel.Information,
             true, 
             true, 
+            true,
             true));
     }
 
-    [Fact]
-    public async Task Should_Forward_Execution_To_Extract_Licenses_With_Settings()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task Should_Forward_Execution_To_Extract_Licenses_With_Settings(bool booleanParameter)
     {
         var extractLicenses = new Mock<IExtractLicenses>();
         var extractLicensesFactory = new Mock<IExtractLicensesFactory>();
+        
         extractLicensesFactory
-            .Setup(factory => factory.Create(It.IsAny<ExtractLicensesSettings>(), It.IsAny<ILoggerProvider>()))
+            .Setup(factory => factory.Create(
+                It.IsAny<ExtractLicensesSettings>(), 
+                It.IsAny<ILoggerProvider>(), 
+                It.IsAny<IProgressHandler?>()))
             .Returns(extractLicenses.Object);
 
         var sut = new CommandRunner(extractLicensesFactory.Object);
@@ -52,9 +60,10 @@ public sealed class CommandRunnerTests
         await sut.RunAsync(
             fileInfo, 
             LogLevel.Information,
-            true, 
-            true, 
-            true);
+            booleanParameter, 
+            booleanParameter, 
+            booleanParameter,
+            booleanParameter);
 
         extractLicenses.Verify(e => e.ExtractAsync(), Times.Once());
     }

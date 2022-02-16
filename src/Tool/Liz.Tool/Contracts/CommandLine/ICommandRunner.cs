@@ -9,5 +9,6 @@ public interface ICommandRunner
         LogLevel logLevel, 
         bool includeTransitive, 
         bool suppressPrintDetails,
-        bool suppressPrintIssues);
+        bool suppressPrintIssues,
+        bool suppressProgressbar);
 }
