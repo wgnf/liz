@@ -5,6 +5,7 @@
     <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Cake.ExtractLicenses" Version="0.1.0-cake-addin0001" />
     <PackageReference Include="Cake.Frosting" Version="2.0.0" />
   </ItemGroup>
 </Project>
