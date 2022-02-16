@@ -9,6 +9,7 @@ using Liz.Core.Logging.Null;
 using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.PackageReferences.NuGetCli;
+using Liz.Core.Progress;
 using Liz.Core.Projects;
 using Liz.Core.Settings;
 using Liz.Core.Utils;
@@ -24,7 +25,10 @@ namespace Liz.Core;
 public sealed class ExtractLicensesFactory : IExtractLicensesFactory
 {
     /// <inheritdoc />
-    public IExtractLicenses Create(ExtractLicensesSettings settings, ILoggerProvider? loggerProvider = null)
+    public IExtractLicenses Create(
+        ExtractLicensesSettings settings, 
+        ILoggerProvider? loggerProvider = null,
+        IProgressHandler? progressHandler = null)
     {
         var logger = GetLogger(settings, loggerProvider);
         var fileSystem = new FileSystem();
@@ -77,6 +81,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var extractLicenses = new ExtractLicenses(
             settings,
             logger,
+            progressHandler,
             getProjects,
             getPackageReferences,
             enrichPackageReferenceWithLicenseInformation,
