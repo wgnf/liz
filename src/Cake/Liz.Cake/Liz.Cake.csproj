@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
         <LangVersion>10</LangVersion>
         
         <ImplicitUsings>enable</ImplicitUsings>
@@ -25,14 +25,14 @@
         <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
         <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>Cake;Addin;License;Extract;Extract;Information;Liz</PackageTags>
+        <PackageTags>cake-addin;Cake;Addin;License;Extract;Extract;Information;Liz</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Cake.Common" Version="1.0.0" />
+        <PackageReference Include="Cake.Core" Version="0.38.0" PrivateAssets="all" />
     </ItemGroup>
-
+    
     <ItemGroup>
       <ProjectReference Include="..\..\Core\Liz.Core\Liz.Core.csproj" />
     </ItemGroup>
