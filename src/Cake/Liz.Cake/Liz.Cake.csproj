@@ -16,6 +16,7 @@
         <PackageId>Cake.ExtractLicenses</PackageId>
         
         <SignAssembly>true</SignAssembly>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
