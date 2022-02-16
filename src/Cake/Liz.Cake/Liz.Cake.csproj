@@ -13,6 +13,7 @@
 
     <!-- NuGet Package relevant stuff -->
     <PropertyGroup>
+        <PackageId>Cake.ExtractLicenses</PackageId>
         <SignAssembly>true</SignAssembly>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
