@@ -14,9 +14,14 @@
     <!-- NuGet Package relevant stuff -->
     <PropertyGroup>
         <PackageId>Cake.ExtractLicenses</PackageId>
+        
         <SignAssembly>true</SignAssembly>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
         <Authors>Martin Wagenführ</Authors>
         <Description>
@@ -32,6 +37,15 @@
 
     <ItemGroup>
         <PackageReference Include="Cake.Core" Version="0.38.0" PrivateAssets="all" />
+
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../../../LICENSE" Pack="true" PackagePath="" />
     </ItemGroup>
     
     <ItemGroup>
