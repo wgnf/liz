@@ -355,3 +355,5 @@ src/.liz_tmp
 test-data/sln/.idea
 test-data/local-nuget-packages/.idea
 !test-data/local-nuget-packages/.packages/*.nupkg
+test-data/cake/cake-frosting/.idea
+test-data/cake/cake-script/tools/Addins
