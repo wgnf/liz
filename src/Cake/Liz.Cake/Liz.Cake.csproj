@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
-
-        <Nullable>enable</Nullable>
+        <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+        <LangVersion>10</LangVersion>
+        
         <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
 
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <WarningLevel>5</WarningLevel>
@@ -13,10 +13,10 @@
 
     <!-- NuGet Package relevant stuff -->
     <PropertyGroup>
-        <PackAsTool>true</PackAsTool>
-        <ToolCommandName>liz</ToolCommandName>
-
+        <PackageId>Cake.ExtractLicenses</PackageId>
+        
         <SignAssembly>true</SignAssembly>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -26,19 +26,18 @@
 
         <Authors>Martin Wagenführ</Authors>
         <Description>
-            The dotnet-CLI-tool of the Liz-Tool - which helps to extract license-information from your solution/project
+            The Cake-Addin of the Liz-Tool - which helps to extract license-information from your solution/project
             aimed on a fast and correct process.
         </Description>
         <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
         <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>dotnet;CLI;Tool;License;Extract;Extract;Information;Liz</PackageTags>
+        <PackageTags>cake-addin;Cake;Addin;License;Extract;Extract;Information;Liz</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ShellProgressBar" Version="5.1.0" />
-        <PackageReference Include="System.CommandLine" Version="2.0.0-beta3.22106.2" />
+        <PackageReference Include="Cake.Core" Version="0.38.0" PrivateAssets="all" />
 
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
             <PrivateAssets>all</PrivateAssets>
@@ -49,9 +48,9 @@
     <ItemGroup>
         <None Include="../../../LICENSE" Pack="true" PackagePath="" />
     </ItemGroup>
-
+    
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Liz.Core\Liz.Core.csproj" />
+      <ProjectReference Include="..\..\Core\Liz.Core\Liz.Core.csproj" />
     </ItemGroup>
 
 </Project>

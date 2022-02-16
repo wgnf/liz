@@ -10,6 +10,8 @@ using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
+// ReSharper disable UnusedMember.Local
+
 namespace Liz.Build;
 
 [CheckBuildProjectConfigurations]
@@ -26,6 +28,7 @@ class Build : NukeBuild
 
     static AbsolutePath SourceDirectory => RootDirectory / "src";
     static AbsolutePath OutputDirectory => RootDirectory / "output";
+    static AbsolutePath PackageOutputDirectory => OutputDirectory / "packages";
 
     Target Clean => _ => _
         .Before(Restore)
@@ -75,6 +78,37 @@ class Build : NukeBuild
                     .SetDataCollector("XPlat Code Coverage")
                     .EnableNoBuild()
                     .EnableNoRestore());
+        });
+
+    Target Pack => _ => _
+        .DependsOn(Test)
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            if (Solution == null)
+                throw new InvalidOperationException("Solution cannot be null!");
+            if (GitVersion == null)
+                throw new InvalidOperationException("GitVersion cannot be null!");
+
+            var packableProjects = Solution
+                .AllProjects
+                .Where(project => project.GetProperty<bool>("IsPackable"));
+
+            foreach (var project in packableProjects)
+            {
+                Serilog.Log.Information("Packaging project... {ProjectName}", project.Name);
+                
+                DotNetPack(settings => settings
+                    .SetProject(project)
+                    .SetOutputDirectory(PackageOutputDirectory)
+                    .SetConfiguration(Configuration)
+                    .EnableNoBuild()
+                    .EnableNoRestore()
+                    .SetVersion(GitVersion.NuGetVersionV2)
+                    .SetAssemblyVersion(GitVersion.AssemblySemVer)
+                    .SetFileVersion(GitVersion.AssemblySemFileVer)
+                    .SetInformationalVersion(GitVersion.InformationalVersion));
+            }
         });
 
     public static int Main() => Execute<Build>(x => x.Test);
