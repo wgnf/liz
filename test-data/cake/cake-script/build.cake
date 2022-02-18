@@ -1,4 +1,4 @@
-#addin nuget:?package=Cake.ExtractLicenses&prerelease
+#addin nuget:?package=Cake.ExtractLicenses&prerelease&loaddependencies=true
 
 var target = Argument("target", "Default");
 var targetFile = File("../../sln/TestingGround.sln");
