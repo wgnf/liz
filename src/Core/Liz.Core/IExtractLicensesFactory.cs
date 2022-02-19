@@ -15,10 +15,12 @@ public interface IExtractLicensesFactory
     /// </summary>
     /// <param name="settings">The <see cref="ExtractLicensesSettingsBase"/> which are configuring the desired instance</param>
     /// <param name="loggerProvider">An optional <see cref="ILoggerProvider"/> to log messages from the tool</param>
+    /// <param name="logLevel">The log level on which to log on (default: <see cref="F:LogLevel.Information"/>)</param>
     /// <param name="progressHandler">An optional <see cref="IProgressHandler"/> that can handle process notifications</param>
     /// <returns>The created instance of <see cref="IExtractLicenses"/></returns>
     IExtractLicenses Create(
         ExtractLicensesSettingsBase settings, 
-        ILoggerProvider? loggerProvider = null, 
+        ILoggerProvider? loggerProvider = null,
+        LogLevel logLevel = LogLevel.Information,
         IProgressHandler? progressHandler = null);
 }

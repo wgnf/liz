@@ -28,11 +28,12 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
     public IExtractLicenses Create(
         ExtractLicensesSettingsBase settings, 
         ILoggerProvider? loggerProvider = null,
+        LogLevel logLevel = LogLevel.Information,
         IProgressHandler? progressHandler = null)
     {
         settings.EnsureValidity();
         
-        var logger = GetLogger(settings, loggerProvider);
+        var logger = GetLogger(logLevel, loggerProvider);
         var fileSystem = new FileSystem();
         var cliToolExecutor = new DefaultCliToolExecutor(logger);
         var httpClient = new HttpClientWrapper();
@@ -95,12 +96,12 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
     }
 
     private static ILogger GetLogger(
-        ExtractLicensesSettingsBase settings, 
+        LogLevel logLevel, 
         ILoggerProvider? loggerProvider)
     {
         loggerProvider ??= new NullLoggerProvider();
 
-        var logger = loggerProvider.Get(settings.LogLevel);
+        var logger = loggerProvider.Get(logLevel);
         return logger;
     }
 }

@@ -49,7 +49,8 @@ public sealed class CommandRunnerTests
         extractLicensesFactory
             .Setup(factory => factory.Create(
                 It.IsAny<ExtractLicensesSettingsBase>(), 
-                It.IsAny<ILoggerProvider>(), 
+                It.IsAny<ILoggerProvider>(),
+                It.IsAny<LogLevel>(),
                 It.IsAny<IProgressHandler?>()))
             .Returns(extractLicenses.Object);
 

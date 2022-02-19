@@ -27,7 +27,7 @@ internal sealed class CommandRunner : ICommandRunner
     {
         ArgumentNullException.ThrowIfNull(targetFile);
 
-        var settings = CreateSettings(targetFile, logLevel, includeTransitive, suppressPrintDetails, suppressPrintIssues);
+        var settings = CreateSettings(targetFile, includeTransitive, suppressPrintDetails, suppressPrintIssues);
 
         ILoggerProvider? loggerProvider;
         IProgressHandler? progressHandler;
@@ -44,13 +44,12 @@ internal sealed class CommandRunner : ICommandRunner
             loggerProvider = new ProgressBarLoggerProvider(commandLineLoggerProvider);
             progressHandler = (IProgressHandler) loggerProvider.Get(logLevel);
         }
-        var extractLicenses = _extractLicensesFactory.Create(settings, loggerProvider, progressHandler);
+        var extractLicenses = _extractLicensesFactory.Create(settings, loggerProvider, logLevel, progressHandler);
         await extractLicenses.ExtractAsync();
     }
 
     private static ExtractLicensesSettingsBase CreateSettings(
         FileSystemInfo targetFile,
-        LogLevel logLevel,
         bool includeTransitive,
         bool suppressPrintDetails,
         bool suppressPrintIssues)
@@ -58,7 +57,6 @@ internal sealed class CommandRunner : ICommandRunner
         var settings = new ExtractLicensesSettings
         {
             TargetFile = targetFile.FullName,
-            LogLevel = logLevel,
             IncludeTransitiveDependencies = includeTransitive,
             SuppressPrintDetails = suppressPrintDetails,
             SuppressPrintIssues = suppressPrintIssues

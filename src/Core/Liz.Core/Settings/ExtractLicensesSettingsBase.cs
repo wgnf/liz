@@ -15,11 +15,6 @@ public abstract class ExtractLicensesSettingsBase
     public bool IncludeTransitiveDependencies { get; set; }
 
     /// <summary>
-    ///     The log level on which to log on (default: <see cref="F:LogLevel.Information"/>)
-    /// </summary>
-    public LogLevel LogLevel { get; set; } = LogLevel.Information;
-    
-    /// <summary>
     ///     Whether or not to suppress printing details of analyzed package-references and license-information
     /// </summary>
     public bool SuppressPrintDetails { get; set; }
