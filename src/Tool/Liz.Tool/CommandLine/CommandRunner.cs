@@ -48,15 +48,16 @@ internal sealed class CommandRunner : ICommandRunner
         await extractLicenses.ExtractAsync();
     }
 
-    private static ExtractLicensesSettings CreateSettings(
+    private static ExtractLicensesSettingsBase CreateSettings(
         FileSystemInfo targetFile,
         LogLevel logLevel,
         bool includeTransitive,
         bool suppressPrintDetails,
         bool suppressPrintIssues)
     {
-        var settings = new ExtractLicensesSettings(targetFile.FullName)
+        var settings = new ExtractLicensesSettings
         {
+            TargetFile = targetFile.FullName,
             LogLevel = logLevel,
             IncludeTransitiveDependencies = includeTransitive,
             SuppressPrintDetails = suppressPrintDetails,

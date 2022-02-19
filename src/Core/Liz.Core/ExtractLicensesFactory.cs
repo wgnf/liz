@@ -26,10 +26,12 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
 {
     /// <inheritdoc />
     public IExtractLicenses Create(
-        ExtractLicensesSettings settings, 
+        ExtractLicensesSettingsBase settings, 
         ILoggerProvider? loggerProvider = null,
         IProgressHandler? progressHandler = null)
     {
+        settings.EnsureValidity();
+        
         var logger = GetLogger(settings, loggerProvider);
         var fileSystem = new FileSystem();
         var cliToolExecutor = new DefaultCliToolExecutor(logger);
@@ -93,7 +95,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
     }
 
     private static ILogger GetLogger(
-        ExtractLicensesSettings settings, 
+        ExtractLicensesSettingsBase settings, 
         ILoggerProvider? loggerProvider)
     {
         loggerProvider ??= new NullLoggerProvider();

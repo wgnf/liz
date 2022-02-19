@@ -241,10 +241,13 @@ public class ExtractLicensesTests
 
     private static ArrangeContext<ExtractLicenses> CreateContext()
     {
-        var settings = new ExtractLicensesSettings("TargetFile.csproj");
-        
+        var settingsMock = new Mock<ExtractLicensesSettingsBase>();
+        settingsMock
+            .Setup(settings => settings.GetTargetFile())
+            .Returns("TargetFile.csproj");
+
         var context = ArrangeContext<ExtractLicenses>.Create();
-        context.Use(settings);
+        context.Use(settingsMock.Object);
 
         context
             .For<IProvideTemporaryDirectories>()

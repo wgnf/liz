@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Liz.Core.Settings;
 using Liz.Core.Utils;
+using Moq;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;
@@ -15,11 +16,15 @@ public class ProvideTemporaryDirectoriesTests
     {
         const string targetFile = "TargetFile.csproj";
 
-        var settings = new ExtractLicensesSettings(targetFile);
+        var settingsMock = new Mock<ExtractLicensesSettingsBase>();
+        settingsMock
+            .Setup(settings => settings.GetTargetFile())
+            .Returns(targetFile);
+        
         var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData> { { targetFile, "" } });
 
         var context = ArrangeContext<ProvideTemporaryDirectories>.Create();
-        context.Use(settings);
+        context.Use(settingsMock.Object);
         context.Use<IFileSystem>(mockFileSystem);
 
         var sut = context.Build();
@@ -40,11 +45,15 @@ public class ProvideTemporaryDirectoriesTests
     {
         const string targetFile = "TargetFile.csproj";
 
-        var settings = new ExtractLicensesSettings(targetFile);
+        var settingsMock = new Mock<ExtractLicensesSettingsBase>();
+        settingsMock
+            .Setup(settings => settings.GetTargetFile())
+            .Returns(targetFile);
+        
         var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData> { { targetFile, "" } });
 
         var context = ArrangeContext<ProvideTemporaryDirectories>.Create();
-        context.Use(settings);
+        context.Use(settingsMock.Object);
         context.Use<IFileSystem>(mockFileSystem);
 
         var sut = context.Build();

@@ -14,10 +14,8 @@ public class PackageReferencePrinterTests
     [Fact]
     public void PrintPackageReferences_Fails_On_Invalid_Parameters()
     {
-        var settings = new ExtractLicensesSettings("something")
-        {
-            SuppressPrintDetails = false
-        };
+        var settings = Mock.Of<ExtractLicensesSettingsBase>();
+        settings.SuppressPrintDetails = false;
         
         var context = ArrangeContext<PackageReferencePrinter>.Create();
         context.Use(settings);
@@ -30,10 +28,8 @@ public class PackageReferencePrinterTests
     [Fact]
     public void PrintPackageReferences_Does_Nothing_When_Disabled()
     {
-        var settings = new ExtractLicensesSettings("something")
-        {
-            SuppressPrintDetails = true
-        };
+        var settings = Mock.Of<ExtractLicensesSettingsBase>();
+        settings.SuppressPrintDetails = true;
         
         var context = ArrangeContext<PackageReferencePrinter>.Create();
         context.Use(settings);
@@ -61,10 +57,8 @@ public class PackageReferencePrinterTests
     [Fact]
     public void PrintPackageReferences_Does_Nothing_When_No_Package_References()
     {
-        var settings = new ExtractLicensesSettings("something")
-        {
-            SuppressPrintDetails = false
-        };
+        var settings = Mock.Of<ExtractLicensesSettingsBase>();
+        settings.SuppressPrintDetails = false;
         
         var context = ArrangeContext<PackageReferencePrinter>.Create();
         context.Use(settings);
@@ -82,10 +76,8 @@ public class PackageReferencePrinterTests
     [Fact]
     public void PrintPackageReferences()
     {
-        var settings = new ExtractLicensesSettings("something")
-        {
-            SuppressPrintDetails = false
-        };
+        var settings = Mock.Of<ExtractLicensesSettingsBase>();
+        settings.SuppressPrintDetails = false;
         
         var context = ArrangeContext<PackageReferencePrinter>.Create();
         context.Use(settings);
@@ -121,10 +113,8 @@ public class PackageReferencePrinterTests
     [Fact]
     public void PrintPackageReferencesIssues_Fails_On_Invalid_Parameters()
     {
-        var settings = new ExtractLicensesSettings("something")
-        {
-            SuppressPrintIssues = false
-        };
+        var settings = Mock.Of<ExtractLicensesSettingsBase>();
+        settings.SuppressPrintIssues = false;
         
         var context = ArrangeContext<PackageReferencePrinter>.Create();
         context.Use(settings);
@@ -137,10 +127,8 @@ public class PackageReferencePrinterTests
     [Fact]
     public void PrintPackageReferencesIssues_Does_Nothing_When_Disabled()
     {
-        var settings = new ExtractLicensesSettings("something")
-        {
-            SuppressPrintIssues = true
-        };
+        var settings = Mock.Of<ExtractLicensesSettingsBase>();
+        settings.SuppressPrintIssues = true;
         
         var context = ArrangeContext<PackageReferencePrinter>.Create();
         context.Use(settings);
@@ -168,10 +156,8 @@ public class PackageReferencePrinterTests
     [Fact]
     public void PrintPackageReferencesIssues_Does_Nothing_When_No_Package_References()
     {
-        var settings = new ExtractLicensesSettings("something")
-        {
-            SuppressPrintIssues = false
-        };
+        var settings = Mock.Of<ExtractLicensesSettingsBase>();
+        settings.SuppressPrintIssues = false;
         
         var context = ArrangeContext<PackageReferencePrinter>.Create();
         context.Use(settings);
@@ -189,10 +175,8 @@ public class PackageReferencePrinterTests
     [Fact]
     public void PrintPackageReferencesIssues_Does_Nothing_When_No_Issues()
     {
-        var settings = new ExtractLicensesSettings("something")
-        {
-            SuppressPrintIssues = false
-        };
+        var settings = Mock.Of<ExtractLicensesSettingsBase>();
+        settings.SuppressPrintIssues = false;
         
         var context = ArrangeContext<PackageReferencePrinter>.Create();
         context.Use(settings);
@@ -220,10 +204,8 @@ public class PackageReferencePrinterTests
     [Fact]
     public void PrintPackageReferencesIssues()
     {
-        var settings = new ExtractLicensesSettings("something")
-        {
-            SuppressPrintDetails = false
-        };
+        var settings = Mock.Of<ExtractLicensesSettingsBase>();
+        settings.SuppressPrintIssues = false;
         
         var context = ArrangeContext<PackageReferencePrinter>.Create();
         context.Use(settings);

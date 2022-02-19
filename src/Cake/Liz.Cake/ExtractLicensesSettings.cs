@@ -1,23 +1,23 @@
-﻿using Liz.Core.Settings;
-using Nuke.Common.IO;
+﻿using Cake.Core.IO;
+using Liz.Core.Settings;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global -- public API
 
-namespace Liz.Nuke;
+namespace Liz.Cake;
 
 /// <inheritdoc />
-[ExcludeFromCodeCoverage] // simple settings
-public sealed class ExtractLicensesSettings : ExtractLicensesSettingsBase
+[ExcludeFromCodeCoverage] // simple settings DTO
+public class ExtractLicensesSettings : ExtractLicensesSettingsBase
 {
     /// <summary>
     ///     The target file that needs to be analyzed - can be a csproj, fsproj and sln file
     /// </summary>
-    public AbsolutePath? TargetFile { get; set; }
+    public FilePath? TargetFile { get; set; }
 
     /// <inheritdoc />
     public override string GetTargetFile()
     {
-        return TargetFile?.ToString() ?? string.Empty;
+        return TargetFile?.FullPath ?? string.Empty;
     }
 }

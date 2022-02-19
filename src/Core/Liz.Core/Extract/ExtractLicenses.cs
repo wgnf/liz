@@ -25,10 +25,10 @@ internal sealed class ExtractLicenses : IExtractLicenses
     private readonly IGetProjects _getProjects;
     private readonly ILogger _logger;
     private readonly IProgressHandler? _progressHandler;
-    private readonly ExtractLicensesSettings _settings;
+    private readonly ExtractLicensesSettingsBase _settings;
 
     public ExtractLicenses(
-        ExtractLicensesSettings settings,
+        ExtractLicensesSettingsBase settings,
         ILogger logger,
         IProgressHandler? progressHandler,
         IGetProjects getProjects,
@@ -55,7 +55,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         try
         {
-            var projects = GetProjects(_settings.TargetFile).ToList();
+            var projects = GetProjects(_settings.GetTargetFile()!).ToList();
 
             await DownloadPackageReferencesFor(projects);
             
@@ -71,7 +71,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
         catch (Exception ex)
         {
-            _logger.LogCritical($"Error occured while extracting licenses for '{_settings.TargetFile}'", ex);
+            _logger.LogCritical($"Error occured while extracting licenses for '{_settings.GetTargetFile()}'", ex);
             throw;
         }
         finally

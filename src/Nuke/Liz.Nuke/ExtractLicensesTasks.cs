@@ -2,11 +2,12 @@
 using Liz.Core.Extract.Contracts;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Settings;
 using Liz.Nuke.Logging;
 using Nuke.Common.Tooling;
 using System.Diagnostics.CodeAnalysis;
-using LizExtractLicensesSettings = Liz.Core.Settings.ExtractLicensesSettings;
 
+// ReSharper disable UnusedMethodReturnValue.Global
 // ReSharper disable UnusedType.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
@@ -43,17 +44,8 @@ public static class ExtractLicensesTasks
                 $"{nameof(settings.TargetFile)} of {nameof(ExtractLicensesSettings)} cannot be null");
 
         var nukeLoggerProvider = new NukeLoggerProvider();
-        var lizExtractLicensesSettings = new LizExtractLicensesSettings(settings.TargetFile.ToString())
-        {
-            IncludeTransitiveDependencies = settings.IncludeTransitiveDependencies,
-            // just use the lowest one, because the log level comes from nuke itself
-            LogLevel = LogLevel.Trace,
-            SuppressPrintDetails = settings.SuppressPrintDetails,
-            SuppressPrintIssues = settings.SuppressPrintIssues
-        };
-
         var extractLicensesFactory = new ExtractLicensesFactory();
-        var extractLicenses = extractLicensesFactory.Create(lizExtractLicensesSettings, nukeLoggerProvider);
+        var extractLicenses = extractLicensesFactory.Create(settings, nukeLoggerProvider);
         return extractLicenses;
     }
 }

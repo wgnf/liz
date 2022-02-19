@@ -6,10 +6,10 @@ namespace Liz.Core.Utils;
 
 internal sealed class ProvideTemporaryDirectories : IProvideTemporaryDirectories
 {
-    private readonly ExtractLicensesSettings _settings;
+    private readonly ExtractLicensesSettingsBase _settings;
     private readonly IFileSystem _fileSystem;
 
-    public ProvideTemporaryDirectories(ExtractLicensesSettings settings, IFileSystem fileSystem)
+    public ProvideTemporaryDirectories(ExtractLicensesSettingsBase settings, IFileSystem fileSystem)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -17,7 +17,7 @@ internal sealed class ProvideTemporaryDirectories : IProvideTemporaryDirectories
     
     public IDirectoryInfo GetRootDirectory()
     {
-        var targetFileDirectory = _fileSystem.Path.GetDirectoryName(_settings.TargetFile);
+        var targetFileDirectory = _fileSystem.Path.GetDirectoryName(_settings.GetTargetFile());
         var lizTemporaryDirectory = _fileSystem.Path.Combine(targetFileDirectory, ".liz_tmp");
         var lizTemporaryDirectoryInfo = _fileSystem.DirectoryInfo.FromDirectoryName(lizTemporaryDirectory);
 

@@ -9,10 +9,10 @@ namespace Liz.Core.Utils;
 
 internal sealed class PackageReferencePrinter : IPackageReferencePrinter
 {
-    private readonly ExtractLicensesSettings _settings;
+    private readonly ExtractLicensesSettingsBase _settings;
     private readonly ILogger _logger;
 
-    public PackageReferencePrinter(ExtractLicensesSettings settings, ILogger logger)
+    public PackageReferencePrinter(ExtractLicensesSettingsBase settings, ILogger logger)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
