@@ -85,14 +85,9 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
-            if (Solution == null)
-                throw new InvalidOperationException("Solution cannot be null!");
-            if (GitVersion == null)
-                throw new InvalidOperationException("GitVersion cannot be null!");
-
-            var packableProjects = Solution
+            var packableProjects = Solution?
                 .AllProjects
-                .Where(project => project.GetProperty<bool>("IsPackable"));
+                .Where(project => project.GetProperty<bool>("IsPackable")) ?? Enumerable.Empty<Project>();
 
             foreach (var project in packableProjects)
             {
@@ -104,10 +99,10 @@ class Build : NukeBuild
                     .SetConfiguration(Configuration)
                     .EnableNoBuild()
                     .EnableNoRestore()
-                    .SetVersion(GitVersion.NuGetVersionV2)
-                    .SetAssemblyVersion(GitVersion.AssemblySemVer)
-                    .SetFileVersion(GitVersion.AssemblySemFileVer)
-                    .SetInformationalVersion(GitVersion.InformationalVersion));
+                    .SetVersion(GitVersion?.NuGetVersionV2)
+                    .SetAssemblyVersion(GitVersion?.AssemblySemVer)
+                    .SetFileVersion(GitVersion?.AssemblySemFileVer)
+                    .SetInformationalVersion(GitVersion?.InformationalVersion));
             }
         });
 
