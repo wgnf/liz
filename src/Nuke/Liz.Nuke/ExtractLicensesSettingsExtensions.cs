@@ -7,7 +7,7 @@ namespace Liz.Nuke;
 // ReSharper disable UnusedMember.Global
 
 /// <summary>
-///     
+///     Extensions to help setup your <see cref="ExtractLicensesSettings"/>
 /// </summary>
 public static class ExtractLicensesSettingsExtensions
 {
@@ -20,6 +20,7 @@ public static class ExtractLicensesSettingsExtensions
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null</exception>
     public static ExtractLicensesSettings SetTargetFile(this ExtractLicensesSettings settings, AbsolutePath value)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
         if (value == null) throw new ArgumentNullException(nameof(value));
 
         settings.TargetFile = value;
@@ -36,6 +37,8 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         bool value)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.IncludeTransitiveDependencies = value;
         return settings;
     }
@@ -47,6 +50,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings EnableIncludeTransitiveDependencies(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.IncludeTransitiveDependencies = true;
         return settings;
     }
@@ -58,6 +63,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings DisableIncludeTransitiveDependencies(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.IncludeTransitiveDependencies = false;
         return settings;
     }
@@ -69,6 +76,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ToggleIncludeTransitiveDependencies(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.IncludeTransitiveDependencies = !settings.IncludeTransitiveDependencies;
         return settings;
     }
@@ -80,6 +89,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ResetIncludeTransitiveDependencies(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.IncludeTransitiveDependencies = new ExtractLicensesSettings().IncludeTransitiveDependencies;
         return settings;
     }
@@ -95,6 +106,8 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         bool value)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.SuppressPrintDetails = value;
         return settings;
     }
@@ -106,6 +119,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings EnableSuppressPrintDetails(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.SuppressPrintDetails = true;
         return settings;
     }
@@ -117,6 +132,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings DisableSuppressPrintDetails(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.SuppressPrintDetails = false;
         return settings;
     }
@@ -128,6 +145,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ToggleSuppressPrintDetails(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.SuppressPrintDetails = !settings.SuppressPrintDetails;
         return settings;
     }
@@ -139,6 +158,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ResetSuppressPrintDetails(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.SuppressPrintDetails = new ExtractLicensesSettings().SuppressPrintDetails;
         return settings;
     }
@@ -153,6 +174,8 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         bool value)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.SuppressPrintIssues = value;
         return settings;
     }
@@ -164,6 +187,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings EnableSuppressPrintIssues(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.SuppressPrintIssues = true;
         return settings;
     }
@@ -175,6 +200,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings DisableSuppressPrintIssues(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.SuppressPrintIssues = false;
         return settings;
     }
@@ -186,6 +213,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ToggleSuppressPrintIssues(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.SuppressPrintIssues = !settings.SuppressPrintIssues;
         return settings;
     }
@@ -197,6 +226,8 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ResetSuppressPrintIssues(this ExtractLicensesSettings settings)
     {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        
         settings.SuppressPrintIssues = new ExtractLicensesSettings().SuppressPrintIssues;
         return settings;
     }
