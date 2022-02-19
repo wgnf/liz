@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+using Liz.Nuke;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.Execution;
@@ -16,6 +18,7 @@ namespace Liz.Build;
 
 [CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
+[SuppressMessage("Performance", "CA1822:Mark members as static")]
 class Build : NukeBuild
 {
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
@@ -29,6 +32,7 @@ class Build : NukeBuild
     static AbsolutePath SourceDirectory => RootDirectory / "src";
     static AbsolutePath OutputDirectory => RootDirectory / "output";
     static AbsolutePath PackageOutputDirectory => OutputDirectory / "packages";
+    static AbsolutePath TestDataDirectory => RootDirectory / "test-data";
 
     Target Clean => _ => _
         .Before(Restore)
@@ -104,6 +108,14 @@ class Build : NukeBuild
                     .SetFileVersion(GitVersion?.AssemblySemFileVer)
                     .SetInformationalVersion(GitVersion?.InformationalVersion));
             }
+        });
+
+    Target ExtractLicenses => _ => _
+        .Executes(async () =>
+        {
+            await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
+                .SetTargetFile(TestDataDirectory / "sln" / "TestingGround.sln")
+                .EnableIncludeTransitiveDependencies());
         });
 
     public static int Main() => Execute<Build>(x => x.Test);

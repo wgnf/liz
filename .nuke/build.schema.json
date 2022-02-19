@@ -73,6 +73,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "ExtractLicenses",
               "Pack",
               "Restore",
               "Test"
@@ -91,6 +92,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "ExtractLicenses",
               "Pack",
               "Restore",
               "Test"
