@@ -32,7 +32,7 @@ internal sealed class ProgressBarProgressHandlerLogger : IProgressHandler, ILogg
             CollapseWhenFinished = false
         };
 
-        _mainProgressBar = new ProgressBar(totalSteps, string.Empty, mainProgressBarOptions);
+        _mainProgressBar = new ProgressBar(totalSteps, initialMessage, mainProgressBarOptions);
         _disposables.Add(_mainProgressBar);
     }
 

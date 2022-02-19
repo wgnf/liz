@@ -1,8 +1,6 @@
 ﻿using Liz.Core;
 using Liz.Core.Extract.Contracts;
-using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
-using Liz.Core.Settings;
 using Liz.Nuke.Logging;
 using Nuke.Common.Tooling;
 using System.Diagnostics.CodeAnalysis;

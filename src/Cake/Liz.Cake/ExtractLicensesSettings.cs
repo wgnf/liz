@@ -2,7 +2,10 @@
 using Liz.Core.Settings;
 using System.Diagnostics.CodeAnalysis;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global -- public API
+// public API...
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Liz.Cake;
 
