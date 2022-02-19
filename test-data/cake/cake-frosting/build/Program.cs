@@ -33,7 +33,12 @@ public sealed class ExtractLicensesDefaultTask : AsyncFrostingTask<BuildContext>
 {
     public override async Task RunAsync(BuildContext context)
     {
-        await context.ExtractLicensesAsync(context.TargetFile);
+        var settings = new ExtractLicensesSettings
+        {
+            TargetFile = context.TargetFile
+        };
+        
+        await context.ExtractLicensesAsync(settings);
     }
 }
 
@@ -42,10 +47,11 @@ public sealed class ExtractLicensesTask : AsyncFrostingTask<BuildContext>
 {
     public override async Task RunAsync(BuildContext context)
     {
-        var settings = new ExtractLicensesToolSettings
+        var settings = new ExtractLicensesSettings
         {
+            TargetFile = context.TargetFile,
             IncludeTransitiveDependencies = true
         };
-        await context.ExtractLicensesAsync(context.TargetFile, settings);
+        await context.ExtractLicensesAsync(settings);
     }
 }

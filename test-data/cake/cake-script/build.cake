@@ -12,7 +12,12 @@ Task("Default")
 Task("ExtractLicensesDefault")
     .Does(async () => 
     {
-        await ExtractLicensesAsync(targetFile);
+        var settings = new ExtractLicensesToolSettings
+        {
+            TargetFile = targetFile
+        };
+
+        await ExtractLicensesAsync(settings);
     });
 
 Task("ExtractLicenses")
@@ -20,10 +25,11 @@ Task("ExtractLicenses")
     {
         var settings = new ExtractLicensesToolSettings
         {
+            TargetFile = targetFile,
             IncludeTransitiveDependencies = true
         };
 
-        await ExtractLicensesAsync(targetFile, settings);
+        await ExtractLicensesAsync(settings);
     });
 
 RunTarget(target);
