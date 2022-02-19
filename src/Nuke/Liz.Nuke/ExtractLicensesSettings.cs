@@ -1,15 +1,21 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Nuke.Common.IO;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global -- public API
 
-namespace Liz.Cake;
+namespace Liz.Nuke;
 
 /// <summary>
 ///     Settings to parameterize the license extraction of the Liz-Tool
 /// </summary>
-[ExcludeFromCodeCoverage] // simple settings DTO
-public class ExtractLicensesToolSettings
+[ExcludeFromCodeCoverage] // simple settings
+public sealed class ExtractLicensesSettings
 {
+    /// <summary>
+    ///     The target-file to analyze. Can be a .csproj, .fsproj and .sln
+    /// </summary>
+    public AbsolutePath? TargetFile { get; set; }
+    
     /// <summary>
     ///     Whether or not to include transitive (dependencies of dependencies) dependencies
     /// </summary>
