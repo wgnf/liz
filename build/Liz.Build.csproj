@@ -21,4 +21,8 @@
     <PackageDownload Include="GitVersion.Tool" Version="[5.8.0]" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\src\Nuke\Liz.Nuke\Liz.Nuke.csproj" />
+  </ItemGroup>
+
 </Project>
