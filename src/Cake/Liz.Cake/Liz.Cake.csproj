@@ -14,6 +14,7 @@
     <!-- NuGet Package relevant stuff -->
     <PropertyGroup>
         <PackageId>Cake.ExtractLicenses</PackageId>
+        <PackageIcon>liz-logo-cake.png</PackageIcon>
         <AssemblyName>Cake.ExtractLicenses</AssemblyName>
         
         <SignAssembly>true</SignAssembly>
@@ -48,6 +49,7 @@
 
     <ItemGroup>
         <None Include="../../../LICENSE" Pack="true" PackagePath="" />
+        <None Include="../../../res/liz-logo-cake.png" Pack="true" PackagePath="" />
     </ItemGroup>
     
     <ItemGroup>
