@@ -1,6 +1,6 @@
 # 📃 liz (ˈlɪz)
 
-<img style="float: left; padding-right: 1em;" src="res/liz-logo-150x.png" />
+![liz logo](res/liz-logo-150x.png)
 
 [![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Uses SemVer 2.0.0](https://img.shields.io/badge/Uses%20SemVer-2.0.0-green)](https://semver.org/spec/v2.0.0.html)
@@ -11,10 +11,6 @@
 [![GitHub watchers](https://img.shields.io/github/watchers/wgnf/liz?style=social)](https://github.com/wgnf/liz/watchers)
 
 **liz** is a tool to extract license-information from your project/solution aimed on a **fast** and **correct** process. Whether its' via a dotnet-CLI-Tool, Cake-Addin or Nuke-Addon.
-
-<br/>
-<br/>
-<br/>
 
 ---
 
