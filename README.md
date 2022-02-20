@@ -1,5 +1,3 @@
-# 📃 liz (ˈlɪz)
-
 ![liz logo](res/liz-logo-150x.png)
 
 [![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
