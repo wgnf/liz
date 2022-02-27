@@ -29,9 +29,6 @@ class Build : NukeBuild
 
     [Parameter("NuGet API Key for the 'Cake.ExtractLicenses' Package", Name = "NUGET_API_KEY_CAKE")]
     readonly string? NuGetApiKeyCake;
-
-    [Parameter("NuGet API Key for the 'Nuke.ExtractLicenses' Package", Name = "NUGET_API_KEY_NUKE")]
-    readonly string? NuGetApiKeyNuke;
     
     const string NuGetSource = "https://api.nuget.org/v3/index.json";
     
@@ -137,10 +134,6 @@ class Build : NukeBuild
                 if (packageFile.NameWithoutExtension.StartsWith("Cake.ExtractLicenses"))
                 {
                     apiKey = NuGetApiKeyCake;
-                }
-                else if (packageFile.NameWithoutExtension.StartsWith("Nuke.ExtractLicenses"))
-                {
-                    apiKey = NuGetApiKeyNuke;
                 }
                 else
                 {

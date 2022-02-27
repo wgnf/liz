@@ -13,9 +13,7 @@
 
     <!-- NuGet Package relevant stuff -->
     <PropertyGroup>
-        <PackageId>Nuke.ExtractLicenses</PackageId>
         <PackageIcon>liz-logo-nuke.png</PackageIcon>
-        <AssemblyName>Nuke.ExtractLicenses</AssemblyName>
 
         <SignAssembly>true</SignAssembly>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
