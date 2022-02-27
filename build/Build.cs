@@ -43,6 +43,14 @@ class Build : NukeBuild
     static AbsolutePath PackageOutputDirectory => OutputDirectory / "packages";
     static AbsolutePath TestDataDirectory => RootDirectory / "test-data";
 
+    Target StartUp => _ => _
+        .Before(Clean)
+        .Executes(() =>
+        {
+            Serilog.Log.Information("Following Version will be used: {NuGetVersion1}, {NuGetVersion2}",
+                GitVersion?.NuGetVersion, GitVersion?.NuGetVersionV2);
+        });
+    
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
