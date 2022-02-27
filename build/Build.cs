@@ -24,7 +24,15 @@ class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-    [Secret] readonly string? NuGetApiKey;
+    [Parameter("NuGet API Key for Liz Packages", Name = "NUGET_API_KEY_LIZ")]
+    readonly string? NuGetApiKeyLiz;
+
+    [Parameter("NuGet API Key for the 'Cake.ExtractLicenses' Package", Name = "NUGET_API_KEY_CAKE")]
+    readonly string? NuGetApiKeyCake;
+
+    [Parameter("NuGet API Key for the 'Nuke.ExtractLicenses' Package", Name = "NUGET_API_KEY_NUKE")]
+    readonly string? NuGetApiKeyNuke;
+    
     const string NuGetSource = "https://api.nuget.org/v3/index.json";
     
     [GitVersion] readonly GitVersion? GitVersion;
@@ -113,19 +121,36 @@ class Build : NukeBuild
 
     Target Publish => _ => _
         .DependsOn(Pack)
-        .Requires(() => !string.IsNullOrWhiteSpace(NuGetApiKey))
+        .Requires(() => !string.IsNullOrWhiteSpace(NuGetApiKeyLiz))
+        .Requires(() => !string.IsNullOrWhiteSpace(NuGetApiKeyCake))
+        .Requires(() => !string.IsNullOrWhiteSpace(NuGetApiKeyLiz))
         .Executes(() =>
         {
-            var packages = PackageOutputDirectory.GlobDirectories("*.nupkg", "*.snupkg");
+            var packageFiles = PackageOutputDirectory.GlobDirectories("*.nupkg", "*.snupkg");
 
-            foreach (var package in packages)
+            foreach (var packageFile in packageFiles)
             {
-                Serilog.Log.Information("Pushing '{PackageName}'...", package.Name);
+                Serilog.Log.Information("Pushing '{PackageName}'...", packageFile.Name);
+
+                string? apiKey;
+
+                if (packageFile.NameWithoutExtension.StartsWith("Cake.ExtractLicenses"))
+                {
+                    apiKey = NuGetApiKeyCake;
+                }
+                else if (packageFile.NameWithoutExtension.StartsWith("Nuke.ExtractLicenses"))
+                {
+                    apiKey = NuGetApiKeyNuke;
+                }
+                else
+                {
+                    apiKey = NuGetApiKeyLiz;
+                }
 
                 DotNetNuGetPush(settings => settings
-                    .SetApiKey(NuGetApiKey)
-                    .SetSymbolApiKey(NuGetApiKey)
-                    .SetTargetPath(package)
+                    .SetApiKey(apiKey)
+                    .SetSymbolApiKey(apiKey)
+                    .SetTargetPath(packageFile)
                     .SetSource(NuGetSource)
                     .SetSymbolSource(NuGetSource));
             }
