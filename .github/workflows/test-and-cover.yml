@@ -19,8 +19,8 @@ jobs:
         with:
           dotnet-version: 6.0.x
 
-      - name: Run Tests with nuke
-        run: ./build/build.sh -Target Test -Configuration Release
+      - name: Run tests with nuke
+        run: ./build/build.sh -Target Test -Configuration Debug
 
       - name: Coverage
         uses: codecov/codecov-action@v2

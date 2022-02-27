@@ -1,0 +1,23 @@
+name: "Publish"
+
+on:
+  push:
+    tags:
+      - "v**.**.**" # Semantic Versioning like "v1.22.3"
+      - "v**.**.**-**" # Prerelease Semantic Versioning like "v1.22.3-rc4"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+      
+      - name: Run publish with nuke
+        run: ./build/build.sh -Target Publish -Configuration Release
