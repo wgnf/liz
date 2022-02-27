@@ -24,7 +24,8 @@ class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-    [Secret] readonly string? CodeCovToken;
+    [Secret] readonly string? NuGetApiKey;
+    const string NuGetSource = "https://api.nuget.org/v3/index.json";
     
     [GitVersion] readonly GitVersion? GitVersion;
     [Solution] readonly Solution? Solution;
@@ -95,7 +96,7 @@ class Build : NukeBuild
 
             foreach (var project in packableProjects)
             {
-                Serilog.Log.Information("Packaging project... {ProjectName}", project.Name);
+                Serilog.Log.Information("Packaging project '{ProjectName}'...", project.Name);
                 
                 DotNetPack(settings => settings
                     .SetProject(project)
@@ -107,6 +108,26 @@ class Build : NukeBuild
                     .SetAssemblyVersion(GitVersion?.AssemblySemVer)
                     .SetFileVersion(GitVersion?.AssemblySemFileVer)
                     .SetInformationalVersion(GitVersion?.InformationalVersion));
+            }
+        });
+
+    Target Publish => _ => _
+        .DependsOn(Pack)
+        .Requires(() => !string.IsNullOrWhiteSpace(NuGetApiKey))
+        .Executes(() =>
+        {
+            var packages = PackageOutputDirectory.GlobDirectories("*.nupkg", "*.snupkg");
+
+            foreach (var package in packages)
+            {
+                Serilog.Log.Information("Pushing '{PackageName}'...", package.Name);
+
+                DotNetNuGetPush(settings => settings
+                    .SetApiKey(NuGetApiKey)
+                    .SetSymbolApiKey(NuGetApiKey)
+                    .SetTargetPath(package)
+                    .SetSource(NuGetSource)
+                    .SetSymbolSource(NuGetSource));
             }
         });
 
