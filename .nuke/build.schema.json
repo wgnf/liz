@@ -46,6 +46,18 @@
           "type": "boolean",
           "description": "Disables displaying the NUKE logo"
         },
+        "NUGET_API_KEY_CAKE": {
+          "type": "string",
+          "description": "NuGet API Key for the 'Cake.ExtractLicenses' Package"
+        },
+        "NUGET_API_KEY_LIZ": {
+          "type": "string",
+          "description": "NuGet API Key for Liz Packages"
+        },
+        "NUGET_API_KEY_NUKE": {
+          "type": "string",
+          "description": "NuGet API Key for the 'Nuke.ExtractLicenses' Package"
+        },
         "Partition": {
           "type": "string",
           "description": "Partition to use on CI"
@@ -75,6 +87,7 @@
               "Compile",
               "ExtractLicenses",
               "Pack",
+              "Publish",
               "Restore",
               "Test"
             ]
@@ -94,6 +107,7 @@
               "Compile",
               "ExtractLicenses",
               "Pack",
+              "Publish",
               "Restore",
               "Test"
             ]

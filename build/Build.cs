@@ -126,7 +126,7 @@ class Build : NukeBuild
         .Requires(() => !string.IsNullOrWhiteSpace(NuGetApiKeyLiz))
         .Executes(() =>
         {
-            var packageFiles = PackageOutputDirectory.GlobDirectories("*.nupkg", "*.snupkg");
+            var packageFiles = PackageOutputDirectory.GlobFiles("*.nupkg", "*.snupkg");
 
             foreach (var packageFile in packageFiles)
             {
