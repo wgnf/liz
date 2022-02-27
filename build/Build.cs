@@ -120,30 +120,24 @@ class Build : NukeBuild
         .DependsOn(Pack)
         .Requires(() => !string.IsNullOrWhiteSpace(NuGetApiKeyLiz))
         .Requires(() => !string.IsNullOrWhiteSpace(NuGetApiKeyCake))
-        .Requires(() => !string.IsNullOrWhiteSpace(NuGetApiKeyLiz))
         .Executes(() =>
         {
-            var packageFiles = PackageOutputDirectory.GlobFiles("*.nupkg", "*.snupkg");
+            var packageFiles = PackageOutputDirectory.GlobFiles("*.nupkg");
 
             foreach (var packageFile in packageFiles)
             {
                 Serilog.Log.Information("Pushing '{PackageName}'...", packageFile.Name);
 
-                string? apiKey;
-
-                if (packageFile.NameWithoutExtension.StartsWith("Cake.ExtractLicenses"))
-                {
-                    apiKey = NuGetApiKeyCake;
-                }
-                else
-                {
-                    apiKey = NuGetApiKeyLiz;
-                }
+                var apiKey = packageFile.NameWithoutExtension.StartsWith("Cake.ExtractLicenses") 
+                    ? NuGetApiKeyCake 
+                    : NuGetApiKeyLiz;
 
                 DotNetNuGetPush(settings => settings
                     .SetApiKey(apiKey)
                     .SetSymbolApiKey(apiKey)
+                    
                     .SetTargetPath(packageFile)
+
                     .SetSource(NuGetSource)
                     .SetSymbolSource(NuGetSource));
             }
