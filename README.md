@@ -12,13 +12,33 @@
 
 ---
 
+## 🖥️ Tools
+
+| Tool | Documentation | Version | Downloads |
+|------|---------------|---------|-----------|
+| `Liz.Tool` | [link](doc/documentation-dotnet-tool.md) | [![Latest Release .NET Tool](https://img.shields.io/nuget/v/Liz.Tool)](https://www.nuget.org/packages/Liz.Tool/) | [![Downloads .NET Tool](https://img.shields.io/nuget/dt/Liz.Tool)](https://www.nuget.org/packages/Liz.Tool/) |
+| `Cake.ExtractLicenses` | [link](doc/documenation-cake-addin.md) | [![Latest Release Cake Addin](https://img.shields.io/nuget/v/Cake.ExtractLicenses)](https://www.nuget.org/packages/Cake.ExtractLicenses/) | [![Downloads Cake Addin](https://img.shields.io/nuget/dt/Cake.ExtractLicenses)](https://www.nuget.org/packages/Cake.ExtractLicenses/) |
+| `Liz.Nuke` | [link](doc/documentation-nuke-addon.md) | [![Latest Release Nuke Addon](https://img.shields.io/nuget/v/Liz.Nuke)](https://www.nuget.org/packages/Liz.Nuke/) | [![Downloads Nuke Addon](https://img.shields.io/nuget/dt/Liz.Nuke)](https://www.nuget.org/packages/Liz.Nuke/) |
+
 ## 🌐 Features
 
-Coming Soon ™️
+**liz** currently supports the following features:
 
-## 🖥️ Usage
+- Determining all (also with transitive if desired) dependencies for the given solution/project for SDK-style and non-SDK-style projects
+- Extract license information (type, URL, text) from all currently known sources for these dependencies
+- Print the found dependencies including their license information to the console
+- Print the problems that occured during the process (missing license-information)
 
-Coming Soon ™️
+### Planned features
+
+- #10 Determining the the license-type by the determined license-type
+- #11 & #12 Mapping from package-reference to license-information
+- #13 Validate found license-types against a provided white-/blacklist
+- #15 & #16 Export license-information in various forms to a given directory/file
+- #5 & #7 Filter for projects and dependencies
+- #6 Ability to provide manual dependencies
+- #1 Caching for even faster analyzation times
+- #28 Sanitize HTML-Tags
 
 ## 🛠️ Requirements
 
@@ -48,13 +68,10 @@ To develop and work with **liz** you just need to clone this Repo somewhere on y
   
 Before you can start, you should restore all NuGet-Packages using `dotnet restore` if that's not done for you by your IDE.  
   
-As this uses .NET 6.0, you need to install the .NET 6.0.102 SDK (as configured by the `global.json`).
+As this uses .NET 6.0, you need to install the .NET 6.0.x SDK (as configured by the `global.json`).
 
 ## 👋 Want to Contribute?
 
-**DISCLAIMER**  
-As this is in really early development, I'd not recommend you contributing yet, because we have to figure stuff out on our own at the moment. (Code-) Structure and processes might change drastically over that time.  
-  
 Cool! We're always welcoming anyone that wants to contribute to this project! Take a look at the [Contributing Guidelines](CONTRIBUTING.md), which helps you get started. You can also look at the [Open Issues](https://github.com/wgnf/liz/issues) for getting more info about current or upcoming tasks.
 
 ## 💬 Want to discuss?
