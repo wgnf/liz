@@ -31,14 +31,14 @@
 
 ### Planned features
 
-- #10 Determining the the license-type by the determined license-type
-- #11 & #12 Mapping from package-reference to license-information
-- #13 Validate found license-types against a provided white-/blacklist
-- #15 & #16 Export license-information in various forms to a given directory/file
-- #5 & #7 Filter for projects and dependencies
-- #6 Ability to provide manual dependencies
-- #1 Caching for even faster analyzation times
-- #28 Sanitize HTML-Tags
+- [#10](https://github.com/wgnf/liz/issues/10) Determining the the license-type by the determined license-type
+- [#11](https://github.com/wgnf/liz/issues/11) & [#12](https://github.com/wgnf/liz/issues/12) Mapping from package-reference to license-information
+- [#13](https://github.com/wgnf/liz/issues/13) Validate found license-types against a provided white-/blacklist
+- [#15](https://github.com/wgnf/liz/issues/15) & [#16](https://github.com/wgnf/liz/issues/16) Export license-information in various forms to a given directory/file
+- [#5](https://github.com/wgnf/liz/issues/5) & [#7](https://github.com/wgnf/liz/issues/7) Filter for projects and dependencies
+- [#6](https://github.com/wgnf/liz/issues/6) Ability to provide manual dependencies
+- [#1](https://github.com/wgnf/liz/issues/1) Caching for even faster analyzation times
+- [#28](https://github.com/wgnf/liz/issues/28) Sanitize HTML-Tags
 
 ## 🛠️ Requirements
 
