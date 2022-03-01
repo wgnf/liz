@@ -71,7 +71,7 @@ To analyze a project your solution you have to use
 |------|-------------|
 | `--log-level`, `-l` | The log-level which describes what kind of messages are displayed when running the tool. </br> Possible values: `Trace`, `Debug`, `Information`, `Warning`, `Error`, `Critical`, `None` </br> Default: `Information` |
 | `--include-transitive`, `-i` | If transitive dependencies should be inlucded or not </br> Default: `false` |
-| `--suppress-print-details`, `-sp` | If printing the license and package-reference details should be suppressed or not </br> Default: `false` |
+| `--suppress-print-details`, `-sd` | If printing the license and package-reference details should be suppressed or not </br> Default: `false` |
 | `--suppress-print-issues`, `-si` | If printing the license-information issues should be suppressed or not </br> Default: `false` |
 | `--suppress-progressbar`, `-sb` | If displaying the progressbar should be suppressed or not. </br> Can help when debugging errors or is used in a CI/CD Pipeline </br> Default: `false` |
 

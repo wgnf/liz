@@ -90,7 +90,7 @@ internal sealed class CommandProvider
     private static Option GetSuppressPrintDetailsOption()
     {
         var option = new Option<bool>(
-            new[] { "--suppress-print-details", "-sp" },
+            new[] { "--suppress-print-details", "-sd" },
             () => false,
             "If printing the license and package-reference details should be suppressed or not");
         return option;
