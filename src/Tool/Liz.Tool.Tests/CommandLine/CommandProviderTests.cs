@@ -67,9 +67,7 @@ public sealed class CommandProviderTests
         logLevelOption?
             .Aliases
             .Should()
-            .Contain(alias =>
-                alias == "--log-level" ||
-                alias == "-l");
+            .Contain(new[] { "--log-level", "-l" });
     }
     
     [Fact]
@@ -95,9 +93,7 @@ public sealed class CommandProviderTests
         includeTransitiveOption?
             .Aliases
             .Should()
-            .Contain(alias =>
-                alias == "--include-transitive" ||
-                alias == "-i");
+            .Contain(new[] { "--include-transitive", "-i" });
     }
     
     [Fact]
@@ -123,9 +119,7 @@ public sealed class CommandProviderTests
         suppressPrintDetailsOption?
             .Aliases
             .Should()
-            .Contain(alias =>
-                alias == "--suppress-print-details" ||
-                alias == "-sp");
+            .Contain(new[] { "--suppress-print-details", "-sd" });
     }
     
     [Fact]
@@ -151,9 +145,7 @@ public sealed class CommandProviderTests
         suppressPrintIssuesOption?
             .Aliases
             .Should()
-            .Contain(alias =>
-                alias == "--suppress-print-issues" ||
-                alias == "-si");
+            .Contain(new[] { "--suppress-print-issues", "-si" });
     }
     
     [Fact]
@@ -179,8 +171,6 @@ public sealed class CommandProviderTests
         suppressPrintIssuesOption?
             .Aliases
             .Should()
-            .Contain(alias =>
-                alias == "--suppress-progressbar" ||
-                alias == "-sb");
+            .Contain(new[] { "--suppress-progressbar", "-sb" });
     }
 }
