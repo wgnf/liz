@@ -19,7 +19,7 @@ public abstract class ExtractLicensesSettingsBase
     public bool SuppressPrintDetails { get; set; }
     
     /// <summary>
-    ///     Whether or not to suppress printing found issues of analyzed package-references and license-information
+    ///    Whether or not to suppress printing found issues of analyzed package-references and license-information
     /// </summary>
     public bool SuppressPrintIssues { get; set; }
 

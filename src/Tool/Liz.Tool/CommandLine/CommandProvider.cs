@@ -65,7 +65,7 @@ internal sealed class CommandProvider
     {
         var argument = new Argument<FileInfo>(
             "targetFile",
-            "The input file to analyze. Can be a Solution (sln) or a Project (csproj, fsproj)");
+            "The target file to analyze. Can be a solution (.sln) or a project (.csproj, .fsproj) file");
         return argument;
     }
 
@@ -74,7 +74,7 @@ internal sealed class CommandProvider
         var option = new Option<LogLevel>(
             new[] { "--log-level", "-l" },
             () => LogLevel.Information,
-            "The Log-Level that describes which messages are displayed when running the tool");
+            "The log-level which describes what kind of messages are displayed when running the tool");
         return option;
     }
 
@@ -110,7 +110,7 @@ internal sealed class CommandProvider
         var option = new Option<bool>(
             new[] { "--suppress-progressbar", "-sb" },
             () => false,
-            "If the display of the progressbar should be suppressed or not. Should be disabled if errors need to be analyzed (i.e. with a higher log-level)");
+            "If displaying the progressbar should be suppressed or not. Can help when debugging errors or is used in a CI/CD Pipeline");
         return option;
     }
 }
