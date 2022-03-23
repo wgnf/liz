@@ -10,6 +10,7 @@ using Liz.Core.Progress;
 using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Exceptions;
 using Liz.Core.Projects.Contracts.Models;
+using Liz.Core.Result.Contracts;
 using Liz.Core.Settings;
 using Liz.Core.Utils.Contracts;
 using Moq;
@@ -100,7 +101,11 @@ public class ExtractLicensesTests
     [Fact]
     public async Task Extract()
     {
+        var resultProcessor = new Mock<IResultProcessor>();
+        
         var context = CreateContext();
+        context.Use<IEnumerable<IResultProcessor>>(new[] { resultProcessor.Object });
+        
         var sut = context.Build();
 
         var project1 = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
@@ -138,13 +143,9 @@ public class ExtractLicensesTests
             .Should()
             .Contain(new[] { packageReference1, packageReference2 });
         
-        context
-            .For<IPackageReferencePrinter>()
-            .Verify(printer => printer.PrintPackageReferences(It.IsAny<IEnumerable<PackageReference>>()), Times.Once);
-        
-        context
-            .For<IPackageReferencePrinter>()
-            .Verify(printer => printer.PrintPackageReferencesIssues(It.IsAny<IEnumerable<PackageReference>>()), Times.Once);
+        resultProcessor
+            .Verify(processor => 
+                processor.ProcessResultsAsync(It.IsAny<IEnumerable<PackageReference>>()), Times.Once);
     }
 
     [Fact]
@@ -245,9 +246,13 @@ public class ExtractLicensesTests
         settingsMock
             .Setup(settings => settings.GetTargetFile())
             .Returns("TargetFile.csproj");
+        
+        var resultProcessor = Mock.Of<IResultProcessor>();
 
         var context = ArrangeContext<ExtractLicenses>.Create();
+        
         context.Use(settingsMock.Object);
+        context.Use<IEnumerable<IResultProcessor>>(new[] { resultProcessor });
 
         context
             .For<IProvideTemporaryDirectories>()

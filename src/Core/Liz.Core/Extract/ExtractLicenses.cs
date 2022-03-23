@@ -10,6 +10,7 @@ using Liz.Core.Progress;
 using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Exceptions;
 using Liz.Core.Projects.Contracts.Models;
+using Liz.Core.Result.Contracts;
 using Liz.Core.Settings;
 using Liz.Core.Utils.Contracts;
 
@@ -21,7 +22,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     private readonly IEnrichPackageReferenceWithLicenseInformation _enrichPackageReferenceWithLicenseInformation;
     private readonly IProvideTemporaryDirectories _provideTemporaryDirectories;
     private readonly IDownloadPackageReferences _downloadPackageReferences;
-    private readonly IPackageReferencePrinter _packageReferencePrinter;
+    private readonly IEnumerable<IResultProcessor> _resultProcessors;
     private readonly IGetProjects _getProjects;
     private readonly ILogger _logger;
     private readonly IProgressHandler? _progressHandler;
@@ -36,7 +37,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         IEnrichPackageReferenceWithLicenseInformation enrichPackageReferenceWithLicenseInformation,
         IProvideTemporaryDirectories provideTemporaryDirectories,
         IDownloadPackageReferences downloadPackageReferences,
-        IPackageReferencePrinter packageReferencePrinter)
+        IEnumerable<IResultProcessor> resultProcessors)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
@@ -46,7 +47,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         _provideTemporaryDirectories = provideTemporaryDirectories 
                                      ?? throw new ArgumentNullException(nameof(provideTemporaryDirectories));
         _downloadPackageReferences = downloadPackageReferences ?? throw new ArgumentNullException(nameof(downloadPackageReferences));
-        _packageReferencePrinter = packageReferencePrinter ?? throw new ArgumentNullException(nameof(packageReferencePrinter));
+        _resultProcessors = resultProcessors ?? throw new ArgumentNullException(nameof(resultProcessors));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _progressHandler = progressHandler;
     }
@@ -64,9 +65,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
             
             _progressHandler?.FinishMainProcess();
 
-            _packageReferencePrinter.PrintPackageReferences(packageReferences);
-            _packageReferencePrinter.PrintPackageReferencesIssues(packageReferences);
-
+            await ProcessResultsAsync(packageReferences);
             return packageReferences;
         }
         catch (Exception ex)
@@ -195,6 +194,18 @@ internal sealed class ExtractLicenses : IExtractLicenses
         catch (Exception ex)
         {
             throw new GetLicenseInformationFailedException(packageReference, ex);
+        }
+    }
+    
+    private async Task ProcessResultsAsync(IReadOnlyCollection<PackageReference> packageReferences)
+    {
+        _logger.LogInformation("Processing results...");
+        
+        foreach (var resultProcessor in _resultProcessors)
+        {
+            _logger.LogDebug($"Processing with '{resultProcessor.GetType().Name}'");
+
+            await resultProcessor.ProcessResultsAsync(packageReferences).ConfigureAwait(false);
         }
     }
 

@@ -11,6 +11,8 @@ using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.PackageReferences.NuGetCli;
 using Liz.Core.Progress;
 using Liz.Core.Projects;
+using Liz.Core.Result;
+using Liz.Core.Result.Contracts;
 using Liz.Core.Settings;
 using Liz.Core.Utils;
 using Liz.Core.Utils.Wrappers;
@@ -65,6 +67,12 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             new LicenseUrlElementLicenseInformationSource(logger, fileSystem, httpClient)
         };
 
+        var resultProcessors = new IResultProcessor[]
+        {
+            new PrintPackageDetailsResultProcessor(settings, logger),
+            new PrintPackageIssuesResultProcessor(settings, logger)
+        };
+
         var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
             fileSystem, 
             logger, 
@@ -79,8 +87,6 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             logger,
             getDownloadedPackageReferenceArtifact);
 
-        var packageReferencePrinter = new PackageReferencePrinter(settings, logger);
-
         var extractLicenses = new ExtractLicenses(
             settings,
             logger,
@@ -90,7 +96,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             enrichPackageReferenceWithLicenseInformation,
             provideTemporaryDirectories,
             downloadPackageReferences,
-            packageReferencePrinter);
+            resultProcessors);
         
         return extractLicenses;
     }

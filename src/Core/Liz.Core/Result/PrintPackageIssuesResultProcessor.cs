@@ -1,66 +1,35 @@
 ﻿using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Result.Contracts;
 using Liz.Core.Settings;
-using Liz.Core.Utils.Contracts;
 using System.Text;
 
-namespace Liz.Core.Utils;
+namespace Liz.Core.Result;
 
-internal sealed class PackageReferencePrinter : IPackageReferencePrinter
+internal sealed class PrintPackageIssuesResultProcessor : IResultProcessor
 {
     private readonly ExtractLicensesSettingsBase _settings;
     private readonly ILogger _logger;
 
-    public PackageReferencePrinter(ExtractLicensesSettingsBase settings, ILogger logger)
+    public PrintPackageIssuesResultProcessor(ExtractLicensesSettingsBase settings, ILogger logger)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     
-    public void PrintPackageReferences(IEnumerable<PackageReference> packageReferences)
+    
+    public Task ProcessResultsAsync(IEnumerable<PackageReference> packageReferences)
     {
         if (packageReferences == null) throw new ArgumentNullException(nameof(packageReferences));
+        if (_settings.SuppressPrintIssues) return Task.CompletedTask;
 
-        var packageReferencesList = packageReferences.OrderBy(packageReference => packageReference.Name).ToList();
+        var packageReferencesList = packageReferences
+            .OrderBy(packageReference => packageReference.Name)
+            .ToList();
         
-        if (_settings.SuppressPrintDetails) return;
-        if (!packageReferencesList.Any()) return;
-
-        var messageBuilder = new StringBuilder();
-
-        // to make some visual space to the rest of the output
-        messageBuilder.AppendLine();
-        messageBuilder.AppendLine();
-        messageBuilder.AppendLine();
+        if (!packageReferencesList.Any()) return Task.CompletedTask;
         
-        messageBuilder.AppendLine($"{"Name",-60} {"Version",-15} {"Text?",-5} {"Type",-20} URL");
-
-        messageBuilder.AppendLine();
-
-        foreach (var packageReference in packageReferencesList)
-        {
-            var name = packageReference.Name;
-            var version = packageReference.Version;
-            var hasText = string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Text) ? "No" : "Yes";
-            var type = packageReference.LicenseInformation.Type;
-            var url = packageReference.LicenseInformation.Url;
-
-            messageBuilder.AppendLine($"{name,-60} {version,-15} {hasText,-5} {type,-20} {url}");
-        }
-        
-        _logger.LogInformation(messageBuilder.ToString());
-    }
-
-    public void PrintPackageReferencesIssues(IEnumerable<PackageReference> packageReferences)
-    {
-        if (packageReferences == null) throw new ArgumentNullException(nameof(packageReferences));
-
-        var packageReferencesList = packageReferences.OrderBy(packageReference => packageReference.Name).ToList();
-        
-        if (_settings.SuppressPrintIssues) return;
-        if (!packageReferencesList.Any()) return;
-
         var messageBuilder = new StringBuilder();
         
         // to make some visual space to the rest of the output
@@ -73,13 +42,15 @@ internal sealed class PackageReferencePrinter : IPackageReferencePrinter
         messageBuilder.AppendLine();
 
         var issuesMessage = GatherLicenseInformationIssuesMessage(packageReferencesList);
-        if (string.IsNullOrWhiteSpace(issuesMessage)) return;
+        if (string.IsNullOrWhiteSpace(issuesMessage)) return Task.CompletedTask;
 
         messageBuilder.AppendLine(issuesMessage);
         
         _logger.LogWarning(messageBuilder.ToString());
-    }
 
+        return Task.CompletedTask;
+    }
+    
     private static string GatherLicenseInformationIssuesMessage(IEnumerable<PackageReference> packageReferences)
     {
         var issueMessageStringBuilder = new StringBuilder();
