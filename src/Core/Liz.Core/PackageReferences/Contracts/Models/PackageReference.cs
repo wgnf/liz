@@ -84,7 +84,7 @@ public sealed class PackageReference : IEquatable<PackageReference>
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return Name == other.Name && TargetFramework == other.TargetFramework && Version == other.Version;
+        return Name == other.Name && Version == other.Version;
     }
 
     /// <inheritdoc />
@@ -96,7 +96,7 @@ public sealed class PackageReference : IEquatable<PackageReference>
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        return HashCode.Combine(Name, TargetFramework, Version);
+        return HashCode.Combine(Name, Version);
     }
 
     /// <summary>
