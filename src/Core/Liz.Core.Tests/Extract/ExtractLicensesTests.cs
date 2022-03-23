@@ -3,6 +3,7 @@ using FluentAssertions;
 using Liz.Core.Extract;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Exceptions;
+using Liz.Core.License.Contracts.Models;
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Exceptions;
 using Liz.Core.PackageReferences.Contracts.Models;
@@ -117,8 +118,14 @@ public class ExtractLicensesTests
             .Setup(getProjects => getProjects.GetFromFile(It.IsAny<string>()))
             .Returns(projects);
 
-        var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0");
-        var packageReference2 = new PackageReference("Something.Else", "net6.0", "2.0.0");
+        var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0")
+        {
+            LicenseInformation = new LicenseInformation { Type = "something" }
+        };
+        var packageReference2 = new PackageReference("Something.Else", "net6.0", "2.0.0")
+        {
+            LicenseInformation = new LicenseInformation { Type = "something" }
+        };
 
         context
             .For<IGetPackageReferences>()
@@ -162,8 +169,14 @@ public class ExtractLicensesTests
             .Setup(getProjects => getProjects.GetFromFile(It.IsAny<string>()))
             .Returns(new[] { project });
 
-        var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0");
-        var packageReference2 = new PackageReference("Something", "net5.0", "1.1.0");
+        var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0")
+        {
+            LicenseInformation = new LicenseInformation { Type = "something" }
+        };
+        var packageReference2 = new PackageReference("Something", "net5.0", "1.1.0")
+        {
+            LicenseInformation = new LicenseInformation { Type = "something" }
+        };
 
         context
             .For<IGetPackageReferences>()
@@ -238,6 +251,49 @@ public class ExtractLicensesTests
         context
             .For<IProgressHandler>()
             .Verify(progressHandler => progressHandler.TickCurrentSubProcess(It.IsAny<string>()), Times.AtLeastOnce);
+    }
+    
+    [Fact]
+    // https://github.com/wgnf/liz/issues/43
+    public async Task Extract_Gets_Rid_Of_Internal_Project_References()
+    {
+        var context = CreateContext();
+        var sut = context.Build();
+
+        var project = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
+
+        context
+            .For<IGetProjects>()
+            .Setup(getProjects => getProjects.GetFromFile(It.IsAny<string>()))
+            .Returns(new[] { project });
+
+        var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0")
+        {
+            LicenseInformation = new LicenseInformation
+            {
+                // everything empty!
+                Text = string.Empty, 
+                Type = string.Empty, 
+                Url = string.Empty
+            }
+        };
+
+        context
+            .For<IGetPackageReferences>()
+            .Setup(getPackageReferences =>
+                getPackageReferences.GetFromProjectAsync(project, It.IsAny<bool>()))
+            .ReturnsAsync(new[] { packageReference1});
+
+        context
+            .For<IEnrichPackageReferenceWithLicenseInformation>()
+            .Setup(enrich => enrich.EnrichAsync(It.IsAny<PackageReference>()))
+            .Returns(Task.CompletedTask);
+
+        var result = await sut.ExtractAsync();
+
+        result
+            .Should()
+            .BeEmpty();
     }
 
     private static ArrangeContext<ExtractLicenses> CreateContext()

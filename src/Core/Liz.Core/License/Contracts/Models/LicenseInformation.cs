@@ -54,4 +54,11 @@ public sealed class LicenseInformation
         var objectString = builder.ToString();
         return objectString;
     }
+    
+    internal bool IsEmpty()
+    {
+        return string.IsNullOrWhiteSpace(Type) &&
+               string.IsNullOrWhiteSpace(Url) &&
+               string.IsNullOrWhiteSpace(Url);
+    }
 }
