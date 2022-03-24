@@ -9,21 +9,22 @@ namespace Liz.Core.License.Contracts.Models;
 [ExcludeFromCodeCoverage] // DTO
 public sealed class LicenseInformation
 {
+    private readonly List<string> _types = new();
+
     /// <summary>
     ///     Creates a new instance of <see cref="LicenseInformation"/>
     /// </summary>
     public LicenseInformation()
     {
-        Type = string.Empty;
         Url = string.Empty;
         Text = string.Empty;
     }
-    
+
     /// <summary>
-    ///     The type of a license
+    ///     The types of a license
     /// </summary>
     /// <example>MIT</example>
-    public string Type { get; set; }
+    public IEnumerable<string> Types => _types;
 
     /// <summary>
     ///     The URL of the license
@@ -46,7 +47,7 @@ public sealed class LicenseInformation
 
         builder.Append(nameof(LicenseInformation));
         builder.Append(" { ");
-        builder.Append($"{nameof(Type)}={Type}, ");
+        builder.Append($"{nameof(Types)}={string.Join(", ", Types)}, ");
         builder.Append($"{nameof(Url)}={Url}");
         // leaving out 'Text' because it can be quite long
         builder.Append(" }");
@@ -54,10 +55,18 @@ public sealed class LicenseInformation
         var objectString = builder.ToString();
         return objectString;
     }
+
+    internal void AddLicenseType(string licenseType)
+    {
+        if (string.IsNullOrWhiteSpace(licenseType))
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(licenseType));
+        
+        _types.Add(licenseType);
+    }
     
     internal bool IsEmpty()
     {
-        return string.IsNullOrWhiteSpace(Type) &&
+        return !Types.Any() &&
                string.IsNullOrWhiteSpace(Url) &&
                string.IsNullOrWhiteSpace(Url);
     }

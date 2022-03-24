@@ -59,15 +59,19 @@ public class GetLicenseInformationFromArtifactTests
     {
         var context = ArrangeContext<GetLicenseInformationFromArtifact>.Create();
 
-        var licenseInformation = new LicenseInformation { Text = "abc", Type = "MIT", Url = "abc.de" };
+        var licenseInformation = new LicenseInformation { Text = "abc", Url = "abc.de" };
+        licenseInformation.AddLicenseType("MIT");
+        
         var licenseInformationSource = new Mock<ILicenseInformationSource>();
         licenseInformationSource
             .Setup(source => source.GetInformationAsync(It.IsAny<GetLicenseInformationContext>()))
             .Returns<GetLicenseInformationContext>(licenseInformationContext =>
             {
                 licenseInformationContext.LicenseInformation.Text = licenseInformation.Text;
-                licenseInformationContext.LicenseInformation.Type = licenseInformation.Type;
                 licenseInformationContext.LicenseInformation.Url = licenseInformation.Url;
+                
+                foreach (var licenseType in licenseInformation.Types)
+                    licenseInformationContext.LicenseInformation.AddLicenseType(licenseType);
 
                 return Task.CompletedTask;
             });

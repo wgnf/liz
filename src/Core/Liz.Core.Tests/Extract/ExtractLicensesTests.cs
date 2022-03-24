@@ -120,11 +120,11 @@ public class ExtractLicensesTests
 
         var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0")
         {
-            LicenseInformation = new LicenseInformation { Type = "something" }
+            LicenseInformation = new LicenseInformation { Url = "something" }
         };
         var packageReference2 = new PackageReference("Something.Else", "net6.0", "2.0.0")
         {
-            LicenseInformation = new LicenseInformation { Type = "something" }
+            LicenseInformation = new LicenseInformation { Url = "something" }
         };
 
         context
@@ -171,11 +171,11 @@ public class ExtractLicensesTests
 
         var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0")
         {
-            LicenseInformation = new LicenseInformation { Type = "something" }
+            LicenseInformation = new LicenseInformation { Url = "something" }
         };
         var packageReference2 = new PackageReference("Something", "net5.0", "1.1.0")
         {
-            LicenseInformation = new LicenseInformation { Type = "something" }
+            LicenseInformation = new LicenseInformation { Url = "something" }
         };
 
         context
@@ -272,8 +272,7 @@ public class ExtractLicensesTests
             LicenseInformation = new LicenseInformation
             {
                 // everything empty!
-                Text = string.Empty, 
-                Type = string.Empty, 
+                Text = string.Empty,
                 Url = string.Empty
             }
         };

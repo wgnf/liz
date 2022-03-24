@@ -36,7 +36,7 @@ internal sealed class PrintPackageDetailsResultProcessor : IResultProcessor
         messageBuilder.AppendLine();
         messageBuilder.AppendLine();
         
-        messageBuilder.AppendLine($"{"Name",-60} {"Version",-15} {"Text?",-5} {"Type",-20} URL");
+        messageBuilder.AppendLine($"{"Name",-60} {"Version",-15} {"Text?",-5} {"Types",-20} URL");
 
         messageBuilder.AppendLine();
 
@@ -45,10 +45,10 @@ internal sealed class PrintPackageDetailsResultProcessor : IResultProcessor
             var name = packageReference.Name;
             var version = packageReference.Version;
             var hasText = string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Text) ? "No" : "Yes";
-            var type = packageReference.LicenseInformation.Type;
+            var types = string.Join(", ", packageReference.LicenseInformation.Types);
             var url = packageReference.LicenseInformation.Url;
 
-            messageBuilder.AppendLine($"{name,-60} {version,-15} {hasText,-5} {type,-20} {url}");
+            messageBuilder.AppendLine($"{name,-60} {version,-15} {hasText,-5} {types,-20} {url}");
         }
         
         _logger.LogInformation(messageBuilder.ToString());

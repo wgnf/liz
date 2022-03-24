@@ -119,7 +119,7 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
         GetLicenseInformationContext licenseInformationContext,
         string licenseElementValue)
     {
-        licenseInformationContext.LicenseInformation.Type = licenseElementValue;
+        licenseInformationContext.LicenseInformation.AddLicenseType(licenseElementValue);
     }
 
     private async Task HandleLicenseFileAsync(

@@ -36,7 +36,9 @@ public class EnrichPackageReferenceWithLicenseInformationTests
             .Setup(getArtifact => getArtifact.TryGetFor(packageReference, out downloadedDirectory))
             .Returns(true);
 
-        var licenseInformation = new LicenseInformation { Text = "abc", Type = "MIT", Url = "abc.de" };
+        var licenseInformation = new LicenseInformation { Text = "abc", Url = "abc.de" };
+        licenseInformation.AddLicenseType("MIT");
+        
         context
             .For<IGetLicenseInformationFromArtifact>()
             .Setup(getLicenseInformation =>

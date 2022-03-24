@@ -49,7 +49,7 @@ public class LicenseElementLicenseInformationSourceTests
             .BeNullOrEmpty();
         licenseContext
             .LicenseInformation
-            .Type
+            .Types
             .Should()
             .BeNullOrEmpty();
     }
@@ -78,7 +78,7 @@ public class LicenseElementLicenseInformationSourceTests
             .BeNullOrEmpty();
         licenseContext
             .LicenseInformation
-            .Type
+            .Types
             .Should()
             .BeNullOrEmpty();
     }
@@ -108,7 +108,7 @@ public class LicenseElementLicenseInformationSourceTests
             .BeNullOrEmpty();
         licenseContext
             .LicenseInformation
-            .Type
+            .Types
             .Should()
             .BeNullOrEmpty();
     }
@@ -133,9 +133,9 @@ public class LicenseElementLicenseInformationSourceTests
 
         licenseContext
             .LicenseInformation
-            .Type
+            .Types
             .Should()
-            .Be("MIT");
+            .Contain("MIT");
     }
 
     [Fact]
