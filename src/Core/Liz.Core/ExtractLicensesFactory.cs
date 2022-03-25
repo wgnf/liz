@@ -3,7 +3,8 @@ using Liz.Core.Extract;
 using Liz.Core.Extract.Contracts;
 using Liz.Core.License;
 using Liz.Core.License.Contracts;
-using Liz.Core.License.Sources;
+using Liz.Core.License.Sources.LicenseInformation;
+using Liz.Core.License.Sources.LicenseType;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.Logging.Null;
 using Liz.Core.PackageReferences;
@@ -60,11 +61,12 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             downloadPackageReferencesDotnet,
             downloadPackageReferencesNuget);
 
-        var enrichLicenseInformation = new ILicenseInformationSource[]
+        var licenseInformationSources = new ILicenseInformationSource[]
         {
             new LicenseElementLicenseInformationSource(logger, fileSystem),
             new LicenseFileLicenseInformationSource(logger),
-            new LicenseUrlElementLicenseInformationSource(logger, fileSystem, httpClient)
+            new LicenseUrlElementLicenseInformationSource(logger, fileSystem, httpClient),
+            new LicenseTypeFromTextLicenseInformationSource(new LicenseTypeDefinitionProvider(), logger)
         };
 
         var resultProcessors = new IResultProcessor[]
@@ -76,7 +78,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
             fileSystem, 
             logger, 
-            enrichLicenseInformation);
+            licenseInformationSources);
 
         var getDownloadedPackageReferenceArtifact = new GetDownloadedPackageReferenceArtifact(
             provideTemporaryDirectories, 
