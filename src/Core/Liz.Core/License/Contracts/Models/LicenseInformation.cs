@@ -21,7 +21,7 @@ public sealed class LicenseInformation
     }
 
     /// <summary>
-    ///     The types of a license
+    ///     The types of a license as an SPDX-ID (see https://spdx.org/licenses/)
     /// </summary>
     /// <example>MIT</example>
     public IEnumerable<string> Types => _types;

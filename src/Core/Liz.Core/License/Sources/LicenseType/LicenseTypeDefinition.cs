@@ -25,6 +25,7 @@ public class LicenseTypeDefinition
 
         LicenseType = licenseType;
         TextSnippets = textSnippets ?? throw new ArgumentNullException(nameof(textSnippets));
+        ExclusionTextSnippets = Enumerable.Empty<string>();
     }
     
     /// <summary>
@@ -35,5 +36,10 @@ public class LicenseTypeDefinition
     /// <summary>
     ///     The snippets that are contained in the license-text of that license-type, which define the license
     /// </summary>
-    public string[] TextSnippets { get; }
+    public IEnumerable<string> TextSnippets { get; }
+
+    /// <summary>
+    ///     The snippets that are NOT allowed to be contained in the license-text of that license-type
+    /// </summary>
+    public IEnumerable<string> ExclusionTextSnippets { get; set; }
 }

@@ -94,4 +94,35 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
             .Should()
             .Contain(new[] { licenseTypeDefinition1.LicenseType, licenseTypeDefinition2.LicenseType });
     }
+
+    [Fact]
+    public async Task GetInformation_Excludes_Non_Fitting_Types()
+    {
+        var licenseTypeToInclude = new LicenseTypeDefinition("ABC", "123");
+        var licenseTypeToNotInclude = new LicenseTypeDefinition("DEF", "123")
+        {
+            ExclusionTextSnippets = new[] { "4" }
+        };
+        
+        var context = ArrangeContext<LicenseTypeFromTextLicenseInformationSource>.Create();
+        context
+            .For<ILicenseTypeDefinitionProvider>()
+            .Setup(provider => provider.Get())
+            .Returns(new[] { licenseTypeToInclude, licenseTypeToNotInclude });
+        
+        var sut = context.Build();
+        
+        var licenseInformationContext = new GetLicenseInformationContext
+        {
+            LicenseInformation = { Text = "1234" }
+        };
+        
+        await sut.GetInformationAsync(licenseInformationContext);
+
+        licenseInformationContext
+            .LicenseInformation
+            .Types
+            .Should()
+            .OnlyContain(type => type == licenseTypeToInclude.LicenseType);
+    }
 }

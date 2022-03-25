@@ -53,10 +53,15 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
         // no need to check if it already is contained
         if (licenseInformationContext.LicenseInformation.Types.Contains(typeDefinition.LicenseType)) return;
 
-        var containsAll = typeDefinition
+        var containsAllSnippets = typeDefinition
             .TextSnippets
-            .All(textSnippet => licenseText.Contains(textSnippet, StringComparison.InvariantCultureIgnoreCase));
+            .All(snippet => licenseText.Contains(snippet, StringComparison.InvariantCultureIgnoreCase));
 
-        if (containsAll) licenseInformationContext.LicenseInformation.AddLicenseType(typeDefinition.LicenseType);
+        var containsAnExclusion = typeDefinition
+            .ExclusionTextSnippets
+            .Any(snippet => licenseText.Contains(snippet, StringComparison.InvariantCultureIgnoreCase));
+
+        if (containsAllSnippets && !containsAnExclusion) 
+            licenseInformationContext.LicenseInformation.AddLicenseType(typeDefinition.LicenseType);
     }
 }
