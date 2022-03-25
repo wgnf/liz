@@ -5,7 +5,7 @@ using Liz.Core.Logging.Contracts;
 using System.IO.Abstractions;
 using System.Xml.Linq;
 
-namespace Liz.Core.License.Sources;
+namespace Liz.Core.License.Sources.LicenseInformation;
 
 /*
  * NOTE:

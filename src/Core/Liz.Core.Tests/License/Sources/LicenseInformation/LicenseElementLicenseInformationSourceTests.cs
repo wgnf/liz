@@ -1,13 +1,13 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
 using Liz.Core.License.Contracts.Models;
-using Liz.Core.License.Sources;
+using Liz.Core.License.Sources.LicenseInformation;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Xml.Linq;
 using Xunit;
 
-namespace Liz.Core.Tests.License.Source;
+namespace Liz.Core.Tests.License.Sources.LicenseInformation;
 
 public class LicenseElementLicenseInformationSourceTests
 {
