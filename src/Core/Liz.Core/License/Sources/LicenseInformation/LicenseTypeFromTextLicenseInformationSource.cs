@@ -27,11 +27,11 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
     public Task GetInformationAsync(GetLicenseInformationContext licenseInformationContext)
     {
         if (licenseInformationContext == null) throw new ArgumentNullException(nameof(licenseInformationContext));
-        
-        var licenseText = licenseInformationContext.LicenseInformation.Text;
-        
+
         // no need to attempt getting the license-type from the text, when there's no text, duh
-        if (string.IsNullOrWhiteSpace(licenseText)) return Task.CompletedTask;
+        if (string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text)) return Task.CompletedTask;
+        
+        var licenseText = RemoveControlCharacters(licenseInformationContext.LicenseInformation.Text);
 
         _logger.LogDebug($"Attempting to get license type from license text for\n{licenseInformationContext.LicenseInformation.Text}");
         
@@ -55,13 +55,18 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
 
         var containsAllSnippets = typeDefinition
             .TextSnippets
-            .All(snippet => licenseText.Contains(snippet, StringComparison.InvariantCultureIgnoreCase));
+            .All(snippet => licenseText.Contains(RemoveControlCharacters(snippet), StringComparison.InvariantCultureIgnoreCase));
 
         var containsAnExclusion = typeDefinition
             .ExclusionTextSnippets
-            .Any(snippet => licenseText.Contains(snippet, StringComparison.InvariantCultureIgnoreCase));
+            .Any(snippet => licenseText.Contains(RemoveControlCharacters(snippet), StringComparison.InvariantCultureIgnoreCase));
 
         if (containsAllSnippets && !containsAnExclusion) 
             licenseInformationContext.LicenseInformation.AddLicenseType(typeDefinition.LicenseType);
+    }
+
+    private static string RemoveControlCharacters(string input)
+    {
+        return new string(input.Where(character => !char.IsControl(character)).ToArray());
     }
 }
