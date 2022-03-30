@@ -19,9 +19,21 @@ internal sealed class LicenseTypeDefinitionProvider : ILicenseTypeDefinitionProv
         {
             new LicenseTypeDefinition("MIT", "MIT License"),
             
-            new LicenseTypeDefinition("GPL-1.0", "GNU GENERAL PUBLIC LICENSE", "Version 1"),
-            new LicenseTypeDefinition("GPL-2.0", "GNU GENERAL PUBLIC LICENSE", "Version 2"),
-            new LicenseTypeDefinition("GPL-3.0", "GNU GENERAL PUBLIC LICENSE", "Version 3"),
+            new LicenseTypeDefinition("GPL-1.0", "GNU GENERAL PUBLIC LICENSE", "Version 1")
+            {
+                // this is part of MPL, which lists some secondary licenses...
+                ExclusionTextSnippets = new []{ "Secondary License" }
+            },
+            new LicenseTypeDefinition("GPL-2.0", "GNU GENERAL PUBLIC LICENSE", "Version 2")
+            {
+                // this is part of MPL, which lists some secondary licenses...
+                ExclusionTextSnippets = new []{ "Secondary License" }
+            },
+            new LicenseTypeDefinition("GPL-3.0", "GNU GENERAL PUBLIC LICENSE", "Version 3")
+            {
+                // this is part of MPL, which lists some secondary licenses...
+                ExclusionTextSnippets = new []{ "Secondary License" }
+            },
             
             new LicenseTypeDefinition("Apache-1.0", "The Apache Group", "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met"),
             new LicenseTypeDefinition("Apache-1.1", "Apache License", "1.1"),
@@ -36,9 +48,21 @@ internal sealed class LicenseTypeDefinitionProvider : ILicenseTypeDefinitionProv
             new LicenseTypeDefinition("ISC", "ISC License"),
             new LicenseTypeDefinition("Artistic-1.0", "The Artistic License"),
             
-            new LicenseTypeDefinition("LGPL-2.0", "GNU LIBRARY GENERAL PUBLIC LICENSE ", "Version 2,"),
-            new LicenseTypeDefinition("LGPL-2.1", "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1,"),
-            new LicenseTypeDefinition("LGPL-3.0", "GNU LESSER GENERAL PUBLIC LICENSE", "Version 3,"),
+            new LicenseTypeDefinition("LGPL-2.0", "GNU LIBRARY GENERAL PUBLIC LICENSE ", "Version 2,")
+            {
+                // this is part of MPL, which lists some secondary licenses...
+                ExclusionTextSnippets = new []{ "Secondary License" }
+            },
+            new LicenseTypeDefinition("LGPL-2.1", "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1,")
+            {
+                // this is part of MPL, which lists some secondary licenses...
+                ExclusionTextSnippets = new []{ "Secondary License" }
+            },
+            new LicenseTypeDefinition("LGPL-3.0", "GNU LESSER GENERAL PUBLIC LICENSE", "Version 3,")
+            {
+                // this is part of MPL, which lists some secondary licenses...
+                ExclusionTextSnippets = new []{ "Secondary License" }
+            },
             
             new LicenseTypeDefinition("EPL-1.0", "Eclipse Public License", "v 1.0"),
             new LicenseTypeDefinition("EPL-2.0", "Eclipse Public License", "v 2.0"),
@@ -47,12 +71,23 @@ internal sealed class LicenseTypeDefinitionProvider : ILicenseTypeDefinitionProv
             
             new LicenseTypeDefinition("CPOL-1.02", "The Code Project Open License", "1.02"),
             
-            new LicenseTypeDefinition("MPL-1.0", "MOZILLA PUBLIC LICENSE", "Version 1.0"),
-            new LicenseTypeDefinition("MPL-1.1", "Mozilla Public License", "Version 1.1"),
-            new LicenseTypeDefinition("MPL-2.0", "Mozilla Public License", "Version 2.0"),
+            new LicenseTypeDefinition("MPL-1.0", "MOZILLA PUBLIC LICENSE Version 1.0"),
+            new LicenseTypeDefinition("MPL-1.0", "MOZILLA PUBLIC LICENSE 1.0"),
+            new LicenseTypeDefinition("MPL-1.1", "Mozilla Public License Version 1.1"),
+            new LicenseTypeDefinition("MPL-1.1", "Mozilla Public License 1.1"),
+            new LicenseTypeDefinition("MPL-2.0", "Mozilla Public License Version 2.0"),
+            new LicenseTypeDefinition("MPL-2.0", "Mozilla Public License 2.0"),
             
-            new LicenseTypeDefinition("AGPL-1.0", "AFFERO GENERAL PUBLIC LICENSE", "Version 1"),
-            new LicenseTypeDefinition("AGPL-3.0", "GNU AFFERO GENERAL PUBLIC LICENSE", "Version 3"),
+            new LicenseTypeDefinition("AGPL-1.0", "AFFERO GENERAL PUBLIC LICENSE", "Version 1")
+            {
+                // this is part of MPL, which lists some secondary licenses...
+                ExclusionTextSnippets = new []{ "Secondary License" }
+            },
+            new LicenseTypeDefinition("AGPL-3.0", "GNU AFFERO GENERAL PUBLIC LICENSE", "Version 3")
+            {
+                // this is part of MPL, which lists some secondary licenses...
+                ExclusionTextSnippets = new []{ "Secondary License" }
+            },
             
             new LicenseTypeDefinition("CDDL-1.0", "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE", "Version 1.0"),
             new LicenseTypeDefinition("CDDL-1.1", "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE", "Version 1.1"),
