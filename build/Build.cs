@@ -86,6 +86,7 @@ class Build : NukeBuild
                     .SetBlameHangTimeout("60s")
                     .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
                     .SetDataCollector("XPlat Code Coverage")
+                    .SetFilter("FullyQualifiedName!~IntegrationTests")
                     .EnableNoBuild()
                     .EnableNoRestore());
         });
