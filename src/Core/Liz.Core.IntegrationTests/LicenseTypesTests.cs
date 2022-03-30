@@ -11,10 +11,12 @@ public class LicenseTypesTests
 {
     [Theory]
     [InlineData("xUnit", "2.4.1", "net6.0", new[] { "MIT", "Apache-2.0" })]
-    // cannot be checked as they're using full html-pages
+    [InlineData("Microsoft.CodeCoverage", "17.1.0", "net6.0", new[] { "MS-NETLIB" })]
+    // cannot be checked for now as they're using full html-pages (need html sanitization for this)
     // [InlineData("OpenMcdf", "2.2.1.9 ", "net6.0", new[] { "MPL-2.0" })]
     // [InlineData("NetOffice.Core", "1.7.4.4", "net6.0", new[] { "MIT" })]
     // [InlineData("NetOffice.Outlook", "1.7.4.4", "net6.0", new[] { "MIT" })]
+    // [InlineData("Microsoft.AspNet.Razor", "3.0.0", "net6.0", new[] { "MS-NETLIB" })]
     public async Task Determines_Correct_License_Types(
         string packageName,
         string packageVersion,

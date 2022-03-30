@@ -3,6 +3,8 @@ using FluentAssertions;
 using Liz.Core.License.Sources.LicenseType;
 using Xunit;
 
+// ReSharper disable StringLiteralTypo
+
 namespace Liz.Core.Tests.License.Sources.LicenseType;
 
 public class LicenseTypeDefinitionProviderTests
@@ -28,6 +30,7 @@ public class LicenseTypeDefinitionProviderTests
     [InlineData("BSD-3-Clause")]
     [InlineData("LGPL-3.0")]
     [InlineData("MS-PL")]
+    [InlineData("MS-NETLIB")]
     [InlineData("Unlicense")]
     public void Provides_Definitions_For_Widely_Used_License_Types(string licenseType)
     {

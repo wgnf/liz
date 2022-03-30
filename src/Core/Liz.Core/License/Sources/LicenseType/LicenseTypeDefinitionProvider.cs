@@ -38,13 +38,15 @@ internal sealed class LicenseTypeDefinitionProvider : ILicenseTypeDefinitionProv
             new LicenseTypeDefinition("Apache-1.0", "The Apache Group", "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met"),
             new LicenseTypeDefinition("Apache-1.1", "Apache License", "1.1"),
             new LicenseTypeDefinition("Apache-2.0", "Apache License", "Version 2.0"),
-            
+
+            new LicenseTypeDefinition("BSD-2-Clause", "BSD 2-Clause License"),
             new LicenseTypeDefinition("BSD-2-Clause", "1.", "2.", "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met")
             {
                 ExclusionTextSnippets = new []{ "3.", "Neither the name of the copyright holder nor the names of its contributors may be used" }
             },
+            new LicenseTypeDefinition("BSD-3-Clause", "BSD 3-Clause License"),
             new LicenseTypeDefinition("BSD-3-Clause", "1.", "2.", "3.", "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met", "Neither the name of the copyright holder nor the names of its contributors may be used"),
-            
+
             new LicenseTypeDefinition("ISC", "ISC License"),
             new LicenseTypeDefinition("Artistic-1.0", "The Artistic License"),
             
@@ -68,6 +70,7 @@ internal sealed class LicenseTypeDefinitionProvider : ILicenseTypeDefinitionProv
             new LicenseTypeDefinition("EPL-2.0", "Eclipse Public License", "v 2.0"),
             
             new LicenseTypeDefinition("MS-PL", "Microsoft Public License"),
+            new LicenseTypeDefinition("MS-NETLIB", "MICROSOFT .NET LIBRARY"),
             
             new LicenseTypeDefinition("CPOL-1.02", "The Code Project Open License", "1.02"),
             
