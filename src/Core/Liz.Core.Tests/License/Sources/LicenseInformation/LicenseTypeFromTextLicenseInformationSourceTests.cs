@@ -60,6 +60,35 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
             .Should()
             .BeEmpty();
     }
+    
+    [Fact]
+    public async Task GetInformation_Does_Nothing_When_Webpage()
+    {
+        const string licenseText = "<!DOCTYPE html> something something";
+
+        var context = ArrangeContext<LicenseTypeFromTextLicenseInformationSource>.Create();
+        
+        var licenseTypeDefinition = new LicenseTypeDefinition("ABC", "something");
+        context
+            .For<ILicenseTypeDefinitionProvider>()
+            .Setup(provider => provider.Get())
+            .Returns(new[] { licenseTypeDefinition });
+        
+        var sut = context.Build();
+        
+        var licenseInformationContext = new GetLicenseInformationContext
+        {
+            LicenseInformation = { Text = licenseText }
+        };
+
+        await sut.GetInformationAsync(licenseInformationContext);
+
+        licenseInformationContext
+            .LicenseInformation
+            .Types
+            .Should()
+            .NotContain(licenseTypeDefinition.LicenseType);
+    }
 
     [Fact]
     public async Task GetInformation_Gets_License_Type_From_Definition()

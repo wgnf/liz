@@ -32,6 +32,15 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
         if (string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text)) return Task.CompletedTask;
         
         var licenseText = RemoveControlCharacters(licenseInformationContext.LicenseInformation.Text);
+        
+        /*
+         * NOTE:
+         * Ignoring Webpages for now (until sanitation (https://github.com/wgnf/liz/issues/28) works reliably), because
+         * some webpages may target a specific license-type (i.e. https://choosealicense.com/licenses/mit/) but also
+         * have phrases in links and scripts that target other license types
+         */
+        if (licenseText.Contains("<!DOCTYPE html>", StringComparison.InvariantCultureIgnoreCase))
+            return Task.CompletedTask;
 
         _logger.LogDebug($"Attempting to get license type from license text for\n{licenseInformationContext.LicenseInformation.Text}");
         
