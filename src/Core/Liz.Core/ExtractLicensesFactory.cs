@@ -69,8 +69,18 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             new LicenseTypeFromTextLicenseInformationSource(
                 new ILicenseTypeDefinitionProvider[]
                 {
+                    new LicenseTypeDefinitionFromSettingsProvider(settings),
                     new PopularLicensesLicenseTypeDefinitionProvider(),
-                    new LicenseTypeDefinitionFromSettingsProvider(settings)
+                    
+                    new ApacheLicenseTypeDefinitionProvider(),
+                    new BsdLicenseTypeDefinitionProvider(),
+                    new CddlLicenseTypeDefinitionProvider(),
+                    new EplLicenseTypeDefinitionProvider(),
+                    new EuplLicenseTypeDefinitionProvider(),
+                    new GnuLicenseTypeDefinitionProvider(),
+                    new MicrosoftLicenseTypeDefinitionProvider(),
+                    new MplLicenseTypeDefinitionProvider(),
+                    new NplLicenseTypeDefinitionProvider()
                 }, 
                 logger)
         };

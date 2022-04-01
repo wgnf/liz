@@ -24,14 +24,10 @@ public class PopularLicensesLicenseTypeDefinitionProviderTests
 
     [Theory]
     [InlineData("MIT")]
-    [InlineData("GPL-3.0")]
-    [InlineData("Apache-2.0")]
-    [InlineData("BSD-2-Clause")]
-    [InlineData("BSD-3-Clause")]
-    [InlineData("LGPL-3.0")]
-    [InlineData("MS-PL")]
-    [InlineData("MS-NETLIB")]
     [InlineData("Unlicense")]
+    [InlineData("WTFPL")]
+    [InlineData("ICU")]
+    [InlineData("CPL-1.0")]
     public void Provides_Definitions_For_Widely_Used_License_Types(string licenseType)
     {
         var context = ArrangeContext<PopularLicensesLicenseTypeDefinitionProvider>.Create();
