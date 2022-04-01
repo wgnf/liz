@@ -137,7 +137,7 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
         var licenseTypeToInclude = new LicenseTypeDefinition("ABC", "123");
         var licenseTypeToNotInclude = new LicenseTypeDefinition("DEF", "123")
         {
-            ExclusionTextSnippets = new[] { "4" }
+            ExclusiveTextSnippets = new[] { "4" }
         };
         
         var context = ArrangeContext<LicenseTypeFromTextLicenseInformationSource>.Create();

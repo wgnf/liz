@@ -173,4 +173,30 @@ public sealed class CommandProviderTests
             .Should()
             .Contain(new[] { "--suppress-progressbar", "-sb" });
     }
+    
+    [Fact]
+    public void Provided_Root_Command_Should_Have_License_Type_Definitions_Option()
+    {
+        var sut = new ArrangeContext<CommandProvider>().Build();
+
+        var rootCommand = sut.Get();
+
+        var suppressPrintIssuesOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "license-type-definitions");
+        Assert.NotNull(suppressPrintIssuesOption);
+
+        suppressPrintIssuesOption?
+            .Description
+            .Should()
+            .NotBeNullOrWhiteSpace();
+
+        suppressPrintIssuesOption?
+            .ValueType
+            .Should()
+            .Be<FileInfo>();
+
+        suppressPrintIssuesOption?
+            .Aliases
+            .Should()
+            .Contain(new[] { "--license-type-definitions", "-td" });
+    }
 }

@@ -35,7 +35,8 @@ public sealed class CommandRunnerTests
             true, 
             true, 
             true,
-            true));
+            true,
+            null));
     }
 
     [Theory]
@@ -64,7 +65,8 @@ public sealed class CommandRunnerTests
             booleanParameter, 
             booleanParameter, 
             booleanParameter,
-            booleanParameter);
+            booleanParameter,
+            null);
 
         extractLicenses.Verify(e => e.ExtractAsync(), Times.Once());
     }

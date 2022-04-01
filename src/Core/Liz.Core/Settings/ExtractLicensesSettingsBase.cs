@@ -51,9 +51,10 @@ public abstract class ExtractLicensesSettingsBase
             throw new SettingsInvalidException("The given target-file does not exist");
 
         var targetFileExtension = Path.GetExtension(targetFile);
-        if (targetFileExtension != ".csproj" &&
-            targetFileExtension != ".fsproj" &&
-            targetFileExtension != ".sln")
+        if (!targetFileExtension.Contains("csproj", StringComparison.InvariantCultureIgnoreCase) &&
+            !targetFileExtension.Contains("fsproj", StringComparison.InvariantCultureIgnoreCase) &&
+            !targetFileExtension.Contains("sln", StringComparison.InvariantCultureIgnoreCase))
             throw new SettingsInvalidException("The given target-file is not a csproj, fsproj nor sln file");
+
     }
 }

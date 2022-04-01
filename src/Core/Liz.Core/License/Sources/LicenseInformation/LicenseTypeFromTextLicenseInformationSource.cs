@@ -63,11 +63,11 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
         if (licenseInformationContext.LicenseInformation.Types.Contains(typeDefinition.LicenseType)) return;
 
         var containsAllSnippets = typeDefinition
-            .TextSnippets
+            .InclusiveTextSnippets
             .All(snippet => licenseText.Contains(RemoveControlCharacters(snippet), StringComparison.InvariantCultureIgnoreCase));
 
         var containsAnExclusion = typeDefinition
-            .ExclusionTextSnippets
+            .ExclusiveTextSnippets
             .Any(snippet => licenseText.Contains(RemoveControlCharacters(snippet), StringComparison.InvariantCultureIgnoreCase));
 
         if (containsAllSnippets && !containsAnExclusion) 

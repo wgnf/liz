@@ -22,17 +22,17 @@ internal sealed class PopularLicensesLicenseTypeDefinitionProvider : ILicenseTyp
             new LicenseTypeDefinition("GPL-1.0", "GNU GENERAL PUBLIC LICENSE", "Version 1")
             {
                 // this is part of MPL, which lists some secondary licenses...
-                ExclusionTextSnippets = new []{ "Secondary License" }
+                ExclusiveTextSnippets = new []{ "Secondary License" }
             },
             new LicenseTypeDefinition("GPL-2.0", "GNU GENERAL PUBLIC LICENSE", "Version 2")
             {
                 // this is part of MPL, which lists some secondary licenses...
-                ExclusionTextSnippets = new []{ "Secondary License" }
+                ExclusiveTextSnippets = new []{ "Secondary License" }
             },
             new LicenseTypeDefinition("GPL-3.0", "GNU GENERAL PUBLIC LICENSE", "Version 3")
             {
                 // this is part of MPL, which lists some secondary licenses...
-                ExclusionTextSnippets = new []{ "Secondary License" }
+                ExclusiveTextSnippets = new []{ "Secondary License" }
             },
             
             new LicenseTypeDefinition("Apache-1.0", "The Apache Group", "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met"),
@@ -42,7 +42,7 @@ internal sealed class PopularLicensesLicenseTypeDefinitionProvider : ILicenseTyp
             new LicenseTypeDefinition("BSD-2-Clause", "BSD 2-Clause License"),
             new LicenseTypeDefinition("BSD-2-Clause", "1.", "2.", "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met")
             {
-                ExclusionTextSnippets = new []{ "3.", "Neither the name of the copyright holder nor the names of its contributors may be used" }
+                ExclusiveTextSnippets = new []{ "3.", "Neither the name of the copyright holder nor the names of its contributors may be used" }
             },
             new LicenseTypeDefinition("BSD-3-Clause", "BSD 3-Clause License"),
             new LicenseTypeDefinition("BSD-3-Clause", "1.", "2.", "3.", "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met", "Neither the name of the copyright holder nor the names of its contributors may be used"),
@@ -53,17 +53,17 @@ internal sealed class PopularLicensesLicenseTypeDefinitionProvider : ILicenseTyp
             new LicenseTypeDefinition("LGPL-2.0", "GNU LIBRARY GENERAL PUBLIC LICENSE ", "Version 2,")
             {
                 // this is part of MPL, which lists some secondary licenses...
-                ExclusionTextSnippets = new []{ "Secondary License" }
+                ExclusiveTextSnippets = new []{ "Secondary License" }
             },
             new LicenseTypeDefinition("LGPL-2.1", "GNU LESSER GENERAL PUBLIC LICENSE", "Version 2.1,")
             {
                 // this is part of MPL, which lists some secondary licenses...
-                ExclusionTextSnippets = new []{ "Secondary License" }
+                ExclusiveTextSnippets = new []{ "Secondary License" }
             },
             new LicenseTypeDefinition("LGPL-3.0", "GNU LESSER GENERAL PUBLIC LICENSE", "Version 3,")
             {
                 // this is part of MPL, which lists some secondary licenses...
-                ExclusionTextSnippets = new []{ "Secondary License" }
+                ExclusiveTextSnippets = new []{ "Secondary License" }
             },
             
             new LicenseTypeDefinition("EPL-1.0", "Eclipse Public License", "v 1.0"),
@@ -84,12 +84,12 @@ internal sealed class PopularLicensesLicenseTypeDefinitionProvider : ILicenseTyp
             new LicenseTypeDefinition("AGPL-1.0", "AFFERO GENERAL PUBLIC LICENSE", "Version 1")
             {
                 // this is part of MPL, which lists some secondary licenses...
-                ExclusionTextSnippets = new []{ "Secondary License" }
+                ExclusiveTextSnippets = new []{ "Secondary License" }
             },
             new LicenseTypeDefinition("AGPL-3.0", "GNU AFFERO GENERAL PUBLIC LICENSE", "Version 3")
             {
                 // this is part of MPL, which lists some secondary licenses...
-                ExclusionTextSnippets = new []{ "Secondary License" }
+                ExclusiveTextSnippets = new []{ "Secondary License" }
             },
             
             new LicenseTypeDefinition("CDDL-1.0", "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE", "Version 1.0"),

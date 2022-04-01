@@ -1,10 +1,13 @@
 ﻿using Liz.Core;
+using Liz.Core.License.Sources.LicenseType;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.Progress;
 using Liz.Core.Settings;
+using Liz.Tool.Contracts;
 using Liz.Tool.Contracts.CommandLine;
 using Liz.Tool.Logging;
 using Liz.Tool.Progress;
+using System.Text.Json;
 
 namespace Liz.Tool.CommandLine;
 
@@ -23,11 +26,17 @@ internal sealed class CommandRunner : ICommandRunner
         bool includeTransitive, 
         bool suppressPrintDetails,
         bool suppressPrintIssues,
-        bool suppressProgressbar)
+        bool suppressProgressbar,
+        FileInfo? licenseTypeDefinitions)
     {
         ArgumentNullException.ThrowIfNull(targetFile);
 
-        var settings = CreateSettings(targetFile, includeTransitive, suppressPrintDetails, suppressPrintIssues);
+        var settings = await CreateSettingsAsync(
+            targetFile, 
+            includeTransitive, 
+            suppressPrintDetails, 
+            suppressPrintIssues,
+            licenseTypeDefinitions);
 
         ILoggerProvider? loggerProvider;
         IProgressHandler? progressHandler;
@@ -48,20 +57,55 @@ internal sealed class CommandRunner : ICommandRunner
         await extractLicenses.ExtractAsync();
     }
 
-    private static ExtractLicensesSettingsBase CreateSettings(
+    private async static Task<ExtractLicensesSettingsBase> CreateSettingsAsync(
         FileSystemInfo targetFile,
         bool includeTransitive,
         bool suppressPrintDetails,
-        bool suppressPrintIssues)
+        bool suppressPrintIssues,
+        FileInfo? licenseTypeDefinitionsFile)
     {
         var settings = new ExtractLicensesSettings
         {
             TargetFile = targetFile.FullName,
             IncludeTransitiveDependencies = includeTransitive,
             SuppressPrintDetails = suppressPrintDetails,
-            SuppressPrintIssues = suppressPrintIssues
+            SuppressPrintIssues = suppressPrintIssues,
+            LicenseTypeDefinitions = await GetLicenseTypeDefinitionsFromFileAsync(licenseTypeDefinitionsFile)
         };
 
         return settings;
+    }
+
+    private async static Task<List<LicenseTypeDefinition>> GetLicenseTypeDefinitionsFromFileAsync(FileInfo? licenseTypeDefinitionsFile)
+    {
+        if (licenseTypeDefinitionsFile == null) return new List<LicenseTypeDefinition>();
+        
+        if (!licenseTypeDefinitionsFile.Exists)
+            throw new InvalidOperationException("the provided license-type-definitions-file does not exist!");
+
+        if (!licenseTypeDefinitionsFile.Extension.Contains("json", StringComparison.InvariantCultureIgnoreCase))
+            throw new InvalidOperationException("only JSON files are supported for the license-type-definitions-file");
+
+        try
+        {
+            await using var fileStream = licenseTypeDefinitionsFile.OpenRead();
+            var typeDefinitions = await JsonSerializer.DeserializeAsync<List<JsonLicenseTypeDefinition>>(fileStream);
+
+            return typeDefinitions?
+                .Where(typeDefinition => !string.IsNullOrWhiteSpace(typeDefinition.LicenseType))
+                .Where(typeDefinition => typeDefinition.InclusiveTextSnippets.Any())
+                .Select(typeDefinition => new LicenseTypeDefinition(
+                    typeDefinition.LicenseType,
+                    typeDefinition.InclusiveTextSnippets.ToArray())
+                {
+                    ExclusiveTextSnippets = typeDefinition.ExclusiveTextSnippets
+                })
+                .ToList() ?? new List<LicenseTypeDefinition>();
+        }
+        catch (Exception exception)
+        {
+            throw new InvalidOperationException("Error while reading license-type-definitions-file", exception);
+        }
+
     }
 }

@@ -24,8 +24,8 @@ public class LicenseTypeDefinition
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(licenseType));
 
         LicenseType = licenseType;
-        TextSnippets = textSnippets ?? throw new ArgumentNullException(nameof(textSnippets));
-        ExclusionTextSnippets = Enumerable.Empty<string>();
+        InclusiveTextSnippets = textSnippets ?? throw new ArgumentNullException(nameof(textSnippets));
+        ExclusiveTextSnippets = Enumerable.Empty<string>();
     }
     
     /// <summary>
@@ -36,10 +36,10 @@ public class LicenseTypeDefinition
     /// <summary>
     ///     The snippets that are contained in the license-text of that license-type, which define the license
     /// </summary>
-    public IEnumerable<string> TextSnippets { get; }
+    public IEnumerable<string> InclusiveTextSnippets { get; }
 
     /// <summary>
     ///     The snippets that are NOT allowed to be contained in the license-text of that license-type
     /// </summary>
-    public IEnumerable<string> ExclusionTextSnippets { get; set; }
+    public IEnumerable<string> ExclusiveTextSnippets { get; set; }
 }

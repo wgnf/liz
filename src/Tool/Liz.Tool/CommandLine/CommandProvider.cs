@@ -33,7 +33,8 @@ internal sealed class CommandProvider
             bool includeTransitive, 
             bool suppressPrintDetails,
             bool suppressPrintIssues,
-            bool suppressProgressbar) =>
+            bool suppressProgressbar,
+            FileInfo licenseTypeDefinitions) =>
         {
             await _commandRunner.RunAsync(
                 targetFile, 
@@ -41,7 +42,8 @@ internal sealed class CommandProvider
                 includeTransitive, 
                 suppressPrintDetails,
                 suppressPrintIssues,
-                suppressProgressbar)
+                suppressProgressbar,
+                licenseTypeDefinitions)
                 .ConfigureAwait(false);
         }, symbols.ToArray());
 
@@ -56,7 +58,8 @@ internal sealed class CommandProvider
             GetIncludeTransitiveOption(),
             GetSuppressPrintDetailsOption(),
             GetSuppressPrintIssuesOption(),
-            GetSuppressProgressBar()
+            GetSuppressProgressBar(),
+            GetLicenseTypeDefinitions()
         };
         return options;
     }
@@ -111,6 +114,14 @@ internal sealed class CommandProvider
             new[] { "--suppress-progressbar", "-sb" },
             () => false,
             "If displaying the progressbar should be suppressed or not. Can help when debugging errors or is used in a CI/CD Pipeline");
+        return option;
+    }
+
+    private static Option GetLicenseTypeDefinitions()
+    {
+        var option = new Option<FileInfo>(
+            new[] { "--license-type-definitions", "-td" },
+            "Provide a path to a JSON-File providing license-type-definitions");
         return option;
     }
 }
