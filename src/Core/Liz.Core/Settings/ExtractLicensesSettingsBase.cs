@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Liz.Core.License.Sources.LicenseType;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Core.Settings;
 
@@ -22,6 +23,12 @@ public abstract class ExtractLicensesSettingsBase
     ///    Whether or not to suppress printing found issues of analyzed package-references and license-information
     /// </summary>
     public bool SuppressPrintIssues { get; set; }
+
+    /// <summary>
+    ///     A list of <see cref="LicenseTypeDefinition"/>s that describe license-types by providing inclusive/exclusive
+    ///     license-text snippets
+    /// </summary>
+    public List<LicenseTypeDefinition> LicenseTypeDefinitions { get; set; } = new();
 
     /// <summary>
     ///     Gets the target file of these settings
