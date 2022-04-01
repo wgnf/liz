@@ -121,7 +121,7 @@ internal sealed class CommandProvider
     {
         var option = new Option<FileInfo?>(
             new[] { "--license-type-definitions", "-td" },
-            "Provide a path to a JSON-File providing license-type-definitions");
+            "Provide a path to a JSON-File providing license-type-definitions which describe license-types by providing inclusive/exclusive license-text snippets");
         return option;
     }
 }

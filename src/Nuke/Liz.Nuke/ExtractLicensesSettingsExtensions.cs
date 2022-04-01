@@ -234,7 +234,7 @@ public static class ExtractLicensesSettingsExtensions
     }
 
     /// <summary>
-    ///     Set the list of <see cref="LicenseTypeDefinition"/> that describe license-types by providing inclusive/exclusive
+    ///     Set the list of <see cref="LicenseTypeDefinition"/>s that describe license-types by providing inclusive/exclusive
     ///     license-text snippets
     /// </summary>
     /// <param name="settings">The settings to set the value on</param>
