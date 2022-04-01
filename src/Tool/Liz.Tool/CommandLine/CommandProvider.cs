@@ -2,6 +2,7 @@
 using Liz.Tool.Contracts.CommandLine;
 using System.CommandLine;
 using System.CommandLine.Binding;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Tool.CommandLine;
 
@@ -14,20 +15,12 @@ internal sealed class CommandProvider
         _commandRunner = commandRunner ?? new CommandRunner();
     }
 
+    [ExcludeFromCodeCoverage] // running root-command cannot easily be tested
     public RootCommand Get()
     {
-        var rootCommand = new RootCommand("dotnet-tool to analyze the licenses of your project(s)");
-        var symbols = new List<IValueDescriptor>();
+        var (rootCommand, symbols) = PrepareRootCommand();
 
-        var targetFileArgument = GetTargetFileArgument();
-        rootCommand.AddArgument(targetFileArgument);
-        symbols.Add(targetFileArgument);
-
-        var options = GetOptions().ToList();
-        foreach (var option in options) rootCommand.AddOption(option);
-        symbols.AddRange(options);
-
-        rootCommand.SetHandler( async (
+        rootCommand.SetHandler(async (
             FileInfo targetFile, 
             LogLevel logLevel, 
             bool includeTransitive, 
@@ -48,6 +41,21 @@ internal sealed class CommandProvider
         }, symbols.ToArray());
 
         return rootCommand;
+    }
+
+    private static (RootCommand rootCommand, List<IValueDescriptor> symbols) PrepareRootCommand()
+    {
+        var rootCommand = new RootCommand("dotnet-tool to analyze the licenses of your project(s)");
+        var symbols = new List<IValueDescriptor>();
+
+        var targetFileArgument = GetTargetFileArgument();
+        rootCommand.AddArgument(targetFileArgument);
+        symbols.Add(targetFileArgument);
+
+        var options = GetOptions().ToList();
+        foreach (var option in options) rootCommand.AddOption(option);
+        symbols.AddRange(options);
+        return (rootCommand, symbols);
     }
 
     private static IEnumerable<Option> GetOptions()
