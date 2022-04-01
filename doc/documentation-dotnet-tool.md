@@ -116,10 +116,6 @@ But if you want to add a definition by yourself, you can do it, like so:
   
 Create a JSON-file that contains your definitions - `definitions.json` in this case:
 
-""type"": ""LIZ-PL-2.0"",
-    ""inclusiveText"": [ ""def"" ],
-    ""exclusiveText"": [ ""abc"" ]
-
 ```json
 [
   {
