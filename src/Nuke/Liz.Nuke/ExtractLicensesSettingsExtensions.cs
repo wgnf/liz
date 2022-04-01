@@ -246,7 +246,7 @@ public static class ExtractLicensesSettingsExtensions
     {
         if (settings == null) throw new ArgumentNullException(nameof(settings));
 
-        settings.LicenseTypeDefinitions = licenseTypeDefinitions;
+        settings.LicenseTypeDefinitions = licenseTypeDefinitions ?? throw new ArgumentNullException(nameof(licenseTypeDefinitions));
         return settings;
     }
 }
