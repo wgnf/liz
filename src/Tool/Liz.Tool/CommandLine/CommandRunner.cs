@@ -7,17 +7,22 @@ using Liz.Tool.Contracts;
 using Liz.Tool.Contracts.CommandLine;
 using Liz.Tool.Logging;
 using Liz.Tool.Progress;
+using System.IO.Abstractions;
 using System.Text.Json;
 
 namespace Liz.Tool.CommandLine;
 
 internal sealed class CommandRunner : ICommandRunner
 {
+    private readonly IFileSystem _fileSystem;
     private readonly IExtractLicensesFactory _extractLicensesFactory;
     
-    public CommandRunner(IExtractLicensesFactory? extractLicensesFactory = null)
+    public CommandRunner(
+        IExtractLicensesFactory? extractLicensesFactory = null,
+        IFileSystem? fileSystem = null)
     {
         _extractLicensesFactory = extractLicensesFactory ?? new ExtractLicensesFactory();
+        _fileSystem = fileSystem ?? new FileSystem();
     }
     
     public async Task RunAsync(
@@ -31,12 +36,16 @@ internal sealed class CommandRunner : ICommandRunner
     {
         ArgumentNullException.ThrowIfNull(targetFile);
 
+        var licenseTypeDefinitionsFile = licenseTypeDefinitions == null
+            ? null
+            : _fileSystem.FileInfo.FromFileName(licenseTypeDefinitions.FullName);
+
         var settings = await CreateSettingsAsync(
             targetFile, 
             includeTransitive, 
             suppressPrintDetails, 
             suppressPrintIssues,
-            licenseTypeDefinitions);
+            licenseTypeDefinitionsFile);
 
         ILoggerProvider? loggerProvider;
         IProgressHandler? progressHandler;
@@ -62,7 +71,7 @@ internal sealed class CommandRunner : ICommandRunner
         bool includeTransitive,
         bool suppressPrintDetails,
         bool suppressPrintIssues,
-        FileInfo? licenseTypeDefinitionsFile)
+        IFileInfo? licenseTypeDefinitionsFile)
     {
         var settings = new ExtractLicensesSettings
         {
@@ -76,12 +85,12 @@ internal sealed class CommandRunner : ICommandRunner
         return settings;
     }
 
-    private async static Task<List<LicenseTypeDefinition>> GetLicenseTypeDefinitionsFromFileAsync(FileInfo? licenseTypeDefinitionsFile)
+    private async static Task<List<LicenseTypeDefinition>> GetLicenseTypeDefinitionsFromFileAsync(IFileInfo? licenseTypeDefinitionsFile)
     {
         if (licenseTypeDefinitionsFile == null) return new List<LicenseTypeDefinition>();
         
         if (!licenseTypeDefinitionsFile.Exists)
-            throw new InvalidOperationException("the provided license-type-definitions-file does not exist!");
+            throw new FileNotFoundException("the provided license-type-definitions-file does not exist!");
 
         if (!licenseTypeDefinitionsFile.Extension.Contains("json", StringComparison.InvariantCultureIgnoreCase))
             throw new InvalidOperationException("only JSON files are supported for the license-type-definitions-file");

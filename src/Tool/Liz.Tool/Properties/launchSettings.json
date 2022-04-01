@@ -2,7 +2,7 @@
   "profiles": {
     "Liz-Solution": {
       "commandName": "Project",
-      "commandLineArgs": "../../../../../Liz.sln -l Trace -i -sb"
+      "commandLineArgs": "../../../../../Liz.sln -l Trace -i -sb -td abc"
     },
     "TestingGround-Solution": {
       "commandName": "Project",

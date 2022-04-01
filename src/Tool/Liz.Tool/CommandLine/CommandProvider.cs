@@ -34,7 +34,7 @@ internal sealed class CommandProvider
             bool suppressPrintDetails,
             bool suppressPrintIssues,
             bool suppressProgressbar,
-            FileInfo licenseTypeDefinitions) =>
+            FileInfo? licenseTypeDefinitions) =>
         {
             await _commandRunner.RunAsync(
                 targetFile, 
@@ -119,7 +119,7 @@ internal sealed class CommandProvider
 
     private static Option GetLicenseTypeDefinitions()
     {
-        var option = new Option<FileInfo>(
+        var option = new Option<FileInfo?>(
             new[] { "--license-type-definitions", "-td" },
             "Provide a path to a JSON-File providing license-type-definitions");
         return option;
