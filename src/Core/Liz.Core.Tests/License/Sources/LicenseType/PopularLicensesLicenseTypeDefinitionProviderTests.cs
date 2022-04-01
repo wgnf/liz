@@ -7,12 +7,12 @@ using Xunit;
 
 namespace Liz.Core.Tests.License.Sources.LicenseType;
 
-public class LicenseTypeDefinitionProviderTests
+public class PopularLicensesLicenseTypeDefinitionProviderTests
 {
     [Fact]
     public void Always_Provides_Something()
     {
-        var context = ArrangeContext<LicenseTypeDefinitionProvider>.Create();
+        var context = ArrangeContext<PopularLicensesLicenseTypeDefinitionProvider>.Create();
         var sut = context.Build();
 
         var result = sut.Get();
@@ -34,7 +34,7 @@ public class LicenseTypeDefinitionProviderTests
     [InlineData("Unlicense")]
     public void Provides_Definitions_For_Widely_Used_License_Types(string licenseType)
     {
-        var context = ArrangeContext<LicenseTypeDefinitionProvider>.Create();
+        var context = ArrangeContext<PopularLicensesLicenseTypeDefinitionProvider>.Create();
         var sut = context.Build();
         
         var result = sut.Get();

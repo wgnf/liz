@@ -66,7 +66,10 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             new LicenseElementLicenseInformationSource(logger, fileSystem),
             new LicenseFileLicenseInformationSource(logger),
             new LicenseUrlElementLicenseInformationSource(logger, fileSystem, httpClient),
-            new LicenseTypeFromTextLicenseInformationSource(new LicenseTypeDefinitionProvider(), logger)
+            new LicenseTypeFromTextLicenseInformationSource(new[]
+            {
+                new PopularLicensesLicenseTypeDefinitionProvider()   
+            }, logger)
         };
 
         var resultProcessors = new IResultProcessor[]

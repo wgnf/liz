@@ -4,7 +4,7 @@
 
 namespace Liz.Core.License.Sources.LicenseType;
 
-internal sealed class LicenseTypeDefinitionProvider : ILicenseTypeDefinitionProvider
+internal sealed class PopularLicensesLicenseTypeDefinitionProvider : ILicenseTypeDefinitionProvider
 {
     public IEnumerable<LicenseTypeDefinition> Get()
     {

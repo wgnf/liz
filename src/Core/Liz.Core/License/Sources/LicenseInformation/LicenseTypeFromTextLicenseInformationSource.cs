@@ -12,13 +12,13 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
     private readonly IEnumerable<LicenseTypeDefinition> _typeDefinitions;
 
     public LicenseTypeFromTextLicenseInformationSource(
-        ILicenseTypeDefinitionProvider provider,
+        IEnumerable<ILicenseTypeDefinitionProvider> licenseTypeDefinitionProviders,
         ILogger logger)
     {
-        if (provider == null) throw new ArgumentNullException(nameof(provider));
+        if (licenseTypeDefinitionProviders == null) throw new ArgumentNullException(nameof(licenseTypeDefinitionProviders));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        _typeDefinitions = provider.Get();
+        _typeDefinitions = licenseTypeDefinitionProviders.SelectMany(provider => provider.Get());
     }
     
     // needs to be after the stuff that possibly gets the license-text

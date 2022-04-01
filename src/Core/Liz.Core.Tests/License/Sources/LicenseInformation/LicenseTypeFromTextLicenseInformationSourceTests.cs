@@ -4,6 +4,7 @@ using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.License.Sources.LicenseInformation;
 using Liz.Core.License.Sources.LicenseType;
+using Moq;
 using Xunit;
 
 namespace Liz.Core.Tests.License.Sources.LicenseInformation;
@@ -40,11 +41,13 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
         var context = ArrangeContext<LicenseTypeFromTextLicenseInformationSource>.Create();
         
         var licenseTypeDefinition = new LicenseTypeDefinition("ABC", "");
-        context
-            .For<ILicenseTypeDefinitionProvider>()
+        var licenseTypeProvider = new Mock<ILicenseTypeDefinitionProvider>();
+        licenseTypeProvider
             .Setup(provider => provider.Get())
             .Returns(new[] { licenseTypeDefinition });
-        
+
+        context.Use((IEnumerable<ILicenseTypeDefinitionProvider>)new[] { licenseTypeProvider.Object });
+
         var sut = context.Build();
 
         var licenseInformationContext = new GetLicenseInformationContext
@@ -69,10 +72,12 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
         var context = ArrangeContext<LicenseTypeFromTextLicenseInformationSource>.Create();
         
         var licenseTypeDefinition = new LicenseTypeDefinition("ABC", "something");
-        context
-            .For<ILicenseTypeDefinitionProvider>()
+        var licenseTypeProvider = new Mock<ILicenseTypeDefinitionProvider>();
+        licenseTypeProvider
             .Setup(provider => provider.Get())
             .Returns(new[] { licenseTypeDefinition });
+
+        context.Use((IEnumerable<ILicenseTypeDefinitionProvider>)new[] { licenseTypeProvider.Object });
         
         var sut = context.Build();
         
@@ -99,10 +104,12 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
         var licenseTypeDefinition2 = new LicenseTypeDefinition("DEF", licenseText);
         
         var context = ArrangeContext<LicenseTypeFromTextLicenseInformationSource>.Create();
-        context
-            .For<ILicenseTypeDefinitionProvider>()
+        var licenseTypeProvider = new Mock<ILicenseTypeDefinitionProvider>();
+        licenseTypeProvider
             .Setup(provider => provider.Get())
             .Returns(new[] { licenseTypeDefinition1, licenseTypeDefinition2 });
+
+        context.Use((IEnumerable<ILicenseTypeDefinitionProvider>)new[] { licenseTypeProvider.Object });
         
         var sut = context.Build();
         
@@ -134,10 +141,12 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
         };
         
         var context = ArrangeContext<LicenseTypeFromTextLicenseInformationSource>.Create();
-        context
-            .For<ILicenseTypeDefinitionProvider>()
+        var licenseTypeProvider = new Mock<ILicenseTypeDefinitionProvider>();
+        licenseTypeProvider
             .Setup(provider => provider.Get())
             .Returns(new[] { licenseTypeToInclude, licenseTypeToNotInclude });
+
+        context.Use((IEnumerable<ILicenseTypeDefinitionProvider>)new[] { licenseTypeProvider.Object });
         
         var sut = context.Build();
         
