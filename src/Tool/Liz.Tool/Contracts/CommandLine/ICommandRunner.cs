@@ -10,5 +10,6 @@ public interface ICommandRunner
         bool includeTransitive, 
         bool suppressPrintDetails,
         bool suppressPrintIssues,
-        bool suppressProgressbar);
+        bool suppressProgressbar,
+        FileInfo? licenseTypeDefinitions);
 }

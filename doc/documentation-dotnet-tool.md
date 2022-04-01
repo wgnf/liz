@@ -74,10 +74,11 @@ To analyze a project your solution you have to use
 | `--suppress-print-details`, `-sd` | If printing the license and package-reference details should be suppressed or not </br> Default: `false` |
 | `--suppress-print-issues`, `-si` | If printing the license-information issues should be suppressed or not </br> Default: `false` |
 | `--suppress-progressbar`, `-sb` | If displaying the progressbar should be suppressed or not. </br> Can help when debugging errors or is used in a CI/CD Pipeline </br> Default: `false` |
+| `--license-type-definitions`, `-td` | Provide a path to a JSON-File providing license-type-definitions which describe license-types by providing inclusive/exclusive license-text snippets |
 
 ## Examples
 
-Simply running **liz** on a solution
+### Simply running **liz** on a solution
 
 ```bash
 # global
@@ -87,7 +88,7 @@ Simply running **liz** on a solution
 > dotnet liz "path/to/solution.sln"
 ```
 
-And on a project
+### And on a project
 
 ```bash
 # global
@@ -105,4 +106,43 @@ Running **liz** on a project including transitive dependencies
 
 # local
 > dotnet liz "path/to/project.csproj" --include-transitive
+```
+
+### Adding your own license-type definitions
+
+**liz** will try to guess license-types by their license-text when no license-type could be determined yet.
+To cover a wide variety of license-types there are already lots of definitions added in the source by default.
+But if you want to add a definition by yourself, you can do it, like so:  
+  
+Create a JSON-file that contains your definitions - `definitions.json` in this case:
+
+```json
+[
+  {
+    "type": "LIZ-1.0",
+    "inclusiveText": [ "LIZ PUBLIC LICENSE 1.0" ]
+  },
+
+  {
+    "type": "LIZ-2.0",
+    "inclusiveText": [ "LIZ PUBLIC LICENSE", "v2.0" ],
+    "exlusiveText": [ "Version 1" ]
+  }
+]
+```
+
+This will do the following:
+
+- definition "LIZ-1.0", will be added when:
+  - the license-text contains the string "LIZ PUBLIC LICENSE 1.0"
+- definition "LIZ-2.0", will be added when:
+  - the license-text contains "LIZ PUBLIC LICENSE" AND "v2.0"
+  - the license-text NOT contains "Version 1"
+
+```bash
+# global
+> liz "path/to/project.csproj" --license-type-definitions "path/to/definitions.json"
+
+# local
+> dotnet liz "path/to/project.csproj" --license-type-definitions "path/to/definitions.json"
 ```

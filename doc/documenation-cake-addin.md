@@ -51,6 +51,7 @@ The settings contain the following properties which can be set according to your
 | `IncludeTransitiveDependencies` | Whether or not to include transitive (dependencies of dependencies) dependencies </br> Default: `false` |
 | `SuppressPrintDetails` | Whether or not to suppress printing details of analyzed package-references and license-information </br> Default: `false` |
 | `SuppressPrintIssues` | Whether or not to suppress printing found issues of analyzed package-references and license-information </br> Default: `false` |
+| `LicenseTypeDefinitions` | A list of `LicenseTypeDefinition`s that describe license-types by providing inclusive/exclusive license-text snippets |
 
 ## Example Usages
 
@@ -88,4 +89,35 @@ public sealed class ExtractLicensesTask : AsyncFrostingTask<BuildContext>
     await context.ExtractLicensesAsync(settings);
   }
 }
+```
+
+### Adding your own license-type definitions
+
+**liz** will try to guess license-types by their license-text when no license-type could be determined yet.
+To cover a wide variety of license-types there are already lots of definitions added in the source by default.
+But if you want to add a definition by yourself, you can do it, like so:
+
+```cs
+
+/*
+ * this will add the license-type "LIZ-1.0" for every license-text that contains the string
+ * "LIZ PUBLIC LICENSE 1.0"
+ */
+var definition1 = new LicenseTypeDefinition("LIZ-1.0", "LIZ PUBLIC LICENSE 1.0");
+
+/*
+ * a bit more advanced - the license-type "LIZ-2.0" will be added, when:
+ * - the license-text contains "LIZ PUBLIC LICENSE" AND "v2.0"
+ * - the license-text NOT contains "Version 1"
+ */
+var definition2 = new LicenseTypeDefinition("LIZ-2.0", "LIZ PUBLIC LICENSE", "v2.0")
+{
+  ExclusiveTextSnippets = new []{ "Version 1" }
+};
+
+var settings = new ExtractLicensesSettings
+{
+    LicenseTypeDefinitions = new List<LicenseTypeDefinition> { definition1, definition2 }
+};
+
 ```

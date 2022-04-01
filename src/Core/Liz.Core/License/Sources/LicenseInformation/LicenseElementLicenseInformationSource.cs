@@ -5,7 +5,7 @@ using Liz.Core.Logging.Contracts;
 using System.IO.Abstractions;
 using System.Xml.Linq;
 
-namespace Liz.Core.License.Sources;
+namespace Liz.Core.License.Sources.LicenseInformation;
 
 /*
  * NOTE:
@@ -119,7 +119,7 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
         GetLicenseInformationContext licenseInformationContext,
         string licenseElementValue)
     {
-        licenseInformationContext.LicenseInformation.Type = licenseElementValue;
+        licenseInformationContext.LicenseInformation.AddLicenseType(licenseElementValue);
     }
 
     private async Task HandleLicenseFileAsync(

@@ -1,4 +1,5 @@
-﻿using Nuke.Common.IO;
+﻿using Liz.Core.License.Sources.LicenseType;
+using Nuke.Common.IO;
 
 namespace Liz.Nuke;
 
@@ -229,6 +230,23 @@ public static class ExtractLicensesSettingsExtensions
         if (settings == null) throw new ArgumentNullException(nameof(settings));
         
         settings.SuppressPrintIssues = new ExtractLicensesSettings().SuppressPrintIssues;
+        return settings;
+    }
+
+    /// <summary>
+    ///     Set the list of <see cref="LicenseTypeDefinition"/>s that describe license-types by providing inclusive/exclusive
+    ///     license-text snippets
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="licenseTypeDefinitions">The value to set</param>
+    /// <returns>The settings</returns>
+    public static ExtractLicensesSettings SetLicenseTypeDefinitions(
+        this ExtractLicensesSettings settings,
+        List<LicenseTypeDefinition> licenseTypeDefinitions)
+    {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+
+        settings.LicenseTypeDefinitions = licenseTypeDefinitions ?? throw new ArgumentNullException(nameof(licenseTypeDefinitions));
         return settings;
     }
 }

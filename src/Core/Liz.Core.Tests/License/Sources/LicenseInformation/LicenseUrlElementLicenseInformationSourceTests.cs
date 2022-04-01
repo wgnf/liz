@@ -1,7 +1,7 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
 using Liz.Core.License.Contracts.Models;
-using Liz.Core.License.Sources;
+using Liz.Core.License.Sources.LicenseInformation;
 using Liz.Core.Utils.Contracts.Wrappers;
 using Moq;
 using System.IO.Abstractions;
@@ -10,7 +10,7 @@ using System.Net;
 using System.Xml.Linq;
 using Xunit;
 
-namespace Liz.Core.Tests.License.Source;
+namespace Liz.Core.Tests.License.Sources.LicenseInformation;
 
 public class LicenseUrlElementLicenseInformationSourceTests
 {

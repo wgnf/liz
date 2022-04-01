@@ -74,8 +74,8 @@ internal sealed class PrintPackageIssuesResultProcessor : IResultProcessor
     {
         var issues = new List<string>();
         
-        if (string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Type))
-            issues.Add("Type");
+        if (!packageReference.LicenseInformation.Types.Any())
+            issues.Add("Types");
         
         if (string.IsNullOrWhiteSpace(packageReference.LicenseInformation.Url))
             issues.Add("URL");

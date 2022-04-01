@@ -41,10 +41,10 @@ public class PrintPackageIssuesResultProcessorTests
             LicenseInformation = new LicenseInformation
             {
                 Text = "Something something", 
-                Type = "MIT", 
                 Url = "https://example.org/"
             }
         };
+        packageReference.LicenseInformation.AddLicenseType("MIT");
 
         await sut.ProcessResultsAsync(new[] { packageReference });
 
@@ -88,11 +88,12 @@ public class PrintPackageIssuesResultProcessorTests
         {
             LicenseInformation = new LicenseInformation
             {
-                Text = "Something something", 
-                Type = "MIT", 
+                Text = "Something something",
                 Url = "https://example.org/"
             }
         };
+        
+        packageReference.LicenseInformation.AddLicenseType("MIT");
 
         await sut.ProcessResultsAsync(new[] { packageReference });
 

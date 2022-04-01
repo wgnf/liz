@@ -41,7 +41,6 @@ public class PrintPackageDetailsResultProcessorTests
             LicenseInformation = new LicenseInformation
             {
                 Text = "Something something", 
-                Type = "MIT", 
                 Url = "https://example.org/"
             }
         };
@@ -88,11 +87,13 @@ public class PrintPackageDetailsResultProcessorTests
         {
             LicenseInformation = new LicenseInformation
             {
-                Text = "Something something", 
-                Type = "MIT", 
+                Text = "Something something",
                 Url = "https://example.org/"
             }
         };
+
+        const string expectedLicenseType = "MIT";
+        packageReference.LicenseInformation.AddLicenseType(expectedLicenseType);
 
         await sut.ProcessResultsAsync(new[] { packageReference });
 
@@ -105,7 +106,7 @@ public class PrintPackageDetailsResultProcessorTests
                             message.Contains(packageReference.Name) && 
                             message.Contains(packageReference.Version) &&
                             message.Contains(packageReference.LicenseInformation.Url) &&
-                            message.Contains(packageReference.LicenseInformation.Type)),
+                            message.Contains(expectedLicenseType)),
                         It.Is<Exception>(exception => exception == null)),
                 Times.Once);
     }

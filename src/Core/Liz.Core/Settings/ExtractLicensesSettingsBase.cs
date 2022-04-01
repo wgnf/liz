@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Liz.Core.License.Sources.LicenseType;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Core.Settings;
 
@@ -24,6 +25,12 @@ public abstract class ExtractLicensesSettingsBase
     public bool SuppressPrintIssues { get; set; }
 
     /// <summary>
+    ///     A list of <see cref="LicenseTypeDefinition"/>s that describe license-types by providing inclusive/exclusive
+    ///     license-text snippets
+    /// </summary>
+    public List<LicenseTypeDefinition> LicenseTypeDefinitions { get; set; } = new();
+
+    /// <summary>
     ///     Gets the target file of these settings
     /// </summary>
     /// <returns>The set target file</returns>
@@ -44,9 +51,10 @@ public abstract class ExtractLicensesSettingsBase
             throw new SettingsInvalidException("The given target-file does not exist");
 
         var targetFileExtension = Path.GetExtension(targetFile);
-        if (targetFileExtension != ".csproj" &&
-            targetFileExtension != ".fsproj" &&
-            targetFileExtension != ".sln")
+        if (!targetFileExtension.Contains("csproj", StringComparison.InvariantCultureIgnoreCase) &&
+            !targetFileExtension.Contains("fsproj", StringComparison.InvariantCultureIgnoreCase) &&
+            !targetFileExtension.Contains("sln", StringComparison.InvariantCultureIgnoreCase))
             throw new SettingsInvalidException("The given target-file is not a csproj, fsproj nor sln file");
+
     }
 }

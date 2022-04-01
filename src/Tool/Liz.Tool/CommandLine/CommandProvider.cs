@@ -2,6 +2,7 @@
 using Liz.Tool.Contracts.CommandLine;
 using System.CommandLine;
 using System.CommandLine.Binding;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Tool.CommandLine;
 
@@ -14,7 +15,35 @@ internal sealed class CommandProvider
         _commandRunner = commandRunner ?? new CommandRunner();
     }
 
+    [ExcludeFromCodeCoverage] // running root-command cannot easily be tested
     public RootCommand Get()
+    {
+        var (rootCommand, symbols) = PrepareRootCommand();
+
+        rootCommand.SetHandler(async (
+            FileInfo targetFile, 
+            LogLevel logLevel, 
+            bool includeTransitive, 
+            bool suppressPrintDetails,
+            bool suppressPrintIssues,
+            bool suppressProgressbar,
+            FileInfo? licenseTypeDefinitions) =>
+        {
+            await _commandRunner.RunAsync(
+                targetFile, 
+                logLevel, 
+                includeTransitive, 
+                suppressPrintDetails,
+                suppressPrintIssues,
+                suppressProgressbar,
+                licenseTypeDefinitions)
+                .ConfigureAwait(false);
+        }, symbols.ToArray());
+
+        return rootCommand;
+    }
+
+    private static (RootCommand rootCommand, List<IValueDescriptor> symbols) PrepareRootCommand()
     {
         var rootCommand = new RootCommand("dotnet-tool to analyze the licenses of your project(s)");
         var symbols = new List<IValueDescriptor>();
@@ -26,26 +55,7 @@ internal sealed class CommandProvider
         var options = GetOptions().ToList();
         foreach (var option in options) rootCommand.AddOption(option);
         symbols.AddRange(options);
-
-        rootCommand.SetHandler( async (
-            FileInfo targetFile, 
-            LogLevel logLevel, 
-            bool includeTransitive, 
-            bool suppressPrintDetails,
-            bool suppressPrintIssues,
-            bool suppressProgressbar) =>
-        {
-            await _commandRunner.RunAsync(
-                targetFile, 
-                logLevel, 
-                includeTransitive, 
-                suppressPrintDetails,
-                suppressPrintIssues,
-                suppressProgressbar)
-                .ConfigureAwait(false);
-        }, symbols.ToArray());
-
-        return rootCommand;
+        return (rootCommand, symbols);
     }
 
     private static IEnumerable<Option> GetOptions()
@@ -56,7 +66,8 @@ internal sealed class CommandProvider
             GetIncludeTransitiveOption(),
             GetSuppressPrintDetailsOption(),
             GetSuppressPrintIssuesOption(),
-            GetSuppressProgressBar()
+            GetSuppressProgressBar(),
+            GetLicenseTypeDefinitions()
         };
         return options;
     }
@@ -111,6 +122,14 @@ internal sealed class CommandProvider
             new[] { "--suppress-progressbar", "-sb" },
             () => false,
             "If displaying the progressbar should be suppressed or not. Can help when debugging errors or is used in a CI/CD Pipeline");
+        return option;
+    }
+
+    private static Option GetLicenseTypeDefinitions()
+    {
+        var option = new Option<FileInfo?>(
+            new[] { "--license-type-definitions", "-td" },
+            "Provide a path to a JSON-File providing license-type-definitions which describe license-types by providing inclusive/exclusive license-text snippets");
         return option;
     }
 }

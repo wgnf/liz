@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Liz.Core.License.Sources.LicenseType;
 using Nuke.Common.IO;
 using System.Reflection;
 using Xunit;
@@ -202,6 +203,33 @@ public class ExtractLicensesSettingsExtensionsTests
                 .GetValue(settingsInstance)
                 .Should()
                 .Be(property.GetValue(settingsInstanceWithDefaults));
+        }
+    }
+    
+    [Fact]
+    public void ExtractLicensesSettings_Sets_LicenseTypeDefinitions()
+    {
+        var definitions = new List<LicenseTypeDefinition> { new ("A", "A") };
+        var properties = GetExtractLicensesSettingsProperties()
+            .Where(property => property.PropertyType == typeof(List<LicenseTypeDefinition>));
+
+        foreach (var property in properties)
+        {
+            var setMethod = typeof(ExtractLicensesSettingsExtensions).GetMethod($"Set{property.Name}");
+
+            var settingsInstance = new ExtractLicensesSettings();
+            
+            Assert.Throws<TargetInvocationException>(() =>
+                setMethod?.Invoke(null, new object?[] { null, definitions }));
+            Assert.Throws<TargetInvocationException>(() =>
+                setMethod?.Invoke(null, new object?[] { settingsInstance, null }));
+                
+            setMethod?.Invoke(null, new object?[] { settingsInstance, definitions });
+
+            property
+                .GetValue(settingsInstance)
+                .Should()
+                .Be(definitions);
         }
     }
 
