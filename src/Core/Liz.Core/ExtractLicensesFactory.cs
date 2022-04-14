@@ -10,6 +10,7 @@ using Liz.Core.Logging.Null;
 using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.PackageReferences.NuGetCli;
+using Liz.Core.Preparation.Contracts;
 using Liz.Core.Progress;
 using Liz.Core.Projects;
 using Liz.Core.Result;
@@ -105,6 +106,8 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             logger,
             getDownloadedPackageReferenceArtifact);
 
+        var preprocessors = Enumerable.Empty<IPreprocessor>();
+
         var extractLicenses = new ExtractLicenses(
             settings,
             logger,
@@ -114,7 +117,8 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             enrichPackageReferenceWithLicenseInformation,
             provideTemporaryDirectories,
             downloadPackageReferences,
-            resultProcessors);
+            resultProcessors,
+            preprocessors);
         
         return extractLicenses;
     }
