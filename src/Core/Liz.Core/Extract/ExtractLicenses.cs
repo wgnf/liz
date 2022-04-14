@@ -99,7 +99,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         {
             /*
              * 5 main process steps:
-             * - pre process
+             * - preparation
              * - get projects
              * - download package-references
              * - get package-references
