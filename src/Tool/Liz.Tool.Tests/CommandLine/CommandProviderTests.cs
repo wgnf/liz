@@ -199,4 +199,30 @@ public sealed class CommandProviderTests
             .Should()
             .Contain(new[] { "--license-type-definitions", "-td" });
     }
+    
+    [Fact]
+    public void Provided_Root_Command_Should_Have_Url_To_License_Type_Mapping_Option()
+    {
+        var sut = new ArrangeContext<CommandProvider>().Build();
+
+        var rootCommand = sut.Get();
+
+        var suppressPrintIssuesOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "url-type-mapping");
+        Assert.NotNull(suppressPrintIssuesOption);
+
+        suppressPrintIssuesOption?
+            .Description
+            .Should()
+            .NotBeNullOrWhiteSpace();
+
+        suppressPrintIssuesOption?
+            .ValueType
+            .Should()
+            .Be<FileInfo>();
+
+        suppressPrintIssuesOption?
+            .Aliases
+            .Should()
+            .Contain(new[] { "--url-type-mapping", "-um" });
+    }
 }

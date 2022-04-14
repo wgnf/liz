@@ -32,7 +32,8 @@ internal sealed class CommandRunner : ICommandRunner
         bool suppressPrintDetails,
         bool suppressPrintIssues,
         bool suppressProgressbar,
-        FileInfo? licenseTypeDefinitions)
+        FileInfo? licenseTypeDefinitions,
+        FileInfo? urlToLicenseTypeMapping)
     {
         ArgumentNullException.ThrowIfNull(targetFile);
 
@@ -45,7 +46,8 @@ internal sealed class CommandRunner : ICommandRunner
             includeTransitive, 
             suppressPrintDetails, 
             suppressPrintIssues,
-            licenseTypeDefinitionsFile);
+            licenseTypeDefinitionsFile,
+            urlToLicenseTypeMapping?.FullName);
 
         ILoggerProvider? loggerProvider;
         IProgressHandler? progressHandler;
@@ -71,7 +73,8 @@ internal sealed class CommandRunner : ICommandRunner
         bool includeTransitive,
         bool suppressPrintDetails,
         bool suppressPrintIssues,
-        IFileInfo? licenseTypeDefinitionsFile)
+        IFileInfo? licenseTypeDefinitionsFile,
+        string? urlToLicenseTypeMapping)
     {
         var settings = new ExtractLicensesSettings
         {
@@ -79,7 +82,8 @@ internal sealed class CommandRunner : ICommandRunner
             IncludeTransitiveDependencies = includeTransitive,
             SuppressPrintDetails = suppressPrintDetails,
             SuppressPrintIssues = suppressPrintIssues,
-            LicenseTypeDefinitions = await GetLicenseTypeDefinitionsFromFileAsync(licenseTypeDefinitionsFile)
+            LicenseTypeDefinitions = await GetLicenseTypeDefinitionsFromFileAsync(licenseTypeDefinitionsFile),
+            UrlToLicenseTypeMappingFilePath = urlToLicenseTypeMapping
         };
 
         return settings;

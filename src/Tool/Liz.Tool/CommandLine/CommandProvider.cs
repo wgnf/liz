@@ -27,7 +27,8 @@ internal sealed class CommandProvider
             bool suppressPrintDetails,
             bool suppressPrintIssues,
             bool suppressProgressbar,
-            FileInfo? licenseTypeDefinitions) =>
+            FileInfo? licenseTypeDefinitions,
+            FileInfo? urlToLicenseTypeMapping) =>
         {
             await _commandRunner.RunAsync(
                 targetFile, 
@@ -36,7 +37,8 @@ internal sealed class CommandProvider
                 suppressPrintDetails,
                 suppressPrintIssues,
                 suppressProgressbar,
-                licenseTypeDefinitions)
+                licenseTypeDefinitions,
+                urlToLicenseTypeMapping)
                 .ConfigureAwait(false);
         }, symbols.ToArray());
 
@@ -66,8 +68,9 @@ internal sealed class CommandProvider
             GetIncludeTransitiveOption(),
             GetSuppressPrintDetailsOption(),
             GetSuppressPrintIssuesOption(),
-            GetSuppressProgressBar(),
-            GetLicenseTypeDefinitions()
+            GetSuppressProgressBarOption(),
+            GetLicenseTypeDefinitionsOption(),
+            GetUrlToLicenseTypeMappingOption()
         };
         return options;
     }
@@ -116,7 +119,7 @@ internal sealed class CommandProvider
         return option;
     }
 
-    private static Option GetSuppressProgressBar()
+    private static Option GetSuppressProgressBarOption()
     {
         var option = new Option<bool>(
             new[] { "--suppress-progressbar", "-sb" },
@@ -125,11 +128,19 @@ internal sealed class CommandProvider
         return option;
     }
 
-    private static Option GetLicenseTypeDefinitions()
+    private static Option GetLicenseTypeDefinitionsOption()
     {
         var option = new Option<FileInfo?>(
             new[] { "--license-type-definitions", "-td" },
             "Provide a path to a JSON-File providing license-type-definitions which describe license-types by providing inclusive/exclusive license-text snippets");
+        return option;
+    }
+
+    private static Option GetUrlToLicenseTypeMappingOption()
+    {
+        var option = new Option<FileInfo?>(
+            new[] { "--url-type-mapping", "-um" },
+            "Provide a path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a mapping from license-url (key) to license-type (value) for licenses whose license-type could not be determined");
         return option;
     }
 }

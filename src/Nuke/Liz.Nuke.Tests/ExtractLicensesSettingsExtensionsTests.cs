@@ -232,6 +232,60 @@ public class ExtractLicensesSettingsExtensionsTests
                 .Be(definitions);
         }
     }
+    
+    [Fact]
+    public void ExtractLicensesSettings_Sets_String_Settings()
+    {
+        const string value = "something";
+        var properties = GetExtractLicensesSettingsProperties()
+            .Where(property => property.PropertyType == typeof(string));
+
+        foreach (var property in properties)
+        {
+            var setMethod = typeof(ExtractLicensesSettingsExtensions).GetMethod($"Set{property.Name}");
+
+            var settingsInstance = new ExtractLicensesSettings();
+            
+            Assert.Throws<TargetInvocationException>(() =>
+                setMethod?.Invoke(null, new object?[] { null, value }));
+            Assert.Throws<TargetInvocationException>(() =>
+                setMethod?.Invoke(null, new object?[] { settingsInstance, null }));
+                
+            setMethod?.Invoke(null, new object?[] { settingsInstance, value });
+
+            property
+                .GetValue(settingsInstance)
+                .Should()
+                .Be(value);
+        }
+    }
+    
+    [Fact]
+    public void ExtractLicensesSettings_Sets_Dictionary_String_String_Settings()
+    {
+        var value = new Dictionary<string, string> { { "something", "else" } };
+        var properties = GetExtractLicensesSettingsProperties()
+            .Where(property => property.PropertyType == typeof(Dictionary<string, string>));
+
+        foreach (var property in properties)
+        {
+            var setMethod = typeof(ExtractLicensesSettingsExtensions).GetMethod($"Set{property.Name}");
+
+            var settingsInstance = new ExtractLicensesSettings();
+            
+            Assert.Throws<TargetInvocationException>(() =>
+                setMethod?.Invoke(null, new object?[] { null, value }));
+            Assert.Throws<TargetInvocationException>(() =>
+                setMethod?.Invoke(null, new object?[] { settingsInstance, null }));
+                
+            setMethod?.Invoke(null, new object?[] { settingsInstance, value });
+
+            property
+                .GetValue(settingsInstance)
+                .Should()
+                .Be(value);
+        }
+    }
 
     private static IEnumerable<PropertyInfo> GetExtractLicensesSettingsProperties()
     {

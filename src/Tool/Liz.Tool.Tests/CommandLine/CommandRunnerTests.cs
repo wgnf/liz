@@ -37,6 +37,7 @@ public sealed class CommandRunnerTests
             true, 
             true,
             true,
+            null,
             null));
     }
 
@@ -67,6 +68,7 @@ public sealed class CommandRunnerTests
             booleanParameter, 
             booleanParameter,
             booleanParameter,
+            null,
             null);
 
         extractLicenses.Verify(e => e.ExtractAsync(), Times.Once());
@@ -101,7 +103,8 @@ public sealed class CommandRunnerTests
             true,
             true,
             true,
-            typeDefinitionsFile));
+            typeDefinitionsFile,
+            null));
     }
     
     [Fact]
@@ -135,7 +138,8 @@ public sealed class CommandRunnerTests
             true,
             true,
             true,
-            typeDefinitionsFile));
+            typeDefinitionsFile,
+            null));
     }
     
     [Fact]
@@ -171,7 +175,8 @@ public sealed class CommandRunnerTests
             true,
             true,
             true,
-            typeDefinitionsFile));
+            typeDefinitionsFile,
+            null));
     }
     
     [Fact]
@@ -225,7 +230,8 @@ public sealed class CommandRunnerTests
             true,
             true,
             true,
-            typeDefinitionsFile);
+            typeDefinitionsFile,
+            null);
 
         extractLicensesFactory
             .Verify(factory => factory.Create(It.Is<ExtractLicensesSettingsBase>(
