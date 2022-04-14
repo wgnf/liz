@@ -1,6 +1,5 @@
 ﻿using Liz.Core.Utils.Contracts;
 using Liz.Core.Utils.Contracts.Wrappers;
-using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 
 namespace Liz.Core.Utils;
@@ -45,7 +44,6 @@ internal sealed class FileContentProvider : IFileContentProvider
         return fileContent;
     }
 
-    [ExcludeFromCodeCoverage] // not sure how to test this properly (apart from the existing integration test)
     private async Task<string> DownloadRemoteFileAsync(string remoteFilePath)
     {
         var response = await _httpClient.GetAsync(remoteFilePath);
