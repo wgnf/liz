@@ -10,6 +10,7 @@ using Liz.Core.Logging.Null;
 using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.PackageReferences.NuGetCli;
+using Liz.Core.Preparation;
 using Liz.Core.Preparation.Contracts;
 using Liz.Core.Progress;
 using Liz.Core.Projects;
@@ -41,6 +42,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var fileSystem = new FileSystem();
         var cliToolExecutor = new DefaultCliToolExecutor(logger);
         var httpClient = new HttpClientWrapper();
+        var fileContentProvider = new FileContentProvider(fileSystem, httpClient);
 
         var getProjects = new GetProjectsViaSlnParser(new SolutionParser(), fileSystem);
         var parseDotnetListPackage = new ParseDotnetListPackageResult();
@@ -106,7 +108,10 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             logger,
             getDownloadedPackageReferenceArtifact);
 
-        var preprocessors = Enumerable.Empty<IPreprocessor>();
+        var preprocessors = new[]
+        {
+            new DeserializeLicenseTypeDefinitionsPreprocessor(settings, logger, fileContentProvider)
+        };
 
         var extractLicenses = new ExtractLicenses(
             settings,

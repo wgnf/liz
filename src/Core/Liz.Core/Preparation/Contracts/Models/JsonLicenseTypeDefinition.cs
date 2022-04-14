@@ -1,14 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-// because this is implicitly used by the JSON-Deserializer
-// ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-
-namespace Liz.Tool.Contracts;
+namespace Liz.Core.Preparation.Contracts.Models;
 
 [ExcludeFromCodeCoverage] // simple DTO
-public sealed class JsonLicenseTypeDefinition
+internal sealed class JsonLicenseTypeDefinition
 {
     [JsonPropertyName("type")]
     public string LicenseType { get; set; } = string.Empty;
