@@ -1,4 +1,5 @@
 ﻿using Liz.Core.License.Contracts;
+using Liz.Core.License.Contracts.Models;
 
 // ReSharper disable StringLiteralTypo
 

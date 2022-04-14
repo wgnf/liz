@@ -1,4 +1,4 @@
-﻿using Liz.Core.License.Sources.LicenseType;
+﻿using Liz.Core.License.Contracts.Models;
 
 namespace Liz.Core.License.Contracts;
 

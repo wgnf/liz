@@ -1,6 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
+// because this is implicitly used by the JSON-Deserializer
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Liz.Core.Preparation.Contracts.Models;
 
 [ExcludeFromCodeCoverage] // simple DTO

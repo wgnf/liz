@@ -11,7 +11,6 @@ using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.PackageReferences.NuGetCli;
 using Liz.Core.Preparation;
-using Liz.Core.Preparation.Contracts;
 using Liz.Core.Progress;
 using Liz.Core.Projects;
 using Liz.Core.Result;

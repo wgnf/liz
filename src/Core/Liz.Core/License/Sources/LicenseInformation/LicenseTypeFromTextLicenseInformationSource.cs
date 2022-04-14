@@ -1,6 +1,5 @@
 ﻿using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
-using Liz.Core.License.Sources.LicenseType;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
 

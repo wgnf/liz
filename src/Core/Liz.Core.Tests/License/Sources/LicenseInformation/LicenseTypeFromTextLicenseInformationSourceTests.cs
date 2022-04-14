@@ -3,7 +3,6 @@ using FluentAssertions;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.License.Sources.LicenseInformation;
-using Liz.Core.License.Sources.LicenseType;
 using Moq;
 using Xunit;
 

@@ -1,6 +1,6 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
-using Liz.Core.License.Sources.LicenseType;
+using Liz.Core.License.Contracts.Models;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.Preparation;
 using Liz.Core.Settings;
@@ -147,11 +147,11 @@ public class DeserializeLicenseTypeDefinitionsPreprocessorTests
   }
 ]";
 
-        var alreadyExistingDefintion = new LicenseTypeDefinition("SOMETHING", "else");
+        var alreadyExistingDefinition = new LicenseTypeDefinition("SOMETHING", "else");
 
         var settings = Mock.Of<ExtractLicensesSettingsBase>();
         
-        settings.LicenseTypeDefinitions.Add(alreadyExistingDefintion);
+        settings.LicenseTypeDefinitions.Add(alreadyExistingDefinition);
         settings.LicenseTypeDefinitionsFilePath = "something";
 
         var context = ArrangeContext<DeserializeLicenseTypeDefinitionsPreprocessor>.Create();
@@ -168,7 +168,7 @@ public class DeserializeLicenseTypeDefinitionsPreprocessorTests
 
         var expectedDefinitions = new List<LicenseTypeDefinition>
         {
-            alreadyExistingDefintion, 
+            alreadyExistingDefinition, 
             new("LIZ-PL-1.0", "abc")
         };
 
