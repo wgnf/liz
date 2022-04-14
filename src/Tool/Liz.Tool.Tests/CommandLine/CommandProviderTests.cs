@@ -192,7 +192,7 @@ public sealed class CommandProviderTests
         suppressPrintIssuesOption?
             .ValueType
             .Should()
-            .Be<FileInfo>();
+            .Be<string>();
 
         suppressPrintIssuesOption?
             .Aliases
@@ -218,7 +218,7 @@ public sealed class CommandProviderTests
         suppressPrintIssuesOption?
             .ValueType
             .Should()
-            .Be<FileInfo>();
+            .Be<string>();
 
         suppressPrintIssuesOption?
             .Aliases
