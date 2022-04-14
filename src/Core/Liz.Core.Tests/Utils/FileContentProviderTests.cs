@@ -23,13 +23,12 @@ public class FileContentProviderTests
     [Fact]
     public async Task Gets_Content_From_Local_File_With_Absolute_Path()
     {
-        const string path = "D:/something.txt";
         const string fileContent = "123";
 
-        var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-        {
-            { path, new MockFileData(fileContent) }
-        });
+        var mockFileSystem = new MockFileSystem();
+
+        var path = mockFileSystem.Path.GetTempFileName();
+        mockFileSystem.AddFile(path, new MockFileData(fileContent));
         
         var context = ArrangeContext<FileContentProvider>.Create();
         context.Use<IFileSystem>(mockFileSystem);
