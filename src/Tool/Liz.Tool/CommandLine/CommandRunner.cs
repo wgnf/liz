@@ -14,15 +14,12 @@ namespace Liz.Tool.CommandLine;
 
 internal sealed class CommandRunner : ICommandRunner
 {
-    private readonly IFileSystem _fileSystem;
     private readonly IExtractLicensesFactory _extractLicensesFactory;
     
     public CommandRunner(
-        IExtractLicensesFactory? extractLicensesFactory = null,
-        IFileSystem? fileSystem = null)
+        IExtractLicensesFactory? extractLicensesFactory = null)
     {
         _extractLicensesFactory = extractLicensesFactory ?? new ExtractLicensesFactory();
-        _fileSystem = fileSystem ?? new FileSystem();
     }
     
     public async Task RunAsync(
@@ -32,22 +29,18 @@ internal sealed class CommandRunner : ICommandRunner
         bool suppressPrintDetails,
         bool suppressPrintIssues,
         bool suppressProgressbar,
-        FileInfo? licenseTypeDefinitions,
-        FileInfo? urlToLicenseTypeMapping)
+        string? licenseTypeDefinitions,
+        string? urlToLicenseTypeMapping)
     {
         ArgumentNullException.ThrowIfNull(targetFile);
 
-        var licenseTypeDefinitionsFile = licenseTypeDefinitions == null
-            ? null
-            : _fileSystem.FileInfo.FromFileName(licenseTypeDefinitions.FullName);
-
-        var settings = await CreateSettingsAsync(
+        var settings = CreateSettings(
             targetFile, 
             includeTransitive, 
             suppressPrintDetails, 
             suppressPrintIssues,
-            licenseTypeDefinitionsFile,
-            urlToLicenseTypeMapping?.FullName);
+            licenseTypeDefinitions,
+            urlToLicenseTypeMapping);
 
         ILoggerProvider? loggerProvider;
         IProgressHandler? progressHandler;
@@ -68,13 +61,13 @@ internal sealed class CommandRunner : ICommandRunner
         await extractLicenses.ExtractAsync();
     }
 
-    private async static Task<ExtractLicensesSettingsBase> CreateSettingsAsync(
+    private static ExtractLicensesSettingsBase CreateSettings(
         FileSystemInfo targetFile,
         bool includeTransitive,
         bool suppressPrintDetails,
         bool suppressPrintIssues,
-        IFileInfo? licenseTypeDefinitionsFile,
-        string? urlToLicenseTypeMapping)
+        string? licenseTypeDefinitionsFile,
+        string? urlToLicenseTypeMappingFile)
     {
         var settings = new ExtractLicensesSettings
         {
@@ -82,8 +75,8 @@ internal sealed class CommandRunner : ICommandRunner
             IncludeTransitiveDependencies = includeTransitive,
             SuppressPrintDetails = suppressPrintDetails,
             SuppressPrintIssues = suppressPrintIssues,
-            LicenseTypeDefinitions = await GetLicenseTypeDefinitionsFromFileAsync(licenseTypeDefinitionsFile),
-            UrlToLicenseTypeMappingFilePath = urlToLicenseTypeMapping
+            LicenseTypeDefinitionsFilePath = licenseTypeDefinitionsFile,
+            UrlToLicenseTypeMappingFilePath = urlToLicenseTypeMappingFile
         };
 
         return settings;

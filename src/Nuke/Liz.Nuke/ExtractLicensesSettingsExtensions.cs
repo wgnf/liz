@@ -251,6 +251,35 @@ public static class ExtractLicensesSettingsExtensions
         settings.LicenseTypeDefinitions = licenseTypeDefinitions ?? throw new ArgumentNullException(nameof(licenseTypeDefinitions));
         return settings;
     }
+    
+    /// <summary>
+    ///     <para>
+    ///         Set the path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing
+    ///         a list of <see cref="LicenseTypeDefinition"/>s that describe license-types by providing inclusive/exclusive
+    ///         license-text snippets
+    ///     </para>
+    ///     <para>
+    ///         If both "LicenseTypeDefinitions" and "LicenseTypeDefinitionsFilePath" are given, those two will be merged
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="licenseTypeDefinitionsFilePath">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the parameter <paramref name="settings"/> is null</exception>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when the parameter <paramref name="licenseTypeDefinitionsFilePath"/> is either null, empty or whitespace
+    /// </exception>
+    public static ExtractLicensesSettings SetLicenseTypeDefinitionsFilePath(
+        this ExtractLicensesSettings settings,
+        string licenseTypeDefinitionsFilePath)
+    {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (string.IsNullOrWhiteSpace(licenseTypeDefinitionsFilePath))
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(licenseTypeDefinitionsFilePath));
+
+        settings.LicenseTypeDefinitionsFilePath = licenseTypeDefinitionsFilePath;
+        return settings;
+    }
 
     /// <summary>
     ///     Set the license-url (key) to license-type (value) mapping, for licenses whose license-type could not be determined
