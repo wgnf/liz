@@ -39,7 +39,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Cake.Core" Version="0.38.0" PrivateAssets="all" />
+        <PackageReference Include="Cake.Core" Version="2.2.0" PrivateAssets="all" />
 
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
             <PrivateAssets>all</PrivateAssets>
