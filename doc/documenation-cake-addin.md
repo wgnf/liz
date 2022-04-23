@@ -52,6 +52,7 @@ The settings contain the following properties which can be set according to your
 | `SuppressPrintDetails` | Whether or not to suppress printing details of analyzed package-references and license-information </br> Default: `false` |
 | `SuppressPrintIssues` | Whether or not to suppress printing found issues of analyzed package-references and license-information </br> Default: `false` |
 | `LicenseTypeDefinitions` | A list of `LicenseTypeDefinition`s that describe license-types by providing inclusive/exclusive license-text snippets |
+| `LicenseTypeDefinitionsFilePath` | A path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a list of `LicenseTypeDefinition`s that describe license-types by providing inclusive/exclusive license-text snippets </br> If both `LicenseTypeDefinitions` and `LicenseTypeDefinitionsFilePath` are given those two will be merged |
 
 ## Example Usages
 
@@ -119,5 +120,39 @@ var settings = new ExtractLicensesSettings
 {
     LicenseTypeDefinitions = new List<LicenseTypeDefinition> { definition1, definition2 }
 };
+```
 
+You can also reference a JSON-file containing the license-type-definitions in the settings, like so:  
+  
+example JSON-file:
+
+```json
+[
+  {
+    "type": "LIZ-1.0",
+    "inclusiveText": [ "LIZ PUBLIC LICENSE 1.0" ]
+  },
+
+  {
+    "type": "LIZ-2.0",
+    "inclusiveText": [ "LIZ PUBLIC LICENSE", "v2.0" ],
+    "exlusiveText": [ "Version 1" ]
+  }
+]
+```
+
+example usage:
+
+```cs
+// path to a file
+var settings = new ExtractLicensesSettings
+{
+    LicenseTypeDefinitionsFilePath = "path/to/file.json"
+};
+
+// or even a path to a remote file
+var settings = new ExtractLicensesSettings
+{
+    LicenseTypeDefinitionsFilePath = "http://path/to/file.json"
+};
 ```

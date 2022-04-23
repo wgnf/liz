@@ -35,31 +35,34 @@ The settings contain the following properties which can be set according to your
 | `SuppressPrintDetails` | Whether or not to suppress printing details of analyzed package-references and license-information </br> Default: `false` |
 | `SuppressPrintIssues` | Whether or not to suppress printing found issues of analyzed package-references and license-information </br> Default: `false` |
 | `LicenseTypeDefinitions` | A list of `LicenseTypeDefinition`s that describe license-types by providing inclusive/exclusive license-text snippets |
+| `LicenseTypeDefinitionsFilePath` | A path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a list of `LicenseTypeDefinition`s that describe license-types by providing inclusive/exclusive license-text snippets </br> If both `LicenseTypeDefinitions` and `LicenseTypeDefinitionsFilePath` are given those two will be merged |
 
-To support the Nuke-specific way of configuring the settings in a Fluent-API way, following Extensions were added as well:
+To support the Nuke-specific way of configuring the settings in a Fluent-API way, following extensions were added as well:
 
 | Name | Description |
 |------|-------------|
 | `SetTargetFile` | Sets the `TargetFile` Property to the given value |
 | | |
-| `SetIncludeTransitiveDependencies` | Sets the `IncludeTransitiveDependencies` Property to the given value |
-| `EnableIncludeTransitiveDependencies` | Sets the `IncludeTransitiveDependencies` Property to `true` |
-| `DisableIncludeTransitiveDependencies` | Sets the `IncludeTransitiveDependencies` Property to `false` |
-| `ToggleIncludeTransitiveDependencies` | Toggles the `IncludeTransitiveDependencies` Property |
-| `ResetIncludeTransitiveDependencies` | Sets the `IncludeTransitiveDependencies` Property to default |
+| `SetIncludeTransitiveDependencies` | Sets the `IncludeTransitiveDependencies` property to the given value |
+| `EnableIncludeTransitiveDependencies` | Sets the `IncludeTransitiveDependencies` property to `true` |
+| `DisableIncludeTransitiveDependencies` | Sets the `IncludeTransitiveDependencies` property to `false` |
+| `ToggleIncludeTransitiveDependencies` | Toggles the `IncludeTransitiveDependencies` property |
+| `ResetIncludeTransitiveDependencies` | Sets the `IncludeTransitiveDependencies` property to default |
 | | |
-| `SetSuppressPrintDetails` | Sets the `SuppressPrintDetails` Property to the given value |
-| `EnableSuppressPrintDetails` | Sets the `SuppressPrintDetails` Property to `true` |
-| `DisableSuppressPrintDetails` | Sets the `SuppressPrintDetails` Property to `false` |
-| `ToggleSuppressPrintDetails` | Toggles the `SuppressPrintDetails` Property |
-| `ResetSuppressPrintDetails` | Sets the `SuppressPrintDetails` Property to default |
+| `SetSuppressPrintDetails` | Sets the `SuppressPrintDetails` property to the given value |
+| `EnableSuppressPrintDetails` | Sets the `SuppressPrintDetails` property to `true` |
+| `DisableSuppressPrintDetails` | Sets the `SuppressPrintDetails` property to `false` |
+| `ToggleSuppressPrintDetails` | Toggles the `SuppressPrintDetails` property |
+| `ResetSuppressPrintDetails` | Sets the `SuppressPrintDetails` property to default |
 | | |
-| `SetSuppressPrintIssues` | Sets the `SuppressPrintIssues` Property to the given value |
-| `EnableSuppressPrintIssues` | Sets the `SuppressPrintIssues` Property to `true` |
-| `DisableSuppressPrintIssues` | Sets the `SuppressPrintIssues` Property to `false` |
-| `ToggleSuppressPrintIssues` | Toggles the `SuppressPrintIssues` Property |
-| `ResetSuppressPrintIssues` | Sets the `SuppressPrintIssues` Property to default |
-| `SetLicenseTypeDefinitions` | Set the list of `LicenseTypeDefinition`s that describe license-types by providing inclusive/exclusive license-text snippets |
+| `SetSuppressPrintIssues` | Sets the `SuppressPrintIssues` property to the given value |
+| `EnableSuppressPrintIssues` | Sets the `SuppressPrintIssues` property to `true` |
+| `DisableSuppressPrintIssues` | Sets the `SuppressPrintIssues` property to `false` |
+| `ToggleSuppressPrintIssues` | Toggles the `SuppressPrintIssues` property |
+| `ResetSuppressPrintIssues` | Sets the `SuppressPrintIssues` property to default |
+| | |
+| `SetLicenseTypeDefinitions` | Sets the `LicenseTypeDefinitions` property to the given value |
+| `SetLicenseTypeDefinitionsFilePath` | Set the `SetLicenseTypeDefinitionsFilePath` property to the given value |
 
 ## Example Usages
 
@@ -104,4 +107,35 @@ var definition2 = new LicenseTypeDefinition("LIZ-2.0", "LIZ PUBLIC LICENSE", "v2
 await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
       .SetLicenseTypeDefinitions(new List<LicenseTypeDefinition>{ definition1, definition2 });
 
+```
+
+You can also reference a JSON-file containing the license-type-definitions in the settings, like so:  
+  
+example JSON-file:
+
+```json
+[
+  {
+    "type": "LIZ-1.0",
+    "inclusiveText": [ "LIZ PUBLIC LICENSE 1.0" ]
+  },
+
+  {
+    "type": "LIZ-2.0",
+    "inclusiveText": [ "LIZ PUBLIC LICENSE", "v2.0" ],
+    "exlusiveText": [ "Version 1" ]
+  }
+]
+```
+
+example usage:
+
+```cs
+// path to a file
+await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
+      .SetLicenseTypeDefinitionsFilePath("path/to/file.json"));
+
+// or even a path to a remote file
+await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
+      .SetLicenseTypeDefinitionsFilePath("http://path/to/file.json"));
 ```
