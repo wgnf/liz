@@ -11,6 +11,7 @@ using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.PackageReferences.NuGetCli;
 using Liz.Core.Preparation;
+using Liz.Core.Preparation.Contracts;
 using Liz.Core.Progress;
 using Liz.Core.Projects;
 using Liz.Core.Result;
@@ -107,9 +108,10 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             logger,
             getDownloadedPackageReferenceArtifact);
 
-        var preprocessors = new[]
+        var preprocessors = new IPreprocessor[]
         {
-            new DeserializeLicenseTypeDefinitionsPreprocessor(settings, logger, fileContentProvider)
+            new DeserializeLicenseTypeDefinitionsPreprocessor(settings, logger, fileContentProvider),
+            new DeserializeUrlToLicenseTypeMappingPreprocessor(settings, logger, fileContentProvider)
         };
 
         var extractLicenses = new ExtractLicenses(
