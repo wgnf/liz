@@ -5,6 +5,7 @@ using Liz.Core.License;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Sources.LicenseInformation;
 using Liz.Core.License.Sources.LicenseType;
+using Liz.Core.License.Sources.UrlToLicenseType;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.Logging.Null;
 using Liz.Core.PackageReferences;
@@ -85,6 +86,14 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
                     new MplLicenseTypeDefinitionProvider(),
                     new NplLicenseTypeDefinitionProvider()
                 }, 
+                logger),
+            new UrlToLicenseTypeMappingLicenseInformationSource(
+                new IUrlToLicenseTypeMappingProvider[]
+                {
+                    new UrlToLicenseTypeFromSettingsProvider(settings),
+                    new ChooseALicenseUrlToLicenseTypeProvider(),
+                    new OpenSourceOrgUrlToLicenseTypeProvider()
+                },
                 logger)
         };
 

@@ -41,7 +41,7 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
         if (licenseText.Contains("<!DOCTYPE html>", StringComparison.InvariantCultureIgnoreCase))
             return Task.CompletedTask;
 
-        _logger.LogDebug($"Attempting to get license type from license text for\n{licenseInformationContext.LicenseInformation.Text}");
+        _logger.LogDebug($"Attempting to get license-type from license-text for\n{licenseInformationContext.LicenseInformation.Text}");
         
         HandleTypeDefinitions(licenseInformationContext, licenseText);
 
