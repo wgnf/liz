@@ -75,6 +75,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
                 {
                     new LicenseTypeDefinitionFromSettingsProvider(settings),
                     new PopularLicensesLicenseTypeDefinitionProvider(),
+                    new SpecialLicenseTypeDefinitionProvider(),
                     
                     new ApacheLicenseTypeDefinitionProvider(),
                     new BsdLicenseTypeDefinitionProvider(),

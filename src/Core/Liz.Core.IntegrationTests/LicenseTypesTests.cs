@@ -16,6 +16,7 @@ public class LicenseTypesTests
     [InlineData("NetOffice.Core", "1.7.4.4", "net6.0", new[] { "MIT" })]
     [InlineData("NetOffice.Outlook", "1.7.4.4", "net6.0", new[] { "MIT" })]
     [InlineData("Microsoft.AspNet.Razor", "3.0.0", "net6.0", new[] { "MS-NETLIB" })]
+    [InlineData("YamlDotNet", "11.2.1", "net6.0", new [] { "MIT" })]
     public async Task Determines_Correct_License_Types(
         string packageName,
         string packageVersion,
