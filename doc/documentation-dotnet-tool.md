@@ -164,7 +164,7 @@ You can also use files that are stored remotely. Just use the web link to the re
 To cover a wide variety of license-types there are already lots of mappings added (i.e. for `choosealicense.com` and `opensource.org`) in the source by default.
 But if you want to add a mapping by yourself, you can do it, like so:  
   
-Create a JSON-file that contains your definitions - `mappings.json` in this case:
+Create a JSON-file that contains your mappings - `mappings.json` in this case:
 
 ```json
 {
