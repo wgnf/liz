@@ -53,6 +53,8 @@ The settings contain the following properties which can be set according to your
 | `SuppressPrintIssues` | Whether or not to suppress printing found issues of analyzed package-references and license-information </br> Default: `false` |
 | `LicenseTypeDefinitions` | A list of `LicenseTypeDefinition`s that describe license-types by providing inclusive/exclusive license-text snippets |
 | `LicenseTypeDefinitionsFilePath` | A path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a list of `LicenseTypeDefinition`s that describe license-types by providing inclusive/exclusive license-text snippets </br> If both `LicenseTypeDefinitions` and `LicenseTypeDefinitionsFilePath` are given those two will be merged |
+| `UrlToLicenseTypeMapping` | A mapping from license-url (key) to license-type (value) for licenses whose license-type could not be determined |
+| `UrlToLicenseTypeMappingFilePath` | A path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a mapping from license-url (key) to license-type (value) for licenses whose license-type could not be determined </br> If both `UrlToLicenseTypeMapping` and `UrlToLicenseTypeMappingFilePath` are given, those two will be merged, ignoring any duplicate keys |
 
 ## Example Usages
 
@@ -154,5 +156,49 @@ var settings = new ExtractLicensesSettings
 var settings = new ExtractLicensesSettings
 {
     LicenseTypeDefinitionsFilePath = "http://path/to/file.json"
+};
+```
+
+### Adding your own license-url to license-type mappings
+
+**liz** will try to guess license-types by their license-url when no license-type could be determined yet.
+To cover a wide variety of license-types there are already lots of mappings added (i.e. for `choosealicense.com` and `opensource.org`) in the source by default.
+But if you want to add a mapping by yourself, you can do it, like so:
+
+```cs
+
+/*
+ * this will add the license-type "LIZ-1.0" for every license-url which is exact "https://liz.com/license"
+ */
+
+var settings = new ExtractLicensesSettings
+{
+    UrlToLicenseTypeMapping = new Dictionary<string, string>{ { "https://liz.com/license", "LIZ-1.0" } }
+};
+```
+
+You can also reference a JSON-file containing the mappings in the settings, like so:  
+  
+example JSON-file:
+
+```json
+{
+  "https://liz.com/license": "LIZ-1.0"
+}
+```
+
+example usage:
+
+```cs
+// path to a file
+var settings = new ExtractLicensesSettings
+{
+    UrlToLicenseTypeMappingFilePath = "path/to/file.json"
+};
+
+// or even a path to a remote file
+var settings = new ExtractLicensesSettings
+{
+    UrlToLicenseTypeMappingFilePath = "http://path/to/file.json"
 };
 ```

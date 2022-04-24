@@ -74,7 +74,8 @@ To analyze a project your solution you have to use
 | `--suppress-print-details`, `-sd` | If printing the license and package-reference details should be suppressed or not </br> Default: `false` |
 | `--suppress-print-issues`, `-si` | If printing the license-information issues should be suppressed or not </br> Default: `false` |
 | `--suppress-progressbar`, `-sb` | If displaying the progressbar should be suppressed or not. </br> Can help when debugging errors or is used in a CI/CD Pipeline </br> Default: `false` |
-| `--license-type-definitions`, `-td` | Provide a path to a JSON-File providing license-type-definitions which describe license-types by providing inclusive/exclusive license-text snippets |
+| `--license-type-definitions`, `-td` | Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) providing license-type-definitions which describe license-types by providing inclusive/exclusive license-text snippets |
+| `--url-type-mapping`, `-um` | Provide a path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a mapping from license-url (key) to license-type (value) for licenses whose license-type could not be determined |
 
 ## Examples
 
@@ -145,4 +146,48 @@ This will do the following:
 
 # local
 > dotnet liz "path/to/project.csproj" --license-type-definitions "path/to/definitions.json"
+```
+
+You can also use files that are stored remotely. Just use the web link to the resource:
+
+```bash
+# global
+> liz "path/to/project.csproj" --license-type-definitions "http://path/to/definitions.json"
+
+# local
+> dotnet liz "path/to/project.csproj" --license-type-definitions "http://path/to/definitions.json"
+```
+
+### Adding your own license-url to license-type mappings
+
+**liz** will try to guess license-types by their license-url when no license-type could be determined yet.
+To cover a wide variety of license-types there are already lots of mappings added (i.e. for `choosealicense.com` and `opensource.org`) in the source by default.
+But if you want to add a mapping by yourself, you can do it, like so:  
+  
+Create a JSON-file that contains your definitions - `mappings.json` in this case:
+
+```json
+{
+  "https://liz.com/license": "LIZ-1.0"
+}
+```
+
+This will add the license-type "LIZ-1.0" to every package-reference which has the exact license-url "https://liz.com/license".
+
+```bash
+# global
+> liz "path/to/project.csproj" --url-type-mapping "path/to/mappings.json"
+
+# local
+> dotnet liz "path/to/project.csproj" --url-type-mapping "path/to/mappings.json"
+```
+
+You can also use files that are stored remotely. Just use the web link to the resource:
+
+```bash
+# global
+> liz "path/to/project.csproj" --url-type-mapping "http://path/to/mappings.json"
+
+# local
+> dotnet liz "path/to/project.csproj" --url-type-mapping "http://path/to/mappings.json"
 ```
