@@ -30,7 +30,7 @@ public class GetPackageReferencesViaPackagesConfigTests
         const string projectFile = "./some/path/project.csproj";
         
         var mockFileSystem = new MockFileSystem();
-        mockFileSystem.AddFile(projectFile, MockFileData.NullObject);
+        mockFileSystem.AddFile(projectFile, new MockFileData(string.Empty));
 
         var projectFileInfo = mockFileSystem.FileInfo.FromFileName(projectFile);
 
@@ -64,8 +64,8 @@ public class GetPackageReferencesViaPackagesConfigTests
         const string packagesConfigFile = $"{projectFileDirectory}/packages.config";
         
         var mockFileSystem = new MockFileSystem();
-        mockFileSystem.AddFile(projectFile, MockFileData.NullObject);
-        mockFileSystem.AddFile(packagesConfigFile, MockFileData.NullObject);
+        mockFileSystem.AddFile(projectFile, new MockFileData(string.Empty));
+        mockFileSystem.AddFile(packagesConfigFile, new MockFileData(string.Empty));
 
         var projectFileInfo = mockFileSystem.FileInfo.FromFileName(projectFile);
 
@@ -101,8 +101,8 @@ public class GetPackageReferencesViaPackagesConfigTests
         const string packagesConfigFile = $"{projectFileDirectory}/packages.config";
         
         var mockFileSystem = new MockFileSystem();
-        mockFileSystem.AddFile(projectFile, MockFileData.NullObject);
-        mockFileSystem.AddFile(packagesConfigFile, MockFileData.NullObject);
+        mockFileSystem.AddFile(projectFile, new MockFileData(string.Empty));
+        mockFileSystem.AddFile(packagesConfigFile, new MockFileData(string.Empty));
 
         var projectFileInfo = mockFileSystem.FileInfo.FromFileName(projectFile);
 
