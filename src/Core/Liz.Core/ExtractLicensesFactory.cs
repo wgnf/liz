@@ -92,9 +92,11 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
                 new IUrlToLicenseTypeMappingProvider[]
                 {
                     new UrlToLicenseTypeFromSettingsProvider(settings),
+                    
                     new ChooseALicenseUrlToLicenseTypeProvider(),
                     new OpenSourceOrgUrlToLicenseTypeProvider(),
-                    new MicrosoftUrlToLicenseTypeProvider()
+                    new MicrosoftUrlToLicenseTypeProvider(),
+                    new ApacheOrUrlToLicenseTypeProvider()
                 },
                 logger)
         };
