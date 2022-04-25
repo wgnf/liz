@@ -10,6 +10,8 @@ internal sealed class MicrosoftUrlToLicenseTypeProvider : IUrlToLicenseTypeMappi
     {
         return new Dictionary<string, string>
         {
+            { "http://www.microsoft.com/web/webpi/eula/aspnetcomponent_rtw_enu.htm", "MS-NETLIB" },
+            { "https://www.microsoft.com/web/webpi/eula/aspnetcomponent_rtw_enu.htm", "MS-NETLIB" },
             { "http://www.microsoft.com/web/webpi/eula/aspnetcomponent_rtw_ENU.htm", "MS-NETLIB" },
             { "https://www.microsoft.com/web/webpi/eula/aspnetcomponent_rtw_ENU.htm", "MS-NETLIB" },
             { "https://go.microsoft.com/fwlink/?linkid=841311", "MIT" }

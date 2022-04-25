@@ -118,7 +118,9 @@ internal sealed class OpenSourceOrgUrlToLicenseTypeProvider : IUrlToLicenseTypeM
             { "https://opensource.org/licenses/Xnet", "Xnet" },
             { "https://opensource.org/licenses/ZPL-2.0", "ZPL-2.0" },
             { "https://opensource.org/licenses/ZPL-2.1", "ZPL-2.1" },
-            { "https://opensource.org/licenses/Zlib", "Zlib" }
+            { "https://opensource.org/licenses/Zlib", "Zlib" },
+            
+            { "http://opensource.org/licenses/BSD-3-Clause", "BSD-3-Clause" }
         };
     }
 }
