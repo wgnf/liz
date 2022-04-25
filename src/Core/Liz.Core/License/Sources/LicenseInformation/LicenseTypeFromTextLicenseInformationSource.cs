@@ -7,17 +7,20 @@ namespace Liz.Core.License.Sources.LicenseInformation;
 
 internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInformationSource
 {
+    private readonly IEnumerable<ILicenseTypeDefinitionProvider> _licenseTypeDefinitionProviders;
     private readonly ILogger _logger;
-    private readonly IEnumerable<LicenseTypeDefinition> _typeDefinitions;
+    private IEnumerable<LicenseTypeDefinition> _typeDefinitions;
+
+    private bool _isInitialized;
 
     public LicenseTypeFromTextLicenseInformationSource(
         IEnumerable<ILicenseTypeDefinitionProvider> licenseTypeDefinitionProviders,
         ILogger logger)
     {
-        if (licenseTypeDefinitionProviders == null) throw new ArgumentNullException(nameof(licenseTypeDefinitionProviders));
+        _licenseTypeDefinitionProviders = licenseTypeDefinitionProviders ?? throw new ArgumentNullException(nameof(licenseTypeDefinitionProviders));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        _typeDefinitions = licenseTypeDefinitionProviders.SelectMany(provider => provider.Get());
+        _typeDefinitions = Enumerable.Empty<LicenseTypeDefinition>();
     }
     
     // needs to be after the stuff that possibly gets the license-text
@@ -26,6 +29,8 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
     public Task GetInformationAsync(GetLicenseInformationContext licenseInformationContext)
     {
         if (licenseInformationContext == null) throw new ArgumentNullException(nameof(licenseInformationContext));
+
+        Initialize();
 
         // no need to attempt getting the license-type from the text, when there's no text, duh
         if (string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text)) return Task.CompletedTask;
@@ -76,5 +81,18 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
     private static string RemoveControlCharacters(string input)
     {
         return new string(input.Where(character => !char.IsControl(character)).ToArray());
+    }
+    
+    /*
+     * NOTE:
+     * We need this here, because some definitions come from the settings which are partly set by a preprocessor,
+     * which has not been executed yet, when the constructor is called
+     */
+    private void Initialize()
+    {
+        if (_isInitialized) return;
+        
+        _typeDefinitions = _licenseTypeDefinitionProviders.SelectMany(provider => provider.Get());
+        _isInitialized = true;
     }
 }
