@@ -5,11 +5,14 @@ using Liz.Core.License;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Sources.LicenseInformation;
 using Liz.Core.License.Sources.LicenseType;
+using Liz.Core.License.Sources.UrlToLicenseType;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.Logging.Null;
 using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.PackageReferences.NuGetCli;
+using Liz.Core.Preparation;
+using Liz.Core.Preparation.Contracts;
 using Liz.Core.Progress;
 using Liz.Core.Projects;
 using Liz.Core.Result;
@@ -40,6 +43,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var fileSystem = new FileSystem();
         var cliToolExecutor = new DefaultCliToolExecutor(logger);
         var httpClient = new HttpClientWrapper();
+        var fileContentProvider = new FileContentProvider(fileSystem, httpClient);
 
         var getProjects = new GetProjectsViaSlnParser(new SolutionParser(), fileSystem);
         var parseDotnetListPackage = new ParseDotnetListPackageResult();
@@ -71,6 +75,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
                 {
                     new LicenseTypeDefinitionFromSettingsProvider(settings),
                     new PopularLicensesLicenseTypeDefinitionProvider(),
+                    new SpecialLicenseTypeDefinitionProvider(),
                     
                     new ApacheLicenseTypeDefinitionProvider(),
                     new BsdLicenseTypeDefinitionProvider(),
@@ -82,6 +87,17 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
                     new MplLicenseTypeDefinitionProvider(),
                     new NplLicenseTypeDefinitionProvider()
                 }, 
+                logger),
+            new UrlToLicenseTypeMappingLicenseInformationSource(
+                new IUrlToLicenseTypeMappingProvider[]
+                {
+                    new UrlToLicenseTypeFromSettingsProvider(settings),
+                    
+                    new ChooseALicenseUrlToLicenseTypeProvider(),
+                    new OpenSourceOrgUrlToLicenseTypeProvider(),
+                    new MicrosoftUrlToLicenseTypeProvider(),
+                    new ApacheOrUrlToLicenseTypeProvider()
+                },
                 logger)
         };
 
@@ -105,6 +121,12 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             logger,
             getDownloadedPackageReferenceArtifact);
 
+        var preprocessors = new IPreprocessor[]
+        {
+            new DeserializeLicenseTypeDefinitionsPreprocessor(settings, logger, fileContentProvider),
+            new DeserializeUrlToLicenseTypeMappingPreprocessor(settings, logger, fileContentProvider)
+        };
+
         var extractLicenses = new ExtractLicenses(
             settings,
             logger,
@@ -114,7 +136,8 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             enrichPackageReferenceWithLicenseInformation,
             provideTemporaryDirectories,
             downloadPackageReferences,
-            resultProcessors);
+            resultProcessors,
+            preprocessors);
         
         return extractLicenses;
     }

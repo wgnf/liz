@@ -61,6 +61,9 @@ public sealed class LicenseInformation
         if (string.IsNullOrWhiteSpace(licenseType))
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(licenseType));
         
+        // no need to add if already contained
+        if (_types.Contains(licenseType)) return;
+        
         _types.Add(licenseType);
     }
     

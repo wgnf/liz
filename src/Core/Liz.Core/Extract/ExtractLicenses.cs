@@ -6,6 +6,8 @@ using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Exceptions;
 using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Preparation.Contracts;
+using Liz.Core.Preparation.Contracts.Exceptions;
 using Liz.Core.Progress;
 using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Exceptions;
@@ -23,6 +25,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     private readonly IProvideTemporaryDirectories _provideTemporaryDirectories;
     private readonly IDownloadPackageReferences _downloadPackageReferences;
     private readonly IEnumerable<IResultProcessor> _resultProcessors;
+    private readonly IEnumerable<IPreprocessor> _preprocessors;
     private readonly IGetProjects _getProjects;
     private readonly ILogger _logger;
     private readonly IProgressHandler? _progressHandler;
@@ -37,7 +40,8 @@ internal sealed class ExtractLicenses : IExtractLicenses
         IEnrichPackageReferenceWithLicenseInformation enrichPackageReferenceWithLicenseInformation,
         IProvideTemporaryDirectories provideTemporaryDirectories,
         IDownloadPackageReferences downloadPackageReferences,
-        IEnumerable<IResultProcessor> resultProcessors)
+        IEnumerable<IResultProcessor> resultProcessors,
+        IEnumerable<IPreprocessor> preprocessors)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
@@ -48,6 +52,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
                                      ?? throw new ArgumentNullException(nameof(provideTemporaryDirectories));
         _downloadPackageReferences = downloadPackageReferences ?? throw new ArgumentNullException(nameof(downloadPackageReferences));
         _resultProcessors = resultProcessors ?? throw new ArgumentNullException(nameof(resultProcessors));
+        _preprocessors = preprocessors ?? throw new ArgumentNullException(nameof(preprocessors));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _progressHandler = progressHandler;
     }
@@ -56,6 +61,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         try
         {
+            await PrepareAsync();
             var projects = GetProjects(_settings.GetTargetFile()!).ToList();
 
             await DownloadPackageReferencesFor(projects);
@@ -87,12 +93,36 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
     }
 
+    private async Task PrepareAsync()
+    {
+        try
+        {
+            /*
+             * 5 main process steps:
+             * - preparation
+             * - get projects
+             * - download package-references
+             * - get package-references
+             * - enrich license info
+             */
+            _progressHandler?.InitializeMainProcess(5, "Preparing");
+            _logger.LogInformation("Preparing...");
+
+            foreach (var preprocessor in _preprocessors)
+                await preprocessor.PreprocessAsync().ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            throw new PreparationFailedException(exception);
+        }
+    }
+
     private IEnumerable<Project> GetProjects(string targetFile)
     {
         try
         {
-            // 4 main-process steps: get projects, download package-references, get package-references, enrich license info 
-            _progressHandler?.InitializeMainProcess(4, "GetProjects");
+            _progressHandler?.TickMainProcess("Get projects");
+            _progressHandler?.InitializeNewSubProcess(1);
             _logger.LogInformation($"Trying to get projects from {targetFile}...");
 
             var projects = _getProjects.GetFromFile(targetFile).ToList();
@@ -102,9 +132,9 @@ internal sealed class ExtractLicenses : IExtractLicenses
 
             return projects;
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
-            throw new GetProjectsFailedException(targetFile, ex);
+            throw new GetProjectsFailedException(targetFile, exception);
         }
     }
 
@@ -167,9 +197,9 @@ internal sealed class ExtractLicenses : IExtractLicenses
 
             return packageReferences;
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
-            throw new GetPackageReferencesFailedException(project, ex);
+            throw new GetPackageReferencesFailedException(project, exception);
         }
     }
 
@@ -199,9 +229,9 @@ internal sealed class ExtractLicenses : IExtractLicenses
             await _enrichPackageReferenceWithLicenseInformation.EnrichAsync(packageReference);
             _logger.LogDebug($"Found following license-type: '{packageReference.LicenseInformation}'");
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
-            throw new GetLicenseInformationFailedException(packageReference, ex);
+            throw new GetLicenseInformationFailedException(packageReference, exception);
         }
     }
     

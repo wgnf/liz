@@ -1,5 +1,6 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
+using Liz.Core.License.Contracts.Models;
 using Liz.Core.License.Sources.LicenseType;
 using Liz.Core.Settings;
 using Moq;

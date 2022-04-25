@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Liz.Core.License.Sources.LicenseType;
+namespace Liz.Core.License.Contracts.Models;
 
 /// <summary>
 ///     Definition that describes a license-type

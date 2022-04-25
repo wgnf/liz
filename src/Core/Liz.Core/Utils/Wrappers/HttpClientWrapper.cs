@@ -17,4 +17,9 @@ internal sealed class HttpClientWrapper : IHttpClient
     {
         return _httpClient.GetStringAsync(url);
     }
+
+    public Task<HttpResponseMessage> GetAsync(string url)
+    {
+        return _httpClient.GetAsync(url);
+    }
 }

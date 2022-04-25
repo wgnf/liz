@@ -3,7 +3,6 @@ using FluentAssertions;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.License.Sources.LicenseInformation;
-using Liz.Core.License.Sources.LicenseType;
 using Moq;
 using Xunit;
 
@@ -12,7 +11,7 @@ namespace Liz.Core.Tests.License.Sources.LicenseInformation;
 public class LicenseTypeFromTextLicenseInformationSourceTests
 {
     [Fact]
-    public void Order_Is_At_The_Start()
+    public void Order_Is_Somewhere_At_The_End()
     {
         var context = ArrangeContext<LicenseTypeFromTextLicenseInformationSource>.Create();
         var sut = context.Build();

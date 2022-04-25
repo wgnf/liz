@@ -7,6 +7,8 @@ using Liz.Core.License.Contracts.Models;
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Exceptions;
 using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Preparation.Contracts;
+using Liz.Core.Preparation.Contracts.Exceptions;
 using Liz.Core.Progress;
 using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Exceptions;
@@ -294,6 +296,52 @@ public class ExtractLicensesTests
             .Should()
             .BeEmpty();
     }
+    
+    [Fact]
+    public async Task Extract_Calls_Preprocessors()
+    {
+        var preprocessorMock = new Mock<IPreprocessor>();
+        
+        var context = CreateContext();
+        context.Use<IEnumerable<IPreprocessor>>(new[] { preprocessorMock.Object });
+        
+        var sut = context.Build();
+
+        var project = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
+
+        context
+            .For<IGetProjects>()
+            .Setup(getProjects => getProjects.GetFromFile(It.IsAny<string>()))
+            .Returns(new[] { project });
+
+        _ = await sut.ExtractAsync();
+
+        preprocessorMock
+            .Verify(preprocessor => preprocessor.PreprocessAsync(), Times.Once);
+    }
+    
+    [Fact]
+    public async Task Extract_Calls_Preprocessors_And_Throws_When_Something_Happens()
+    {
+        var preprocessorMock = new Mock<IPreprocessor>();
+        preprocessorMock
+            .Setup(preprocessor => preprocessor.PreprocessAsync())
+            .Throws<Exception>();
+        
+        var context = CreateContext();
+        context.Use<IEnumerable<IPreprocessor>>(new[] { preprocessorMock.Object });
+        
+        var sut = context.Build();
+
+        var project = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
+
+        context
+            .For<IGetProjects>()
+            .Setup(getProjects => getProjects.GetFromFile(It.IsAny<string>()))
+            .Returns(new[] { project });
+
+        await Assert.ThrowsAsync<PreparationFailedException>(() => sut.ExtractAsync());
+    }
 
     private static ArrangeContext<ExtractLicenses> CreateContext()
     {
@@ -303,11 +351,13 @@ public class ExtractLicensesTests
             .Returns("TargetFile.csproj");
         
         var resultProcessor = Mock.Of<IResultProcessor>();
+        var preprocessor = Mock.Of<IPreprocessor>();
 
         var context = ArrangeContext<ExtractLicenses>.Create();
         
         context.Use(settingsMock.Object);
         context.Use<IEnumerable<IResultProcessor>>(new[] { resultProcessor });
+        context.Use<IEnumerable<IPreprocessor>>(new[] { preprocessor });
 
         context
             .For<IProvideTemporaryDirectories>()

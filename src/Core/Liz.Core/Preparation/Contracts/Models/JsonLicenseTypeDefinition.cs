@@ -5,10 +5,10 @@ using System.Text.Json.Serialization;
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
-namespace Liz.Tool.Contracts;
+namespace Liz.Core.Preparation.Contracts.Models;
 
 [ExcludeFromCodeCoverage] // simple DTO
-public sealed class JsonLicenseTypeDefinition
+internal sealed class JsonLicenseTypeDefinition
 {
     [JsonPropertyName("type")]
     public string LicenseType { get; set; } = string.Empty;

@@ -1,4 +1,4 @@
-﻿using Liz.Core.License.Sources.LicenseType;
+﻿using Liz.Core.License.Contracts.Models;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Core.Settings;
@@ -29,6 +29,36 @@ public abstract class ExtractLicensesSettingsBase
     ///     license-text snippets
     /// </summary>
     public List<LicenseTypeDefinition> LicenseTypeDefinitions { get; set; } = new();
+    
+    /// <summary>
+    ///     <para>
+    ///         A path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a
+    ///         list of <see cref="LicenseTypeDefinition"/>s that describe license-types by providing inclusive/exclusive
+    ///         license-text snippets
+    ///     </para>
+    ///     <para>
+    ///         If both <see cref="LicenseTypeDefinitions"/> and <see cref="LicenseTypeDefinitionsFilePath"/> are given,
+    ///         those two will be merged
+    ///     </para>
+    /// </summary>
+    public string? LicenseTypeDefinitionsFilePath { get; set; }
+
+    /// <summary>
+    ///     A mapping from license-url (key) to license-type (value) for licenses whose license-type could not be determined
+    /// </summary>
+    public Dictionary<string, string> UrlToLicenseTypeMapping { get; set; } = new();
+
+    /// <summary>
+    ///     <para>
+    ///         A path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a
+    ///         mapping from license-url (key) to license-type (value) for licenses whose license-type could not be determined
+    ///     </para>
+    ///     <para>
+    ///         If both <see cref="UrlToLicenseTypeMapping"/> and <see cref="UrlToLicenseTypeMappingFilePath"/> are given,
+    ///         those two will be merged, ignoring any duplicate keys
+    ///     </para>
+    /// </summary>
+    public string? UrlToLicenseTypeMappingFilePath { get; set; }
 
     /// <summary>
     ///     Gets the target file of these settings

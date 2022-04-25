@@ -29,6 +29,7 @@
 - Print the found dependencies including their license information to the console
 - Print the problems that occured during the process (missing license-information)
 - (Try to) determine the license-type from the license-text, if no license-type could be determined
+- (Try to) determine the license-type from the license-url, if no license-type could be determined
 
 ### Planned features
 
