@@ -124,7 +124,9 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var preprocessors = new IPreprocessor[]
         {
             new DeserializeLicenseTypeDefinitionsPreprocessor(settings, logger, fileContentProvider),
-            new DeserializeUrlToLicenseTypeMappingPreprocessor(settings, logger, fileContentProvider)
+            new DeserializeUrlToLicenseTypeMappingPreprocessor(settings, logger, fileContentProvider),
+            new DeserializeLicenseTypeWhitelistPreprocessor(settings, logger, fileContentProvider),
+            new DeserializeLicenseTypeBlacklistPreprocessor(settings, logger, fileContentProvider)
         };
 
         var extractLicenses = new ExtractLicenses(

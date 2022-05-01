@@ -9,33 +9,33 @@ using Xunit;
 
 namespace Liz.Core.Tests.Preparation;
 
-public class DeserializeUrlToLicenseTypeMappingPreprocessorTests
+public class DeserializeLicenseTypeWhitelistPreprocessorTests
 {
     [Fact]
     public async Task Does_Nothing_When_Setting_Not_Set()
     {
         var settings = Mock.Of<ExtractLicensesSettingsBase>();
-        settings.UrlToLicenseTypeMappingFilePath = null;
+        settings.LicenseTypeWhitelistFilePath = null;
 
-        var context = ArrangeContext<DeserializeUrlToLicenseTypeMappingPreprocessor>.Create();
+        var context = ArrangeContext<DeserializeLicenseTypeWhitelistPreprocessor>.Create();
         context.Use(settings);
-        
+
         var sut = context.Build();
 
         await sut.PreprocessAsync();
-        
+
         context
             .For<IFileContentProvider>()
             .Verify(fileContentProvider => fileContentProvider.GetFileContentAsync(It.IsAny<string>()), Times.Never);
     }
-    
+
     [Fact]
     public async Task Logs_Warning_When_Get_Content_Fails()
     {
         var settings = Mock.Of<ExtractLicensesSettingsBase>();
-        settings.UrlToLicenseTypeMappingFilePath = "something";
+        settings.LicenseTypeWhitelistFilePath = "something";
 
-        var context = ArrangeContext<DeserializeUrlToLicenseTypeMappingPreprocessor>.Create();
+        var context = ArrangeContext<DeserializeLicenseTypeWhitelistPreprocessor>.Create();
         context.Use(settings);
 
         var sut = context.Build();
@@ -46,26 +46,25 @@ public class DeserializeUrlToLicenseTypeMappingPreprocessorTests
             .Throws<Exception>();
 
         await sut.PreprocessAsync();
-        
+
         context
             .For<ILogger>()
             .Verify(logger => logger.Log(
                     It.Is<LogLevel>(logLevel => logLevel == LogLevel.Warning),
-                    It.IsAny<string>(), 
+                    It.IsAny<string>(),
                     It.IsAny<Exception?>()),
                 Times.Once);
     }
-    
-    [Fact]
-    public async Task Logs_Warning_Json_Cannot_Be_Deserialized()
-    {
-        // this is a list of dictionaries...
-        const string json = @"[ { ""gibberish"": ""something"" } ]";
-        
-        var settings = Mock.Of<ExtractLicensesSettingsBase>();
-        settings.UrlToLicenseTypeMappingFilePath = "something";
 
-        var context = ArrangeContext<DeserializeUrlToLicenseTypeMappingPreprocessor>.Create();
+    [Fact]
+    public async Task Logs_Warning_When_Json_Cannot_Be_Deserialized()
+    {
+        const string json = @"{ ""gibberish"": ""something"" }";
+
+        var settings = Mock.Of<ExtractLicensesSettingsBase>();
+        settings.LicenseTypeWhitelistFilePath = "something";
+
+        var context = ArrangeContext<DeserializeLicenseTypeWhitelistPreprocessor>.Create();
         context.Use(settings);
 
         var sut = context.Build();
@@ -85,21 +84,21 @@ public class DeserializeUrlToLicenseTypeMappingPreprocessorTests
                     It.IsAny<Exception?>()),
                 Times.Once);
     }
-    
+
     [Fact]
-    public async Task Only_Uses_Correct_Mappings()
+    public async Task Only_Uses_Correct_Entries()
     {
         const string json = @"
-{
-   """": ""this is not correct as it has no key"",
-   ""this is not correct as it has no value"": """",
-   ""correct"": ""correct""
-}";
+[
+  """",
+  "" "",
+  ""something""
+]";
 
         var settings = Mock.Of<ExtractLicensesSettingsBase>();
-        settings.UrlToLicenseTypeMappingFilePath = "something";
+        settings.LicenseTypeWhitelistFilePath = "something";
 
-        var context = ArrangeContext<DeserializeUrlToLicenseTypeMappingPreprocessor>.Create();
+        var context = ArrangeContext<DeserializeLicenseTypeWhitelistPreprocessor>.Create();
         context.Use(settings);
 
         var sut = context.Build();
@@ -110,29 +109,33 @@ public class DeserializeUrlToLicenseTypeMappingPreprocessorTests
             .Returns(Task.FromResult(json));
 
         await sut.PreprocessAsync();
-
-        var expectedMappings = new Dictionary<string, string> { { "correct", "correct" } };
-
+        
+        var expectedEntries = new[] { "something" };
+        
         settings
-            .UrlToLicenseTypeMapping
+            .LicenseTypeWhitelist
             .Should()
-            .BeEquivalentTo(expectedMappings);
+            .BeEquivalentTo(expectedEntries);
     }
-    
+
     [Fact]
-    public async Task Adds_File_Definitions_To_Already_Existing_Definitions()
+    public async Task Adds_Entries_To_Already_Existing_Entries()
     {
         const string json = @"
-{
-   ""correct"": ""correct""
-}";
+[
+  """",
+  "" "",
+  ""something""
+]";
+
+        const string alreadyExistingEntry = "else";
 
         var settings = Mock.Of<ExtractLicensesSettingsBase>();
         
-        settings.UrlToLicenseTypeMapping.Add("something", "something");
-        settings.UrlToLicenseTypeMappingFilePath = "something";
+        settings.LicenseTypeWhitelist.Add(alreadyExistingEntry);
+        settings.LicenseTypeWhitelistFilePath = "something";
 
-        var context = ArrangeContext<DeserializeUrlToLicenseTypeMappingPreprocessor>.Create();
+        var context = ArrangeContext<DeserializeLicenseTypeWhitelistPreprocessor>.Create();
         context.Use(settings);
 
         var sut = context.Build();
@@ -144,15 +147,11 @@ public class DeserializeUrlToLicenseTypeMappingPreprocessorTests
 
         await sut.PreprocessAsync();
 
-        var expectedMappings = new Dictionary<string, string>
-        {
-            { "something", "something" }, 
-            { "correct", "correct" }
-        };
+        var expectedEntries = new[] { "something", alreadyExistingEntry };
 
         settings
-            .UrlToLicenseTypeMapping
+            .LicenseTypeWhitelist
             .Should()
-            .BeEquivalentTo(expectedMappings);
+            .BeEquivalentTo(expectedEntries);
     }
 }
