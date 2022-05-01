@@ -104,7 +104,9 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var resultProcessors = new IResultProcessor[]
         {
             new PrintPackageDetailsResultProcessor(settings, logger),
-            new PrintPackageIssuesResultProcessor(settings, logger)
+            new PrintPackageIssuesResultProcessor(settings, logger),
+            new ValidateLicenseTypesWhitelistResultProcessor(settings, logger),
+            new ValidateLicenseTypesBlacklistResultProcessor(settings, logger)
         };
 
         var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
