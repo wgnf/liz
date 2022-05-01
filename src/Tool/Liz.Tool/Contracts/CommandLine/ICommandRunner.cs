@@ -12,5 +12,7 @@ public interface ICommandRunner
         bool suppressPrintIssues,
         bool suppressProgressbar,
         string? licenseTypeDefinitions,
-        string? urlToLicenseTypeMapping);
+        string? urlToLicenseTypeMapping,
+        string? whitelist,
+        string? blacklist);
 }

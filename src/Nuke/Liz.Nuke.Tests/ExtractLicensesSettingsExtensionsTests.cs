@@ -286,6 +286,33 @@ public class ExtractLicensesSettingsExtensionsTests
                 .Be(value);
         }
     }
+    
+    [Fact]
+    public void ExtractLicensesSettings_Sets_String_List_Settings()
+    {
+        var value = new List<string> { "something", "else" };
+        var properties = GetExtractLicensesSettingsProperties()
+            .Where(property => property.PropertyType == typeof(List<string>));
+
+        foreach (var property in properties)
+        {
+            var setMethod = typeof(ExtractLicensesSettingsExtensions).GetMethod($"Set{property.Name}");
+
+            var settingsInstance = new ExtractLicensesSettings();
+            
+            Assert.Throws<TargetInvocationException>(() =>
+                setMethod?.Invoke(null, new object?[] { null, value }));
+            Assert.Throws<TargetInvocationException>(() =>
+                setMethod?.Invoke(null, new object?[] { settingsInstance, null }));
+                
+            setMethod?.Invoke(null, new object?[] { settingsInstance, value });
+
+            property
+                .GetValue(settingsInstance)
+                .Should()
+                .Be(value);
+        }
+    }
 
     private static IEnumerable<PropertyInfo> GetExtractLicensesSettingsProperties()
     {

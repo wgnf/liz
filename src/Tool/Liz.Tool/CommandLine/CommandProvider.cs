@@ -28,7 +28,9 @@ internal sealed class CommandProvider
             bool suppressPrintIssues,
             bool suppressProgressbar,
             string? licenseTypeDefinitions,
-            string? urlToLicenseTypeMapping) =>
+            string? urlToLicenseTypeMapping,
+            string? whitelist,
+            string? blacklist) =>
         {
             await _commandRunner.RunAsync(
                 targetFile, 
@@ -38,7 +40,9 @@ internal sealed class CommandProvider
                 suppressPrintIssues,
                 suppressProgressbar,
                 licenseTypeDefinitions,
-                urlToLicenseTypeMapping)
+                urlToLicenseTypeMapping,
+                whitelist,
+                blacklist)
                 .ConfigureAwait(false);
         }, symbols.ToArray());
 
@@ -70,7 +74,9 @@ internal sealed class CommandProvider
             GetSuppressPrintIssuesOption(),
             GetSuppressProgressBarOption(),
             GetLicenseTypeDefinitionsOption(),
-            GetUrlToLicenseTypeMappingOption()
+            GetUrlToLicenseTypeMappingOption(),
+            GetLicenseTypeWhitelistOption(),
+            GetLicenseTypeBlacklistOption()
         };
         return options;
     }
@@ -132,6 +138,7 @@ internal sealed class CommandProvider
     {
         var option = new Option<string?>(
             new[] { "--license-type-definitions", "-td" },
+            () => null,
             "Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) providing license-type-definitions which describe license-types by providing inclusive/exclusive license-text snippets");
         return option;
     }
@@ -140,7 +147,26 @@ internal sealed class CommandProvider
     {
         var option = new Option<string?>(
             new[] { "--url-type-mapping", "-um" },
+            () => null,
             "Provide a path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a mapping from license-url (key) to license-type (value) for licenses whose license-type could not be determined");
+        return option;
+    }
+
+    private static Option GetLicenseTypeWhitelistOption()
+    {
+        var option = new Option<string?>(
+            new[] { "--whitelist", "-w" },
+            () => null,
+            "Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones allowed, when validating the determined license-types. Any license-type which is not in the whitelist will cause the validation to fail.");
+        return option;
+    }
+
+    private static Option GetLicenseTypeBlacklistOption()
+    {
+        var option = new Option<string?>(
+            new[] { "--blacklist", "-b" },
+            () => null,
+            "Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones disallowed, when validating the determined license-types. Any license-type that is the same as within that blacklist will cause the validation to fail. Any other license-type is allowed.");
         return option;
     }
 }
