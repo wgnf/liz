@@ -327,4 +327,122 @@ public static class ExtractLicensesSettingsExtensions
         settings.UrlToLicenseTypeMappingFilePath = urlToLicenseTypeMappingFilePath;
         return settings;
     }
+
+    /// <summary>
+    ///     <para>
+    ///         Set a list of license-types, which are the only ones allowed, when validating the determined license-types.
+    ///         Any license-type which is not in the whitelist will cause the validation to fail.
+    ///     </para>
+    ///     <para>
+    ///         This option is mutually exclusive with "LicenseTypeBlacklist" and "LicenseTypeBlacklistFilePath"
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="licenseTypeWhiteList">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown when the parameters <paramref name="settings"/> or <paramref name="licenseTypeWhiteList"/> are null
+    /// </exception>
+    public static ExtractLicensesSettings SetLicenseTypeWhitelist(
+        this ExtractLicensesSettings settings,
+        List<string> licenseTypeWhiteList)
+    {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (licenseTypeWhiteList == null) throw new ArgumentNullException(nameof(licenseTypeWhiteList));
+
+        settings.LicenseTypeWhitelist = licenseTypeWhiteList;
+        return settings;
+    }
+
+    /// <summary>
+    ///     <para>
+    ///         Set a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing
+    ///         a list of license-types, which are the only ones allowed, when validating the determined license-types.
+    ///         Any license-type which is not in the whitelist will cause the validation to fail.
+    ///     </para>
+    ///     <para>
+    ///         This option is mutually exclusive with "LicenseTypeBlacklist" and "LicenseTypeBlacklistFilePath"
+    ///     </para>
+    ///     <para>
+    ///         If both "LicenseTypeWhitelist" and "LicenseTypeWhitelistFilePath" are given, those two will be merged
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="licenseTypeWhitelistFilePath">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the parameter <paramref name="settings"/> is null</exception>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when the parameter <paramref name="licenseTypeWhitelistFilePath"/> is either null, empty or whitespace
+    /// </exception>
+    public static ExtractLicensesSettings SetLicenseTypeWhitelistFilePath(
+        this ExtractLicensesSettings settings,
+        string licenseTypeWhitelistFilePath)
+    {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (string.IsNullOrWhiteSpace(licenseTypeWhitelistFilePath))
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(licenseTypeWhitelistFilePath));
+
+        settings.LicenseTypeWhitelistFilePath = licenseTypeWhitelistFilePath;
+        return settings;
+    }
+
+    /// <summary>
+    ///     <para>
+    ///         Set a list of license-types, which are the only ones disallowed, when validating the determined license-types.
+    ///         Any license-type that is the same as within that blacklist will cause the validation to fail. Any other
+    ///         license-type is allowed.
+    ///     </para>
+    ///     <para>
+    ///         This option is mutually exclusive with "LicenseTypeWhitelist" and LicenseTypeWhitelistFilePath"
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="licenseTypeBlacklist">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown when the parameters <paramref name="settings"/> or <paramref name="licenseTypeBlacklist"/> are null
+    /// </exception>
+    public static ExtractLicensesSettings SetLicenseTypeBlacklist(
+        this ExtractLicensesSettings settings,
+        List<string> licenseTypeBlacklist)
+    {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (licenseTypeBlacklist == null) throw new ArgumentNullException(nameof(licenseTypeBlacklist));
+
+        settings.LicenseTypeBlacklist = licenseTypeBlacklist;
+        return settings;
+    }
+
+    /// <summary>
+    ///     <para>
+    ///         Set a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing
+    ///         a list of license-types, which are the only ones disallowed, when validating the determined license-types.
+    ///         Any license-type that is the same as within that blacklist will cause the validation to fail. Any other
+    ///         license-type is allowed.
+    ///     </para>
+    ///     <para>
+    ///         This option is mutually exclusive with "LicenseTypeWhitelist" and "LicenseTypeWhitelistFilePath"
+    ///     </para>
+    ///     <para>
+    ///         If both LicenseTypeBlacklist" and "LicenseTypeBlacklistFilePath" are given, those two will be merged
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="licenseTypeBlacklistFilePath">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the parameter <paramref name="settings"/> is null</exception>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when the parameter <paramref name="licenseTypeBlacklistFilePath"/> is either null, empty or whitespace
+    /// </exception>
+    public static ExtractLicensesSettings SetLicenseTypeBlacklistFilePath(
+        this ExtractLicensesSettings settings,
+        string licenseTypeBlacklistFilePath)
+    {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (string.IsNullOrWhiteSpace(licenseTypeBlacklistFilePath))
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(licenseTypeBlacklistFilePath));
+
+        settings.LicenseTypeBlacklistFilePath = licenseTypeBlacklistFilePath;
+        return settings;
+    }
 }

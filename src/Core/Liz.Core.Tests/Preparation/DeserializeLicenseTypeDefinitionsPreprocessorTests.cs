@@ -47,13 +47,13 @@ public class DeserializeLicenseTypeDefinitionsPreprocessorTests
             .Throws<Exception>();
 
         await sut.PreprocessAsync();
-        
+
         context
             .For<ILogger>()
             .Verify(logger => logger.Log(
-                It.Is<LogLevel>(logLevel => logLevel == LogLevel.Warning),
-                It.IsAny<string>(), 
-                It.IsAny<Exception?>()),
+                    It.Is<LogLevel>(logLevel => logLevel == LogLevel.Warning),
+                    It.IsAny<string>(),
+                    It.IsAny<Exception?>()),
                 Times.Once);
     }
     

@@ -30,15 +30,15 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var targetFileArgument = rootCommand.Arguments.FirstOrDefault(opt => opt.Name == "targetFile");
-        Assert.NotNull(targetFileArgument);
+        var argument = rootCommand.Arguments.FirstOrDefault(opt => opt.Name == "targetFile");
+        Assert.NotNull(argument);
 
-        targetFileArgument?
+        argument?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        targetFileArgument?
+        argument?
             .ValueType
             .Should()
             .Be<FileInfo>();
@@ -51,20 +51,20 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var logLevelOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "log-level");
-        Assert.NotNull(logLevelOption);
+        var option = rootCommand.Options.FirstOrDefault(opt => opt.Name == "log-level");
+        Assert.NotNull(option);
 
-        logLevelOption?
+        option?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        logLevelOption?
+        option?
             .ValueType
             .Should()
             .Be<LogLevel>();
 
-        logLevelOption?
+        option?
             .Aliases
             .Should()
             .Contain(new[] { "--log-level", "-l" });
@@ -77,20 +77,20 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var includeTransitiveOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "include-transitive");
-        Assert.NotNull(includeTransitiveOption);
+        var option = rootCommand.Options.FirstOrDefault(opt => opt.Name == "include-transitive");
+        Assert.NotNull(option);
 
-        includeTransitiveOption?
+        option?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        includeTransitiveOption?
+        option?
             .ValueType
             .Should()
             .Be<bool>();
 
-        includeTransitiveOption?
+        option?
             .Aliases
             .Should()
             .Contain(new[] { "--include-transitive", "-i" });
@@ -103,20 +103,20 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var suppressPrintDetailsOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-print-details");
-        Assert.NotNull(suppressPrintDetailsOption);
+        var option = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-print-details");
+        Assert.NotNull(option);
 
-        suppressPrintDetailsOption?
+        option?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        suppressPrintDetailsOption?
+        option?
             .ValueType
             .Should()
             .Be<bool>();
 
-        suppressPrintDetailsOption?
+        option?
             .Aliases
             .Should()
             .Contain(new[] { "--suppress-print-details", "-sd" });
@@ -129,20 +129,20 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var suppressPrintIssuesOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-print-issues");
-        Assert.NotNull(suppressPrintIssuesOption);
+        var option = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-print-issues");
+        Assert.NotNull(option);
 
-        suppressPrintIssuesOption?
+        option?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        suppressPrintIssuesOption?
+        option?
             .ValueType
             .Should()
             .Be<bool>();
 
-        suppressPrintIssuesOption?
+        option?
             .Aliases
             .Should()
             .Contain(new[] { "--suppress-print-issues", "-si" });
@@ -155,20 +155,20 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var suppressPrintIssuesOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-progressbar");
-        Assert.NotNull(suppressPrintIssuesOption);
+        var option = rootCommand.Options.FirstOrDefault(opt => opt.Name == "suppress-progressbar");
+        Assert.NotNull(option);
 
-        suppressPrintIssuesOption?
+        option?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        suppressPrintIssuesOption?
+        option?
             .ValueType
             .Should()
             .Be<bool>();
 
-        suppressPrintIssuesOption?
+        option?
             .Aliases
             .Should()
             .Contain(new[] { "--suppress-progressbar", "-sb" });
@@ -181,20 +181,20 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var suppressPrintIssuesOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "license-type-definitions");
-        Assert.NotNull(suppressPrintIssuesOption);
+        var option = rootCommand.Options.FirstOrDefault(opt => opt.Name == "license-type-definitions");
+        Assert.NotNull(option);
 
-        suppressPrintIssuesOption?
+        option?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        suppressPrintIssuesOption?
+        option?
             .ValueType
             .Should()
             .Be<string>();
 
-        suppressPrintIssuesOption?
+        option?
             .Aliases
             .Should()
             .Contain(new[] { "--license-type-definitions", "-td" });
@@ -207,22 +207,74 @@ public sealed class CommandProviderTests
 
         var rootCommand = sut.Get();
 
-        var suppressPrintIssuesOption = rootCommand.Options.FirstOrDefault(opt => opt.Name == "url-type-mapping");
-        Assert.NotNull(suppressPrintIssuesOption);
+        var option = rootCommand.Options.FirstOrDefault(opt => opt.Name == "url-type-mapping");
+        Assert.NotNull(option);
 
-        suppressPrintIssuesOption?
+        option?
             .Description
             .Should()
             .NotBeNullOrWhiteSpace();
 
-        suppressPrintIssuesOption?
+        option?
             .ValueType
             .Should()
             .Be<string>();
 
-        suppressPrintIssuesOption?
+        option?
             .Aliases
             .Should()
             .Contain(new[] { "--url-type-mapping", "-um" });
+    }
+    
+    [Fact]
+    public void Provided_Root_Command_Should_Have_License_Type_Whitelist_Option()
+    {
+        var sut = new ArrangeContext<CommandProvider>().Build();
+
+        var rootCommand = sut.Get();
+
+        var option = rootCommand.Options.FirstOrDefault(opt => opt.Name == "whitelist");
+        Assert.NotNull(option);
+
+        option?
+            .Description
+            .Should()
+            .NotBeNullOrWhiteSpace();
+
+        option?
+            .ValueType
+            .Should()
+            .Be<string>();
+
+        option?
+            .Aliases
+            .Should()
+            .Contain(new[] { "--whitelist", "-w" });
+    }
+    
+    [Fact]
+    public void Provided_Root_Command_Should_Have_License_Type_Blacklist_Option()
+    {
+        var sut = new ArrangeContext<CommandProvider>().Build();
+
+        var rootCommand = sut.Get();
+
+        var option = rootCommand.Options.FirstOrDefault(opt => opt.Name == "blacklist");
+        Assert.NotNull(option);
+
+        option?
+            .Description
+            .Should()
+            .NotBeNullOrWhiteSpace();
+
+        option?
+            .ValueType
+            .Should()
+            .Be<string>();
+
+        option?
+            .Aliases
+            .Should()
+            .Contain(new[] { "--blacklist", "-b" });
     }
 }

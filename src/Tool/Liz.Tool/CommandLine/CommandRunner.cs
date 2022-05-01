@@ -26,7 +26,9 @@ internal sealed class CommandRunner : ICommandRunner
         bool suppressPrintIssues,
         bool suppressProgressbar,
         string? licenseTypeDefinitions,
-        string? urlToLicenseTypeMapping)
+        string? urlToLicenseTypeMapping,
+        string? whitelist,
+        string? blacklist)
     {
         ArgumentNullException.ThrowIfNull(targetFile);
 
@@ -36,7 +38,9 @@ internal sealed class CommandRunner : ICommandRunner
             suppressPrintDetails, 
             suppressPrintIssues,
             licenseTypeDefinitions,
-            urlToLicenseTypeMapping);
+            urlToLicenseTypeMapping,
+            whitelist,
+            blacklist);
 
         ILoggerProvider? loggerProvider;
         IProgressHandler? progressHandler;
@@ -63,7 +67,9 @@ internal sealed class CommandRunner : ICommandRunner
         bool suppressPrintDetails,
         bool suppressPrintIssues,
         string? licenseTypeDefinitionsFile,
-        string? urlToLicenseTypeMappingFile)
+        string? urlToLicenseTypeMappingFile,
+        string? whitelistFile,
+        string? blacklistFile)
     {
         var settings = new ExtractLicensesSettings
         {
@@ -72,7 +78,9 @@ internal sealed class CommandRunner : ICommandRunner
             SuppressPrintDetails = suppressPrintDetails,
             SuppressPrintIssues = suppressPrintIssues,
             LicenseTypeDefinitionsFilePath = licenseTypeDefinitionsFile,
-            UrlToLicenseTypeMappingFilePath = urlToLicenseTypeMappingFile
+            UrlToLicenseTypeMappingFilePath = urlToLicenseTypeMappingFile,
+            LicenseTypeWhitelistFilePath = whitelistFile,
+            LicenseTypeBlacklistFilePath = blacklistFile
         };
 
         return settings;

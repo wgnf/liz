@@ -104,7 +104,9 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var resultProcessors = new IResultProcessor[]
         {
             new PrintPackageDetailsResultProcessor(settings, logger),
-            new PrintPackageIssuesResultProcessor(settings, logger)
+            new PrintPackageIssuesResultProcessor(settings, logger),
+            new ValidateLicenseTypesWhitelistResultProcessor(settings, logger),
+            new ValidateLicenseTypesBlacklistResultProcessor(settings, logger)
         };
 
         var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
@@ -124,7 +126,9 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var preprocessors = new IPreprocessor[]
         {
             new DeserializeLicenseTypeDefinitionsPreprocessor(settings, logger, fileContentProvider),
-            new DeserializeUrlToLicenseTypeMappingPreprocessor(settings, logger, fileContentProvider)
+            new DeserializeUrlToLicenseTypeMappingPreprocessor(settings, logger, fileContentProvider),
+            new DeserializeLicenseTypeWhitelistPreprocessor(settings, logger, fileContentProvider),
+            new DeserializeLicenseTypeBlacklistPreprocessor(settings, logger, fileContentProvider)
         };
 
         var extractLicenses = new ExtractLicenses(

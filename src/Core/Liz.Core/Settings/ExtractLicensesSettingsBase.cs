@@ -60,6 +60,67 @@ public abstract class ExtractLicensesSettingsBase
     /// </summary>
     public string? UrlToLicenseTypeMappingFilePath { get; set; }
 
+    
+    /// <summary>
+    ///     <para>
+    ///         A list of license-types, which are the only ones allowed, when validating the determined license-types.
+    ///         Any license-type which is not in the whitelist will cause the validation to fail.
+    ///     </para>
+    ///     <para>
+    ///         This option is mutually exclusive with <see cref="LicenseTypeBlacklist"/> and
+    ///         <see cref="LicenseTypeBlacklistFilePath"/>
+    ///     </para>
+    /// </summary>
+    public List<string> LicenseTypeWhitelist { get; set; } = new();
+    
+    /// <summary>
+    ///     <para>
+    ///         A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing
+    ///         a list of license-types, which are the only ones allowed, when validating the determined license-types.
+    ///         Any license-type which is not in the whitelist will cause the validation to fail.
+    ///     </para>
+    ///     <para>
+    ///         This option is mutually exclusive with <see cref="LicenseTypeBlacklist"/> and
+    ///         <see cref="LicenseTypeBlacklistFilePath"/>
+    ///     </para>
+    ///     <para>
+    ///         If both <see cref="LicenseTypeWhitelist"/> and <see cref="LicenseTypeWhitelistFilePath"/> are given,
+    ///         those two will be merged
+    ///     </para>
+    /// </summary>
+    public string? LicenseTypeWhitelistFilePath { get; set; }
+
+    /// <summary>
+    ///     <para>
+    ///         A list of license-types, which are the only ones disallowed, when validating the determined license-types.
+    ///         Any license-type that is the same as within that blacklist will cause the validation to fail. Any other
+    ///         license-type is allowed.
+    ///     </para>
+    ///     <para>
+    ///         This option is mutually exclusive with <see cref="LicenseTypeWhitelist"/> and
+    ///         <see cref="LicenseTypeWhitelistFilePath"/>
+    ///     </para>
+    /// </summary>
+    public List<string> LicenseTypeBlacklist { get; set; } = new();
+    
+    /// <summary>
+    ///     <para>
+    ///         A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing
+    ///         a list of license-types, which are the only ones disallowed, when validating the determined license-types.
+    ///         Any license-type that is the same as within that blacklist will cause the validation to fail. Any other
+    ///         license-type is allowed.
+    ///     </para>
+    ///     <para>
+    ///         This option is mutually exclusive with <see cref="LicenseTypeWhitelist"/> and
+    ///         <see cref="LicenseTypeWhitelistFilePath"/>
+    ///     </para>
+    ///     <para>
+    ///         If both <see cref="LicenseTypeBlacklist"/> and <see cref="LicenseTypeBlacklistFilePath"/> are given,
+    ///         those two will be merged
+    ///     </para>
+    /// </summary>
+    public string? LicenseTypeBlacklistFilePath { get; set; }
+
     /// <summary>
     ///     Gets the target file of these settings
     /// </summary>
@@ -86,5 +147,10 @@ public abstract class ExtractLicensesSettingsBase
             !targetFileExtension.Contains("sln", StringComparison.InvariantCultureIgnoreCase))
             throw new SettingsInvalidException("The given target-file is not a csproj, fsproj nor sln file");
 
+        // this will ensure the mutual exclusivity of the license-type whitelist and blacklist
+        if ((LicenseTypeWhitelist.Any() || !string.IsNullOrWhiteSpace(LicenseTypeWhitelistFilePath)) &&
+            (LicenseTypeBlacklist.Any() || !string.IsNullOrWhiteSpace(LicenseTypeBlacklistFilePath)))
+            throw new SettingsInvalidException("License-type whitelist and blacklist are mutually exclusive. " +
+                                               "You cannot use them together. Either use the whitelist or the blacklist.");
     }
 }
