@@ -76,6 +76,8 @@ To analyze a project your solution you have to use
 | `--suppress-progressbar`, `-sb` | If displaying the progressbar should be suppressed or not. </br> Can help when debugging errors or is used in a CI/CD Pipeline </br> Default: `false` |
 | `--license-type-definitions`, `-td` | Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) providing license-type-definitions which describe license-types by providing inclusive/exclusive license-text snippets |
 | `--url-type-mapping`, `-um` | Provide a path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a mapping from license-url (key) to license-type (value) for licenses whose license-type could not be determined |
+| `--whitelist`, `-w` | Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones allowed, when validating the determined license-types. Any license-type which is not in the whitelist will cause the validation to fail. </br> `--whitelist` and `--blacklist` are mutually exclusive! |
+| `--blacklist`, `-b` |  Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones disallowed, when validating the determined license-types. Any license-type that is the same as within that blacklist will cause the validation to fail. Any other license-type is allowed. </br> `--whitelist` and `--blacklist` are mutually exclusive! |
 
 ## Examples
 
@@ -190,4 +192,73 @@ You can also use files that are stored remotely. Just use the web link to the re
 
 # local
 > dotnet liz "path/to/project.csproj" --url-type-mapping "http://path/to/mappings.json"
+```
+
+### Validating license-types
+
+**liz** will validate the license-types of the determined package-references for you, if you provide a whitelist or blacklist. :warning: The options for the whitelist and blacklist are mutually exclusive (they cannot be used together)!  
+What is the difference between a whitelist and a blacklist?
+
+- whitelist: any license-type that is **not** explicitly referenced in the whitelist is not allowed
+- blacklist: any license-type that is explicitly referenced in the blacklist is not allowed
+
+#### Using a whitelist
+
+Create a JSON-File that contains your whitelisted license-types - `whitelist.json` in this case:
+
+```json
+[
+  "MIT",
+  "Unlicense"
+]
+```
+
+This will specifically only allow "MIT" and "Unlicense" licenses.
+
+```bash
+# global
+> liz "path/to/project.csproj" --whitelist "path/to/whitelist.json"
+
+# local
+> dotnet liz "path/to/project.csproj" --whitelist "path/to/whitelist.json"
+```
+
+You can also use files that are stored remotely. Just use the web link to the resource:
+
+```bash
+# global
+> liz "path/to/project.csproj" --whitelist "http://path/to/whitelist.json"
+
+# local
+> dotnet liz "path/to/project.csproj" --whitelist "http://path/to/whitelist.json"
+```
+
+#### Using a  blacklist
+
+Create a JSON-File that contains your blacklisted license-types - `blacklist.json` in this case:
+
+```json
+[
+  "GPL-3.0"
+]
+```
+
+This will specifically disallow "GPL-3.0" licenses.
+
+```bash
+# global
+> liz "path/to/project.csproj" --blacklist "path/to/blacklist.json"
+
+# local
+> dotnet liz "path/to/project.csproj" --blacklist "path/to/blacklist.json"
+```
+
+You can also use files that are stored remotely. Just use the web link to the resource:
+
+```bash
+# global
+> liz "path/to/project.csproj" --blacklist "http://path/to/blacklist.json"
+
+# local
+> dotnet liz "path/to/project.csproj" --blacklist "http://path/to/blacklist.json"
 ```

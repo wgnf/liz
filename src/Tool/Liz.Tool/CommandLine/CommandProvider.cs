@@ -157,7 +157,7 @@ internal sealed class CommandProvider
         var option = new Option<string?>(
             new[] { "--whitelist", "-w" },
             () => null,
-            "Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones allowed, when validating the determined license-types. Any license-type which is not in the whitelist will cause the validation to fail.");
+            "Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones allowed, when validating the determined license-types. Any license-type which is not in the whitelist will cause the validation to fail. '--whitelist' and '--blacklist' are mutually exclusive!");
         return option;
     }
 
@@ -166,7 +166,7 @@ internal sealed class CommandProvider
         var option = new Option<string?>(
             new[] { "--blacklist", "-b" },
             () => null,
-            "Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones disallowed, when validating the determined license-types. Any license-type that is the same as within that blacklist will cause the validation to fail. Any other license-type is allowed.");
+            "Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones disallowed, when validating the determined license-types. Any license-type that is the same as within that blacklist will cause the validation to fail. Any other license-type is allowed. '--whitelist' and '--blacklist' are mutually exclusive!");
         return option;
     }
 }

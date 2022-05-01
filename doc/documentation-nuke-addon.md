@@ -26,7 +26,7 @@ This method can be used to analyze your solution or project according to the pro
 
 ### Settings
 
-The settings contain the following properties which can be set according to your needs
+The settings contain the following options which can be set according to your needs
 
 | Name | Description |
 |------|-------------|
@@ -38,6 +38,10 @@ The settings contain the following properties which can be set according to your
 | `LicenseTypeDefinitionsFilePath` | A path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a list of `LicenseTypeDefinition`s that describe license-types by providing inclusive/exclusive license-text snippets </br> If both `LicenseTypeDefinitions` and `LicenseTypeDefinitionsFilePath` are given those two will be merged |
 | `UrlToLicenseTypeMapping` | A mapping from license-url (key) to license-type (value) for licenses whose license-type could not be determined |
 | `UrlToLicenseTypeMappingFilePath` | A path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a mapping from license-url (key) to license-type (value) for licenses whose license-type could not be determined </br> If both `UrlToLicenseTypeMapping` and `UrlToLicenseTypeMappingFilePath` are given, those two will be merged, ignoring any duplicate keys |
+| `LicenseTypeWhitelist` | A list of license-types, which are the only ones allowed, when validating the determined license-types. Any license-type which is not in the whitelist will cause the validation to fail. </br> This option is mutually exclusive with `LicenseTypeBlacklist` and `LicenseTypeBlacklistFilePath` |
+| `LicenseTypeWhitelistFilePath` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones allowed, when validating the determined license-types. Any license-type which is not in the whitelist will cause the validation to fail. </br> This option is mutually exclusive with `LicenseTypeBlacklist` and `LicenseTypeBlacklistFilePath` </br> If both `LicenseTypeWhitelist` and `LicenseTypeWhitelistFilePath` are given, those two will be merged |
+| `LicenseTypeBlacklist` | A list of license-types, which are the only ones disallowed, when validating the determined license-types. Any license-type that is the same as within that blacklist will cause the validation to fail. Any other license-type is allowed. </br> This option is mutually exclusive with `LicenseTypeWhitelist` and `LicenseTypeWhitelistFilePath` |
+| `LicenseTypeBlacklistFilePath` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones disallowed, when validating the determined license-types. Any license-type that is the same as within that blacklist will cause the validation to fail. Any other license-type is allowed. </br> This option is mutually exclusive with `LicenseTypeWhitelist` and `LicenseTypeWhitelistFilePath` </br> If both `LicenseTypeBlacklist` and `LicenseTypeBlacklistFilePath` are given, those two will be merged |
 
 To support the Nuke-specific way of configuring the settings in a Fluent-API way, following extensions were added as well:
 
@@ -68,6 +72,12 @@ To support the Nuke-specific way of configuring the settings in a Fluent-API way
 | | |
 | `SetUrlToLicenseTypeMapping` | Sets the `UrlToLicenseTypeMapping` property to the given value |
 | `SetUrlToLicenseTypeMappingFilePath` | Sets the `UrlToLicenseTypeMappingFilePath` property to the given value |
+| | |
+| `SetLicenseTypeWhitelist` | Sets the `LicenseTypeWhitelist` property to the given value |
+| `SetLicenseTypeWhitelistFilePath` | Sets the `LicenseTypeWhitelistFilePath` property to the given value |
+| | |
+| `SetLicenseTypeBlacklist` | Sets the `LicenseTypeBlacklist` property to the given value |
+| `SetLicenseTypeBlacklistFilePath` | Sets the `LicenseTypeBlacklistFilePath` property to the given value |
 
 ## Example Usages
 
@@ -92,7 +102,6 @@ To cover a wide variety of license-types there are already lots of definitions a
 But if you want to add a definition by yourself, you can do it, like so:
 
 ```cs
-
 /*
  * this will add the license-type "LIZ-1.0" for every license-text that contains the string
  * "LIZ PUBLIC LICENSE 1.0"
@@ -152,7 +161,6 @@ To cover a wide variety of license-types there are already lots of mappings adde
 But if you want to add a mapping by yourself, you can do it, like so:
 
 ```cs
-
 /*
  * this will add the license-type "LIZ-1.0" for every license-url which is exact "https://liz.com/license"
  */
@@ -180,4 +188,73 @@ await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
 // or even a path to a remote file
 await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
       .SetUrlToLicenseTypeMappingFilePath("http://path/to/file.json"));
+```
+
+### Validating license-types
+
+**liz** will validate the license-types of the determined package-references for you, if you provide a whitelist or blacklist. :warning: The options for the whitelist and blacklist are mutually exclusive (they cannot be used together)!  
+What is the difference between a whitelist and a blacklist?
+
+- whitelist: any license-type that is **not** explicitly referenced in the whitelist is not allowed
+- blacklist: any license-type that is explicitly referenced in the blacklist is not allowed
+
+#### Using a whitelist
+
+```cs
+// this will specifically only allow "MIT" and "Unlicense" licenses
+await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
+  .SetLicenseTypeWhitelist(new List<string>{ "MIT", "Unlicense" });
+```
+
+You can also reference a JSON-file containing a list of whitelisted license-types:  
+  
+example JSON-file:
+
+```json
+[
+  "MIT",
+  "Unlicense"
+]
+```
+
+example usage:
+
+```cs
+// path to a file
+await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
+  .SetLicenseTypeWhitelistFilePath("path/to/file.json");
+
+// or even a path to a remote file
+await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
+  .SetLicenseTypeWhitelistFilePath("http://path/to/file.json");
+```
+
+#### Using a  blacklist
+
+```cs
+// this will specifically disallow "GPL-3.0" licenses
+await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
+  .SetLicenseTypeBlacklist(new List<string>{ "GPL-3.0" });
+```
+
+You can also reference a JSON-file containing a list of blacklisted license-types:  
+  
+example JSON-file:
+
+```json
+[
+  "GPL-3.0"
+]
+```
+
+example usage:
+
+```cs
+// path to a file
+await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
+  .SetLicenseTypeBlacklistFilePath("path/to/file.json");
+
+// or even a path to a remote file
+await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
+  .SetLicenseTypeBlacklistFilePath("http://path/to/file.json");
 ```
