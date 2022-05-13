@@ -39,6 +39,7 @@ public sealed class CommandRunnerTests
             null,
             null,
             null,
+            null,
             null));
     }
 
@@ -69,6 +70,7 @@ public sealed class CommandRunnerTests
             booleanParameter, 
             booleanParameter,
             booleanParameter,
+            null,
             null,
             null,
             null,

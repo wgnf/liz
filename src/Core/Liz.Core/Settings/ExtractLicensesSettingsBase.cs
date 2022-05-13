@@ -120,6 +120,18 @@ public abstract class ExtractLicensesSettingsBase
     ///     </para>
     /// </summary>
     public string? LicenseTypeBlacklistFilePath { get; set; }
+    
+    /// <summary>
+    ///     <para>
+    ///         A path to a directory to where the determined license-texts will be exported
+    ///     </para>
+    ///     <para>
+    ///         Each license-text will be written to an individual file with the file-name being:
+    ///         "{package-name}-{package-version}.txt". If the license-text is the content of a website, the contents
+    ///         will be written into an ".html" file instead
+    ///     </para>
+    /// </summary>
+    public string? ExportLicenseTextsDirectory { get; set; }
 
     /// <summary>
     ///     Gets the target file of these settings

@@ -277,4 +277,30 @@ public sealed class CommandProviderTests
             .Should()
             .Contain(new[] { "--blacklist", "-b" });
     }
+    
+    [Fact]
+    public void Provided_Root_Command_Should_Have_Export_License_Texts_Directory_Option()
+    {
+        var sut = new ArrangeContext<CommandProvider>().Build();
+
+        var rootCommand = sut.Get();
+
+        var option = rootCommand.Options.FirstOrDefault(opt => opt.Name == "export-texts");
+        Assert.NotNull(option);
+
+        option?
+            .Description
+            .Should()
+            .NotBeNullOrWhiteSpace();
+
+        option?
+            .ValueType
+            .Should()
+            .Be<string>();
+
+        option?
+            .Aliases
+            .Should()
+            .Contain(new[] { "--export-texts", "-et" });
+    }
 }
