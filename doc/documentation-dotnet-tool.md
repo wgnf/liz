@@ -78,6 +78,7 @@ To analyze a project your solution you have to use
 | `--url-type-mapping`, `-um` | Provide a path to a JSON-file (local or remote - remote will be downloaded automatically if available) containing a mapping from license-url (key) to license-type (value) for licenses whose license-type could not be determined |
 | `--whitelist`, `-w` | Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones allowed, when validating the determined license-types. Any license-type which is not in the whitelist will cause the validation to fail. </br> `--whitelist` and `--blacklist` are mutually exclusive! |
 | `--blacklist`, `-b` |  Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones disallowed, when validating the determined license-types. Any license-type that is the same as within that blacklist will cause the validation to fail. Any other license-type is allowed. </br> `--whitelist` and `--blacklist` are mutually exclusive! |
+| `--export-texts`, `-et` | A path to a directory to where the determined license-texts will be exported. </br> Each license-text will be written to an individual file with the file-name being: `<package-name>-<package-version>.txt`. If the license-text is the content of a website, the contents will be written into an \".html\" file instead | 
 
 ## Examples
 
