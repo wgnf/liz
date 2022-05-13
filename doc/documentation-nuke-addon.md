@@ -42,6 +42,7 @@ The settings contain the following options which can be set according to your ne
 | `LicenseTypeWhitelistFilePath` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones allowed, when validating the determined license-types. Any license-type which is not in the whitelist will cause the validation to fail. </br> This option is mutually exclusive with `LicenseTypeBlacklist` and `LicenseTypeBlacklistFilePath` </br> If both `LicenseTypeWhitelist` and `LicenseTypeWhitelistFilePath` are given, those two will be merged |
 | `LicenseTypeBlacklist` | A list of license-types, which are the only ones disallowed, when validating the determined license-types. Any license-type that is the same as within that blacklist will cause the validation to fail. Any other license-type is allowed. </br> This option is mutually exclusive with `LicenseTypeWhitelist` and `LicenseTypeWhitelistFilePath` |
 | `LicenseTypeBlacklistFilePath` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones disallowed, when validating the determined license-types. Any license-type that is the same as within that blacklist will cause the validation to fail. Any other license-type is allowed. </br> This option is mutually exclusive with `LicenseTypeWhitelist` and `LicenseTypeWhitelistFilePath` </br> If both `LicenseTypeBlacklist` and `LicenseTypeBlacklistFilePath` are given, those two will be merged |
+| `ExportLicenseTextsDirectory` | A path to a directory to where the determined license-texts will be exported </br> Each license-text will be written to an individual file with the file-name being: `<package-name>-<package-version>.txt`. If the license-text is the content of a website, the contents will be written into an ".html" file instead |
 
 To support the Nuke-specific way of configuring the settings in a Fluent-API way, following extensions were added as well:
 
@@ -78,6 +79,8 @@ To support the Nuke-specific way of configuring the settings in a Fluent-API way
 | | |
 | `SetLicenseTypeBlacklist` | Sets the `LicenseTypeBlacklist` property to the given value |
 | `SetLicenseTypeBlacklistFilePath` | Sets the `LicenseTypeBlacklistFilePath` property to the given value |
+| | |
+| `SetExportLicenseTextsDirectory` | Sets the `ExportLicenseTextsDirectory` property to the given value |
 
 ## Example Usages
 

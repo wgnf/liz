@@ -14,5 +14,6 @@ public interface ICommandRunner
         string? licenseTypeDefinitions,
         string? urlToLicenseTypeMapping,
         string? whitelist,
-        string? blacklist);
+        string? blacklist,
+        string? exportTexts);
 }

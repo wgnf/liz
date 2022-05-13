@@ -445,4 +445,33 @@ public static class ExtractLicensesSettingsExtensions
         settings.LicenseTypeBlacklistFilePath = licenseTypeBlacklistFilePath;
         return settings;
     }
+
+    /// <summary>
+    ///     <para>
+    ///         A path to a directory to where the determined license-texts will be exported
+    ///     </para>
+    ///     <para>
+    ///         Each license-text will be written to an individual file with the file-name being:
+    ///         "{package-name}-{package-version}.txt". If the license-text is the content of a website, the contents
+    ///         will be written into an ".html" file instead
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="exportLicenseTextsDirectory">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the parameter <paramref name="settings"/> is null</exception>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when the parameter <paramref name="exportLicenseTextsDirectory"/> is either null, empty or whitespace
+    /// </exception>
+    public static ExtractLicensesSettings SetExportLicenseTextsDirectory(
+        this ExtractLicensesSettings settings,
+        string exportLicenseTextsDirectory)
+    {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (string.IsNullOrWhiteSpace(exportLicenseTextsDirectory))
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(exportLicenseTextsDirectory));
+
+        settings.ExportLicenseTextsDirectory = exportLicenseTextsDirectory;
+        return settings;
+    }
 }

@@ -30,7 +30,8 @@ internal sealed class CommandProvider
             string? licenseTypeDefinitions,
             string? urlToLicenseTypeMapping,
             string? whitelist,
-            string? blacklist) =>
+            string? blacklist,
+            string? exportTexts) =>
         {
             await _commandRunner.RunAsync(
                 targetFile, 
@@ -42,7 +43,8 @@ internal sealed class CommandProvider
                 licenseTypeDefinitions,
                 urlToLicenseTypeMapping,
                 whitelist,
-                blacklist)
+                blacklist,
+                exportTexts)
                 .ConfigureAwait(false);
         }, symbols.ToArray());
 
@@ -76,7 +78,8 @@ internal sealed class CommandProvider
             GetLicenseTypeDefinitionsOption(),
             GetUrlToLicenseTypeMappingOption(),
             GetLicenseTypeWhitelistOption(),
-            GetLicenseTypeBlacklistOption()
+            GetLicenseTypeBlacklistOption(),
+            GetExportLicenseTextsDirectoryOption()
         };
         return options;
     }
@@ -167,6 +170,15 @@ internal sealed class CommandProvider
             new[] { "--blacklist", "-b" },
             () => null,
             "Provide a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of license-types, which are the only ones disallowed, when validating the determined license-types. Any license-type that is the same as within that blacklist will cause the validation to fail. Any other license-type is allowed. '--whitelist' and '--blacklist' are mutually exclusive!");
+        return option;
+    }
+
+    private static Option GetExportLicenseTextsDirectoryOption()
+    {
+        var option = new Option<string?>(
+            new[] { "--export-texts", "-et" },
+            () => null,
+            "A path to a directory to where the determined license-texts will be exported. Each license-text will be written to an individual file with the file-name being: \"<package-name>-<package-version>.txt\". If the license-text is the content of a website, the contents will be written into an \".html\" file instead");
         return option;
     }
 }

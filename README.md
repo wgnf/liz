@@ -31,11 +31,13 @@
 - (Try to) determine the license-type from the license-text, if no license-type could be determined
 - (Try to) determine the license-type from the license-url, if no license-type could be determined
 - Validate the determined package-references and their license-types against a provided whitelist/blacklist
+- Export license-information in various forms:
+  - license-texts into text-files in a given directory
 
 ### Planned features
 
 - [#11](https://github.com/wgnf/liz/issues/11) & [#12](https://github.com/wgnf/liz/issues/12) Mapping from package-reference to license-information
-- [#15](https://github.com/wgnf/liz/issues/15) & [#16](https://github.com/wgnf/liz/issues/16) Export license-information in various forms to a given directory/file
+- [#16](https://github.com/wgnf/liz/issues/16) Export license-information in various forms to a given directory/file
 - [#5](https://github.com/wgnf/liz/issues/5) & [#7](https://github.com/wgnf/liz/issues/7) Filter for projects and dependencies
 - [#6](https://github.com/wgnf/liz/issues/6) Ability to provide manual dependencies
 - [#1](https://github.com/wgnf/liz/issues/1) Caching for even faster analyzation times

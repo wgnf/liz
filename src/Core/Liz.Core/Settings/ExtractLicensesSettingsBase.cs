@@ -120,6 +120,18 @@ public abstract class ExtractLicensesSettingsBase
     ///     </para>
     /// </summary>
     public string? LicenseTypeBlacklistFilePath { get; set; }
+    
+    /// <summary>
+    ///     <para>
+    ///         A path to a directory to where the determined license-texts will be exported
+    ///     </para>
+    ///     <para>
+    ///         Each license-text will be written to an individual file with the file-name being:
+    ///         "{package-name}-{package-version}.txt". If the license-text is the content of a website, the contents
+    ///         will be written into an ".html" file instead
+    ///     </para>
+    /// </summary>
+    public string? ExportLicenseTextsDirectory { get; set; }
 
     /// <summary>
     ///     Gets the target file of these settings
@@ -133,10 +145,19 @@ public abstract class ExtractLicensesSettingsBase
     /// <exception cref="SettingsInvalidException">Thrown when there is an issue with the settings</exception>
     public void EnsureValidity()
     {
+        ValidateTargetFile();
+        ValidateWhitelistAndBlacklist();
+        ValidateExportTextsDirectory();
+    }
+
+    private void ValidateTargetFile()
+    {
         var targetFile = GetTargetFile();
-        
+
         if (string.IsNullOrWhiteSpace(targetFile))
             throw new SettingsInvalidException("The target-file cannot be null/empty/whitespace");
+
+        ValidatePath(targetFile, "TargetFile");
 
         if (!File.Exists(targetFile))
             throw new SettingsInvalidException("The given target-file does not exist");
@@ -146,11 +167,37 @@ public abstract class ExtractLicensesSettingsBase
             !targetFileExtension.Contains("fsproj", StringComparison.InvariantCultureIgnoreCase) &&
             !targetFileExtension.Contains("sln", StringComparison.InvariantCultureIgnoreCase))
             throw new SettingsInvalidException("The given target-file is not a csproj, fsproj nor sln file");
+    }
 
+    private void ValidateWhitelistAndBlacklist()
+    {
         // this will ensure the mutual exclusivity of the license-type whitelist and blacklist
         if ((LicenseTypeWhitelist.Any() || !string.IsNullOrWhiteSpace(LicenseTypeWhitelistFilePath)) &&
             (LicenseTypeBlacklist.Any() || !string.IsNullOrWhiteSpace(LicenseTypeBlacklistFilePath)))
             throw new SettingsInvalidException("License-type whitelist and blacklist are mutually exclusive. " +
                                                "You cannot use them together. Either use the whitelist or the blacklist.");
+    }
+
+    private void ValidateExportTextsDirectory()
+    {
+        if (!string.IsNullOrWhiteSpace(ExportLicenseTextsDirectory))
+            ValidatePath(ExportLicenseTextsDirectory, nameof(ExportLicenseTextsDirectory));
+    }
+
+    private void ValidatePath(string path, string settingsName)
+    {
+        try
+        {
+            /*
+             * According to https://stackoverflow.com/a/3137165/8242470 "Path.GetFullPath" can be used to check if a
+             * path is a valid path as it will throw when it is not
+             */
+            _ = Path.GetFullPath(path);
+        }
+        catch (Exception exception)
+        {
+            throw new SettingsInvalidException(
+                $"The given path '{path}' for setting '{settingsName}' is not a valid path", exception);
+        }
     }
 }

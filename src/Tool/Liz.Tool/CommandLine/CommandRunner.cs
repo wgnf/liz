@@ -28,7 +28,8 @@ internal sealed class CommandRunner : ICommandRunner
         string? licenseTypeDefinitions,
         string? urlToLicenseTypeMapping,
         string? whitelist,
-        string? blacklist)
+        string? blacklist,
+        string? exportTexts)
     {
         ArgumentNullException.ThrowIfNull(targetFile);
 
@@ -40,7 +41,8 @@ internal sealed class CommandRunner : ICommandRunner
             licenseTypeDefinitions,
             urlToLicenseTypeMapping,
             whitelist,
-            blacklist);
+            blacklist,
+            exportTexts);
 
         ILoggerProvider? loggerProvider;
         IProgressHandler? progressHandler;
@@ -69,7 +71,8 @@ internal sealed class CommandRunner : ICommandRunner
         string? licenseTypeDefinitionsFile,
         string? urlToLicenseTypeMappingFile,
         string? whitelistFile,
-        string? blacklistFile)
+        string? blacklistFile,
+        string? exportTextsDirectory)
     {
         var settings = new ExtractLicensesSettings
         {
@@ -80,7 +83,8 @@ internal sealed class CommandRunner : ICommandRunner
             LicenseTypeDefinitionsFilePath = licenseTypeDefinitionsFile,
             UrlToLicenseTypeMappingFilePath = urlToLicenseTypeMappingFile,
             LicenseTypeWhitelistFilePath = whitelistFile,
-            LicenseTypeBlacklistFilePath = blacklistFile
+            LicenseTypeBlacklistFilePath = blacklistFile,
+            ExportLicenseTextsDirectory = exportTextsDirectory
         };
 
         return settings;
