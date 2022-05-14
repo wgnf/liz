@@ -1,0 +1,23 @@
+name: 🆕 Feature Request
+description: Request a new feature/enhancement
+title: "[FEAT]: "
+labels: ["enhancement"]
+assignees: ["wgnf"]
+body:
+  - type: markdown
+    attributes:
+      value: Please make sure that this request hasn't already bin submitted by someone else
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the feature/enhancement
+      description: Please give a brief description of the feature or enhancement you would like to see
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: Provide any additional information that might be useful to understand what this is trying to achieve or how this might be achieved (e.g. proposed solutions, links, screenshots, user/usage scenarios, ...)

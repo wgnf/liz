@@ -1,0 +1,36 @@
+name: 🐞 Bug Report
+description: File a bug report
+title: "[BUG]: "
+labels: ["bug"]
+assignees: ["wgnf"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to file a bug report. Please make sure that aren't any issues open for the same issue/bug/topic.
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the bug
+      description: Please give a brief description of what happened and what should have happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Steps the reproduce the faulty behavior.
+      placeholder: |
+        1. Do this
+        2. Do that
+        3. Run something other
+        4. See the error
+    validations:
+      required: true
+  
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: Provide any additional information that might be useful, such as logs, screenshots, ...
