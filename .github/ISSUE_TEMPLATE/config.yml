@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Ask Questions
+    url: https://github.com/wgnf/liz/discussions/categories/q-a
+    about: If you have any questions (general, contributing, coding, features, ...) feel free to ask them in our GitHub-Discussions
+  - name: Share Ideas
+    url: https://github.com/wgnf/liz/discussions/categories/ideas
+    about: Share ideas for new features or changes for existing features in our GitHub-Discussions
+  - name: Show and Tell
+    url: https://github.com/wgnf/liz/discussions/categories/show-and-tell
+    about: Do you have something that you want to show us? You can share them in our GitHub-Discussions
