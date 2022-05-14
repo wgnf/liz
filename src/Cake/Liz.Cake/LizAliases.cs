@@ -38,7 +38,7 @@ public static class LizAliases
 
         var extractLicenses = GetExtractLicensesInstance(context, settings);
 
-        var packageReferences = await extractLicenses.ExtractAsync();
+        var packageReferences = await extractLicenses.ExtractAsync().ConfigureAwait(false);
         return packageReferences;
     }
 

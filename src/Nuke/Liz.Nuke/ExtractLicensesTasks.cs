@@ -31,7 +31,7 @@ public static class ExtractLicensesTasks
         var settings = configureSettings.Invoke(new ExtractLicensesSettings());
         var extractLicenses = GetExtractLicensesInstance(settings);
 
-        var packageReferences = await extractLicenses.ExtractAsync();
+        var packageReferences = await extractLicenses.ExtractAsync().ConfigureAwait(false);
         return packageReferences;
     }
 

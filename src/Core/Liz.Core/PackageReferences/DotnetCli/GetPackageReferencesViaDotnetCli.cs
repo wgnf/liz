@@ -23,8 +23,8 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
     {
         if (project == null) throw new ArgumentNullException(nameof(project));
 
-        await RunDotNetRestore(project);
-        var result = await RunDotNetListPackage(project, includeTransitive);
+        await RunDotNetRestore(project).ConfigureAwait(false);
+        var result = await RunDotNetListPackage(project, includeTransitive).ConfigureAwait(false);
         var packageReferences = GetPackageReferencesFromListPackageResult(result);
 
         return packageReferences;
@@ -32,15 +32,15 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
 
     private async Task RunDotNetRestore(Project project)
     {
-        await _cliToolExecutor.ExecuteAsync("dotnet", $"restore {project.File}");
+        await _cliToolExecutor.ExecuteAsync("dotnet", $"restore {project.File}").ConfigureAwait(false);
     }
 
     private async Task<string> RunDotNetListPackage(Project project, bool includeTransitive)
     {
         // c.f.: https://docs.microsoft.com/de-de/dotnet/core/tools/dotnet-list-package
         var arguments = $"list \"{project.File}\" package {(includeTransitive ? "--include-transitive" : "")}";
-        
-        var result = await _cliToolExecutor.ExecuteWithResultAsync("dotnet", arguments);
+
+        var result = await _cliToolExecutor.ExecuteWithResultAsync("dotnet", arguments).ConfigureAwait(false);
         return result;
     }
 

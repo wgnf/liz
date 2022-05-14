@@ -21,7 +21,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         if (string.IsNullOrWhiteSpace(fileName))
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(fileName));
 
-        _ = await ExecuteWithResultAsync(fileName, arguments);
+        _ = await ExecuteWithResultAsync(fileName, arguments).ConfigureAwait(false);
     }
     
     public async Task<string> ExecuteWithResultAsync(string fileName, string arguments)
@@ -30,7 +30,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         if (string.IsNullOrWhiteSpace(fileName))
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(fileName));
 
-        var result = await ExecuteInternalAsync(fileName, arguments);
+        var result = await ExecuteInternalAsync(fileName, arguments).ConfigureAwait(false);
         return result;
     }
 
@@ -50,8 +50,8 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
          * you have to read the StandardOutput/StandardError before waiting or else you can get problems
          * (like an endless wait for the process to finish)
          */
-        var standardOutput = await GatherStandardOutput(process);
-        var errorOutput = await GatherErrorOutput(process);
+        var standardOutput = await GatherStandardOutput(process).ConfigureAwait(false);
+        var errorOutput = await GatherErrorOutput(process).ConfigureAwait(false);
         
         process.WaitForExit();
 
@@ -92,7 +92,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
     private async static Task<string> GatherErrorOutput(Process process)
     {
         var standardError = process.StandardError;
-        var errorOutput = await standardError.ReadToEndAsync();
+        var errorOutput = await standardError.ReadToEndAsync().ConfigureAwait(false);
 
         return errorOutput;
     }
@@ -100,8 +100,8 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
     private async static Task<string> GatherStandardOutput(Process process)
     {
         var standardOutput = process.StandardOutput;
-        var standardOutputResult = await standardOutput.ReadToEndAsync();
-
+        var standardOutputResult = await standardOutput.ReadToEndAsync().ConfigureAwait(false);
+        
         return standardOutputResult;
     }
 }

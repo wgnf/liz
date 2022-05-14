@@ -60,7 +60,7 @@ internal sealed class CommandRunner : ICommandRunner
             progressHandler = (IProgressHandler) loggerProvider.Get(logLevel);
         }
         var extractLicenses = _extractLicensesFactory.Create(settings, loggerProvider, logLevel, progressHandler);
-        await extractLicenses.ExtractAsync();
+        await extractLicenses.ExtractAsync().ConfigureAwait(false);
     }
 
     private static ExtractLicensesSettingsBase CreateSettings(

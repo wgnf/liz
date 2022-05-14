@@ -41,7 +41,7 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
 
         await GetLicenseInformationFromLicenseElementAsync(
             licenseInformationContext,
-            licenseInformationContext.NugetSpecificationFileXml);
+            licenseInformationContext.NugetSpecificationFileXml).ConfigureAwait(false);
     }
 
     private async Task GetLicenseInformationFromLicenseElementAsync(
@@ -52,7 +52,8 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
             return;
 
         _logger.LogDebug("Found 'license' element");
-        await GetLicenseInformationBasedOnLicenseElementAsync(licenseInformationContext, licenseElement);
+        await GetLicenseInformationBasedOnLicenseElementAsync(licenseInformationContext, licenseElement)
+            .ConfigureAwait(false);
     }
 
     private bool TryGetLicenseElement(XContainer nugetSpecificationXml, out XElement? licenseElement)
@@ -107,7 +108,7 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
                 HandleLicenseExpression(licenseInformationContext, licenseElementValue);
                 break;
             case "file":
-                await HandleLicenseFileAsync(licenseInformationContext, licenseElementValue);
+                await HandleLicenseFileAsync(licenseInformationContext, licenseElementValue).ConfigureAwait(false);
                 break;
             default:
                 throw new InvalidOperationException(
@@ -144,7 +145,8 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
             return;
         }
 
-        var rawLicenseTextFromFile = await _fileSystem.File.ReadAllTextAsync(licenseFileInfo.FullName);
+        var rawLicenseTextFromFile =
+            await _fileSystem.File.ReadAllTextAsync(licenseFileInfo.FullName).ConfigureAwait(false);
         licenseInformationContext.LicenseInformation.Text = rawLicenseTextFromFile;
     }
 }

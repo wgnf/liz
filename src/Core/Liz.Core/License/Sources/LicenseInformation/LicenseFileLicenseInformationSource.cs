@@ -40,7 +40,7 @@ internal sealed class LicenseFileLicenseInformationSource : ILicenseInformationS
 
         await GetLicenseInformationFromLicenseFileAsync(
             licenseInformationContext.ArtifactDirectory,
-            licenseInformationContext);
+            licenseInformationContext).ConfigureAwait(false);
     }
 
     private async Task GetLicenseInformationFromLicenseFileAsync(
@@ -57,7 +57,7 @@ internal sealed class LicenseFileLicenseInformationSource : ILicenseInformationS
         _logger.LogDebug("Reading content as raw license-text...");
 
         using var streamReader = licenseFile.OpenText();
-        var licenseText = await streamReader.ReadToEndAsync();
+        var licenseText = await streamReader.ReadToEndAsync().ConfigureAwait(false);
         licenseInformationContext.LicenseInformation.Text = licenseText;
     }
 

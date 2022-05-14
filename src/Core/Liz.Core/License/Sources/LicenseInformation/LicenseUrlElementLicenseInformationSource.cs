@@ -32,8 +32,8 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
         _logger.LogDebug("Get license-information from 'licenseUrl' element from the 'nuspec' file...");
 
         await GetLicenseInformationFromLicenseUrlElementAsync(
-            licenseInformationContext, 
-            licenseInformationContext.NugetSpecificationFileXml);
+            licenseInformationContext,
+            licenseInformationContext.NugetSpecificationFileXml).ConfigureAwait(false);
     }
 
     private async Task GetLicenseInformationFromLicenseUrlElementAsync(
@@ -44,7 +44,8 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
             return;
         
         _logger.LogDebug("Found 'licenseUrl' element");
-        await GetLicenseInformationBasedOnLicenseUrlElementAsync(licenseInformationContext, licenseUrlElement);
+        await GetLicenseInformationBasedOnLicenseUrlElementAsync(licenseInformationContext, licenseUrlElement)
+            .ConfigureAwait(false);
     }
 
     private bool TryGetLicenseUrlElement(XContainer nugetSpecificationXml, out XElement? licenseUrlElement)
@@ -89,16 +90,16 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
          * Because when it already was determined we can assume that it's already the right one
          */
         if (!string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text)) return;
-        await HandleLicenseUrlAsync(licenseInformationContext, licenseUrlElementValue);
+        await HandleLicenseUrlAsync(licenseInformationContext, licenseUrlElementValue).ConfigureAwait(false);
     }
 
     private async Task HandleLicenseUrlAsync(GetLicenseInformationContext licenseInformationContext, string licenseUrl)
     {
         var isWebResource = licenseUrl.StartsWith("http");
         if (isWebResource)
-            await HandleLicenseWebResourceAsync(licenseInformationContext, licenseUrl);
+            await HandleLicenseWebResourceAsync(licenseInformationContext, licenseUrl).ConfigureAwait(false);
         else
-            await HandleLicenseFileAsync(licenseInformationContext, licenseUrl);
+            await HandleLicenseFileAsync(licenseInformationContext, licenseUrl).ConfigureAwait(false);
     }
 
     private async Task HandleLicenseFileAsync(
@@ -120,7 +121,8 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
             return;
         }
 
-        var rawLicenseTextFromFile = await _fileSystem.File.ReadAllTextAsync(licenseFileInfo.FullName);
+        var rawLicenseTextFromFile =
+            await _fileSystem.File.ReadAllTextAsync(licenseFileInfo.FullName).ConfigureAwait(false);
         licenseInformationContext.LicenseInformation.Text = rawLicenseTextFromFile;
     }
     
@@ -132,7 +134,7 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
 
         try
         {
-            var rawLicenseText = await _httpClient.GetStringAsync(licenseUrl);
+            var rawLicenseText = await _httpClient.GetStringAsync(licenseUrl).ConfigureAwait(false);
             licenseInformationContext.LicenseInformation.Text = rawLicenseText;
         }
         catch (Exception ex)

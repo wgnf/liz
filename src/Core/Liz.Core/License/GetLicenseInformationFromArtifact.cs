@@ -29,16 +29,16 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
     {
         if (downloadDirectory == null) throw new ArgumentNullException(nameof(downloadDirectory));
 
-        var licenseInformation = await GetFromArtifactAsync(downloadDirectory);
+        var licenseInformation = await GetFromArtifactAsync(downloadDirectory).ConfigureAwait(false);
         return licenseInformation;
     }
 
     private async Task<LicenseInformation> GetFromArtifactAsync(IDirectoryInfo artifactDirectory)
     {
-        var licenseInformationContext = await CreateContext(artifactDirectory);
+        var licenseInformationContext = await CreateContext(artifactDirectory).ConfigureAwait(false);
 
         foreach (var licenseInformationSource in _licenseInformationSources.OrderBy(e => e.Order))
-            await licenseInformationSource.GetInformationAsync(licenseInformationContext);
+            await licenseInformationSource.GetInformationAsync(licenseInformationContext).ConfigureAwait(false);
 
         return licenseInformationContext.LicenseInformation;
     }
@@ -48,7 +48,7 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
         var licenseInformationContext = new GetLicenseInformationContext
         {
             ArtifactDirectory = artifactDirectory,
-            NugetSpecificationFileXml = await GetNugetSpecificationFileXmlAsync(artifactDirectory)
+            NugetSpecificationFileXml = await GetNugetSpecificationFileXmlAsync(artifactDirectory).ConfigureAwait(false)
         };
         return licenseInformationContext;
     }
@@ -63,7 +63,8 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
 
         _logger.LogDebug($"Found '.nuspec' file: {nugetSpecificationFile}");
 
-        var nugetSpecificationFileAsync = await LoadNugetSpecificationFileAsXmlFileAsync(nugetSpecificationFile);
+        var nugetSpecificationFileAsync =
+            await LoadNugetSpecificationFileAsXmlFileAsync(nugetSpecificationFile).ConfigureAwait(false);
         return nugetSpecificationFileAsync;
     }
 
@@ -100,7 +101,9 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
     {
         await using var fileStream =
             _fileSystem.FileStream.Create(nugetSpecificationFile.FullName, FileMode.Open, FileAccess.Read);
-        var xmlDocument = await XDocument.LoadAsync(fileStream, LoadOptions.None, CancellationToken.None);
+        var xmlDocument = await XDocument
+            .LoadAsync(fileStream, LoadOptions.None, CancellationToken.None)
+            .ConfigureAwait(false);
 
         return xmlDocument;
     }

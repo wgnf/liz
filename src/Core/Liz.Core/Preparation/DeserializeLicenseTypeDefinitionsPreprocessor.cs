@@ -34,7 +34,7 @@ internal sealed class DeserializeLicenseTypeDefinitionsPreprocessor : IPreproces
         {
             _logger.LogDebug($"Preprocess: getting license-type-definitions from file {targetFilePath}...");
 
-            var fileContent = await _fileContentProvider.GetFileContentAsync(targetFilePath);
+            var fileContent = await _fileContentProvider.GetFileContentAsync(targetFilePath).ConfigureAwait(false);
             var licenseTypeDefinitionsFromFile = DeserializeLicenseTypeDefinitions(fileContent);
             AddToSettings(licenseTypeDefinitionsFromFile);
         }

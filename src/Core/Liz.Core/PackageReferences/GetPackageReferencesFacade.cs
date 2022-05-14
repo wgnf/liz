@@ -51,7 +51,9 @@ internal sealed class GetPackageReferencesFacade : IGetPackageReferences
         _logger.LogDebug($"Project '{project.Name} ({project.File})' " +
                          "appears to be in SDK-Style-Format. Getting package-references via dotnet cli...");
 
-        var packageReferences = await _getPackageReferencesViaDotnetCli.GetFromProjectAsync(project, includeTransitive);
+        var packageReferences = await _getPackageReferencesViaDotnetCli
+            .GetFromProjectAsync(project, includeTransitive)
+            .ConfigureAwait(false);
         return packageReferences;
     }
 
@@ -60,7 +62,9 @@ internal sealed class GetPackageReferencesFacade : IGetPackageReferences
         _logger.LogDebug($"Project '{project.Name} ({project.File})' " +
                          "appears to be in non-SDK-Style-Format. Getting package-references via packages.config...");
 
-        var packageReferences = await _getPackageReferencesViaPackagesConfig.GetFromProjectAsync(project, includeTransitive);
+        var packageReferences = await _getPackageReferencesViaPackagesConfig
+            .GetFromProjectAsync(project, includeTransitive)
+            .ConfigureAwait(false);
         return packageReferences;
     }
 }

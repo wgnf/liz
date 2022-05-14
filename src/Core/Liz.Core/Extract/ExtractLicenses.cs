@@ -61,13 +61,13 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         try
         {
-            await PrepareAsync();
+            await PrepareAsync().ConfigureAwait(false);
             var projects = GetProjects(_settings.GetTargetFile()!).ToList();
 
-            await DownloadPackageReferencesFor(projects);
+            await DownloadPackageReferencesFor(projects).ConfigureAwait(false);
             
-            var packageReferences = (await GetPackageReferencesAsync(projects)).ToList();
-            await EnrichWithLicenseInformationAsync(packageReferences);
+            var packageReferences = (await GetPackageReferencesAsync(projects).ConfigureAwait(false)).ToList();
+            await EnrichWithLicenseInformationAsync(packageReferences).ConfigureAwait(false);
 
             packageReferences = packageReferences
                 /*
@@ -79,7 +79,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
             
             _progressHandler?.FinishMainProcess();
 
-            await ProcessResultsAsync(packageReferences);
+            await ProcessResultsAsync(packageReferences).ConfigureAwait(false);
             return packageReferences;
         }
         catch (Exception ex)
@@ -168,8 +168,8 @@ internal sealed class ExtractLicenses : IExtractLicenses
         foreach (var project in projectsList)
         {
             _progressHandler?.TickCurrentSubProcess($"Get package-references: {project.Name}");
-            
-            var referencesFromProject = await GetPackageReferencesForProjectAsync(project);
+
+            var referencesFromProject = await GetPackageReferencesForProjectAsync(project).ConfigureAwait(false);
             packageReferences.AddRange(referencesFromProject);
         }
         
@@ -187,7 +187,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
             _logger.LogDebug($"Trying to get package-references for project '{project.Name} ({project.File})'...");
 
             var packageReferences = (await _getPackageReferences
-                .GetFromProjectAsync(project, _settings.IncludeTransitiveDependencies)).ToList();
+                .GetFromProjectAsync(project, _settings.IncludeTransitiveDependencies).ConfigureAwait(false)).ToList();
 
             var foundReferencesLogString = string.Join($"{Environment.NewLine}",
                 packageReferences.Select(reference =>
@@ -215,8 +215,8 @@ internal sealed class ExtractLicenses : IExtractLicenses
         foreach (var packageReference in packageReferencesList)
         {
             _progressHandler?.TickCurrentSubProcess($"Get license information: {packageReference.Name}");
-            
-            await EnrichWithLicenseInformationForPackageReferenceAsync(packageReference);
+
+            await EnrichWithLicenseInformationForPackageReferenceAsync(packageReference).ConfigureAwait(false);
         }
     }
 
@@ -226,7 +226,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         {
             _logger.LogDebug($"Trying to get license information for {packageReference}...");
 
-            await _enrichPackageReferenceWithLicenseInformation.EnrichAsync(packageReference);
+            await _enrichPackageReferenceWithLicenseInformation.EnrichAsync(packageReference).ConfigureAwait(false);
             _logger.LogDebug($"Found following license-type: '{packageReference.LicenseInformation}'");
         }
         catch (Exception exception)

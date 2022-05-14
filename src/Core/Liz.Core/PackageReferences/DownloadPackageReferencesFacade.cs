@@ -49,10 +49,14 @@ internal sealed class DownloadPackageReferencesFacade : IDownloadPackageReferenc
         switch (project.FormatStyle)
         {
             case ProjectFormatStyle.SdkStyle:
-                await _downloadPackageReferencesViaDotnetCli.DownloadForProjectAsync(project, targetDirectory);
+                await _downloadPackageReferencesViaDotnetCli
+                    .DownloadForProjectAsync(project, targetDirectory)
+                    .ConfigureAwait(false);
                 break;
             case ProjectFormatStyle.NonSdkStyle:
-                await _downloadPackageReferencesViaNugetCli.DownloadForProjectAsync(project, targetDirectory);
+                await _downloadPackageReferencesViaNugetCli
+                    .DownloadForProjectAsync(project, targetDirectory)
+                    .ConfigureAwait(false);
                 break;
 
             case ProjectFormatStyle.Unknown:

@@ -34,8 +34,8 @@ internal sealed class DownloadPackageReferencesViaNugetCli : IDownloadPackageRef
 
         var projectFileName = project.File.FullName;
         var nugetTargetDirectory = GetNugetTargetDirectory(targetDirectory);
-        
-        await DownloadPackageReferencesAsync(projectFileName, nugetTargetDirectory);
+
+        await DownloadPackageReferencesAsync(projectFileName, nugetTargetDirectory).ConfigureAwait(false);
         UnzipNugetPackages(nugetTargetDirectory);
     }
 
@@ -44,7 +44,7 @@ internal sealed class DownloadPackageReferencesViaNugetCli : IDownloadPackageRef
         var targetDirectoryName = targetDirectory.FullName;
         
         var arguments = $"restore \"{projectFileName}\"  -PackagesDirectory \"{targetDirectoryName}\" -Force -NonInteractive";
-        await _cliToolExecutor.ExecuteAsync("nuget", arguments);
+        await _cliToolExecutor.ExecuteAsync("nuget", arguments).ConfigureAwait(false);
     }
     
     private static IDirectoryInfo GetNugetTargetDirectory(IDirectoryInfo targetDirectory)

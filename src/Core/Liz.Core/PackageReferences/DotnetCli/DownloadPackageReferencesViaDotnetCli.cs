@@ -30,7 +30,7 @@ internal sealed class DownloadPackageReferencesViaDotnetCli : IDownloadPackageRe
         var dotnetTargetDirectoryName = GetDotnetTargetDirectory(targetDirectory).FullName;
 
         var arguments = $"restore \"{projectFileName}\" --packages \"{dotnetTargetDirectoryName}\" --force";
-        await _cliToolExecutor.ExecuteAsync("dotnet", arguments);
+        await _cliToolExecutor.ExecuteAsync("dotnet", arguments).ConfigureAwait(false);
     }
     
     private static IDirectoryInfo GetDotnetTargetDirectory(IDirectoryInfo targetDirectory)

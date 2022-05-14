@@ -32,7 +32,7 @@ internal sealed class DeserializeLicenseTypeBlacklistPreprocessor : IPreprocesso
         {
             _logger.LogDebug($"Preprocess: getting license-type-blacklist from file {targetFilePath}...");
 
-            var fileContent = await _fileContentProvider.GetFileContentAsync(targetFilePath);
+            var fileContent = await _fileContentProvider.GetFileContentAsync(targetFilePath).ConfigureAwait(false);
             var licenseTypeBlacklistFromFile = DeserializeLicenseTypeBlacklist(fileContent);
             AddToSettings(licenseTypeBlacklistFromFile);
         }

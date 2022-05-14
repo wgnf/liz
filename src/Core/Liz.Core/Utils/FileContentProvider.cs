@@ -26,13 +26,13 @@ internal sealed class FileContentProvider : IFileContentProvider
         
         // when it's a relative path it's gotta be a local file path
         if (!fileUri.IsAbsoluteUri)
-            contentOfFile = await GetContentOfFileAsync(filePath);
+            contentOfFile = await GetContentOfFileAsync(filePath).ConfigureAwait(false);
         else if (fileUri.IsFile)
-            contentOfFile = await GetContentOfFileAsync(fileUri.LocalPath);
+            contentOfFile = await GetContentOfFileAsync(fileUri.LocalPath).ConfigureAwait(false);
         else
         {
-            var downloadedFilePath = await DownloadRemoteFileAsync(filePath);
-            contentOfFile = await GetContentOfFileAsync(downloadedFilePath);
+            var downloadedFilePath = await DownloadRemoteFileAsync(filePath).ConfigureAwait(false);
+            contentOfFile = await GetContentOfFileAsync(downloadedFilePath).ConfigureAwait(false);
         }
 
         return contentOfFile;
@@ -40,19 +40,21 @@ internal sealed class FileContentProvider : IFileContentProvider
 
     private async Task<string> GetContentOfFileAsync(string filePath)
     {
-        var fileContent = await _fileSystem.File.ReadAllTextAsync(filePath);
+        var fileContent = await _fileSystem.File.ReadAllTextAsync(filePath).ConfigureAwait(false);
         return fileContent;
     }
 
     private async Task<string> DownloadRemoteFileAsync(string remoteFilePath)
     {
-        var response = await _httpClient.GetAsync(remoteFilePath);
+        var response = await _httpClient.GetAsync(remoteFilePath).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
 
         var tempFile = _fileSystem.Path.GetTempFileName();
-        await using var fileStream = _fileSystem.FileStream.Create(tempFile, FileMode.Create, FileAccess.Write);
+        await using var fileStream = _fileSystem
+            .FileStream
+            .Create(tempFile, FileMode.Create, FileAccess.Write);
 
-        await response.Content.CopyToAsync(fileStream);
+        await response.Content.CopyToAsync(fileStream).ConfigureAwait(false);
 
         return tempFile;
     }

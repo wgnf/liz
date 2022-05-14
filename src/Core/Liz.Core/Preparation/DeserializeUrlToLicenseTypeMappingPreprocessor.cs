@@ -32,7 +32,7 @@ internal sealed class DeserializeUrlToLicenseTypeMappingPreprocessor : IPreproce
         {
             _logger.LogDebug($"Preprocess: getting url to license-type mappings from file {targetFilePath}...");
 
-            var fileContent = await _fileContentProvider.GetFileContentAsync(targetFilePath);
+            var fileContent = await _fileContentProvider.GetFileContentAsync(targetFilePath).ConfigureAwait(false);
             var urlToLicenseTypeMappingsFromFile = DeserializeUrlToLicenseTypeMappings(fileContent);
             AddToSettings(urlToLicenseTypeMappingsFromFile);
         }

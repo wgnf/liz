@@ -43,7 +43,8 @@ internal sealed class EnrichPackageReferenceWithLicenseInformation : IEnrichPack
             return;
         }
 
-        var licenseInformation = await GetLicenseInformationAsync(downloadedPackageReferenceDirectory);
+        var licenseInformation =
+            await GetLicenseInformationAsync(downloadedPackageReferenceDirectory).ConfigureAwait(false);
         packageReference.LicenseInformation = licenseInformation;
     }
 
@@ -53,7 +54,7 @@ internal sealed class EnrichPackageReferenceWithLicenseInformation : IEnrichPack
         _logger.LogDebug($"Determining license information from {downloadedPackageReferenceDirectory}...");
         var licenseInformation =
             await _getLicenseInformationFromArtifact.GetFromDownloadedPackageReferenceAsync(
-                downloadedPackageReferenceDirectory);
+                downloadedPackageReferenceDirectory).ConfigureAwait(false);
 
         return licenseInformation;
     }
