@@ -42,6 +42,7 @@ internal sealed class ValidateLicenseTypesBlacklistResultProcessor : IResultProc
     {
         // violating a blacklist means, that there is a license-type that is explicitly mentioned in the blacklist
         var packagesThatViolateBlacklist = packageReferences
+            .Where(package => package.LicenseInformation.Types.Any())
             .Where(package => package
                 .LicenseInformation
                 .Types

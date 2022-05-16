@@ -42,6 +42,7 @@ internal sealed class ValidateLicenseTypesWhitelistResultProcessor : IResultProc
     {
         // violating a whitelist means, that there is a license-type that is not explicitly mentioned in the whitelist
         var packagesThatViolateWhitelist = packageReferences
+            .Where(package => package.LicenseInformation.Types.Any())
             .Where(package => package
                 .LicenseInformation
                 .Types
