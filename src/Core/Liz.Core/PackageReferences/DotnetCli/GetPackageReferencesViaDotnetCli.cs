@@ -31,8 +31,6 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
         var result = await RunDotNetListPackage(project, includeTransitive).ConfigureAwait(false);
         var packageReferences = GetPackageReferencesFromListPackageResult(result).ToList();
 
-        if (!includeTransitive) return packageReferences;
-
         RemoveProjectReferencePackages(project, packageReferences);
 
         return packageReferences;
