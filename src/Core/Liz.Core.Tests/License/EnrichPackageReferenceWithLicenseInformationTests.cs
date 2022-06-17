@@ -3,10 +3,10 @@ using FluentAssertions;
 using Liz.Core.License;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
-using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
 using Moq;
 using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
 using Xunit;
 
 namespace Liz.Core.Tests.License;
@@ -26,15 +26,15 @@ public class EnrichPackageReferenceWithLicenseInformationTests
     public async Task Enrich_Sets_License_Information_From_Downloaded_Artifact_When_Artifact_Could_Be_Found()
     {
         var context = ArrangeContext<EnrichPackageReferenceWithLicenseInformation>.Create();
+        context.Use<IFileSystem>(new MockFileSystem());
+        
         var sut = context.Build();
 
-        var packageReference = new PackageReference("Something", "net472", "1.0.0");
-        
-        var downloadedDirectory = Mock.Of<IDirectoryInfo>();
-        context
-            .For<IGetDownloadedPackageReferenceArtifact>()
-            .Setup(getArtifact => getArtifact.TryGetFor(packageReference, out downloadedDirectory))
-            .Returns(true);
+        const string artifactDirectory = "C:/some/directory";
+        var packageReference = new PackageReference("Something", "net472", "1.0.0")
+        {
+            ArtifactDirectory = artifactDirectory
+        };
 
         var licenseInformation = new LicenseInformation { Text = "abc", Url = "abc.de" };
         licenseInformation.AddLicenseType("MIT");
@@ -42,7 +42,7 @@ public class EnrichPackageReferenceWithLicenseInformationTests
         context
             .For<IGetLicenseInformationFromArtifact>()
             .Setup(getLicenseInformation =>
-                getLicenseInformation.GetFromDownloadedPackageReferenceAsync(downloadedDirectory))
+                getLicenseInformation.GetFromDownloadedPackageReferenceAsync(It.IsAny<IDirectoryInfo>()))
             .ReturnsAsync(licenseInformation);
 
         await sut.EnrichAsync(packageReference);
@@ -57,15 +57,14 @@ public class EnrichPackageReferenceWithLicenseInformationTests
     public async Task Enrich_Does_Not_Do_Anything_When_Artifact_Could_Not_Be_Found()
     {
         var context = ArrangeContext<EnrichPackageReferenceWithLicenseInformation>.Create();
+        context.Use<IFileSystem>(new MockFileSystem());
+        
         var sut = context.Build();
 
-        var packageReference = new PackageReference("Something", "net472", "1.0.0");
-        
-        var downloadedDirectory = Mock.Of<IDirectoryInfo>();
-        context
-            .For<IGetDownloadedPackageReferenceArtifact>()
-            .Setup(getArtifact => getArtifact.TryGetFor(packageReference, out downloadedDirectory))
-            .Returns(false);
+        var packageReference = new PackageReference("Something", "net472", "1.0.0")
+        {
+            ArtifactDirectory = null
+        };
 
         await sut.EnrichAsync(packageReference);
 
@@ -73,6 +72,6 @@ public class EnrichPackageReferenceWithLicenseInformationTests
             .For<IGetLicenseInformationFromArtifact>()
             .Verify(
                 getLicenseInformation =>
-                    getLicenseInformation.GetFromDownloadedPackageReferenceAsync(downloadedDirectory), Times.Never);
+                    getLicenseInformation.GetFromDownloadedPackageReferenceAsync(It.IsAny<IDirectoryInfo>()), Times.Never);
     }
 }

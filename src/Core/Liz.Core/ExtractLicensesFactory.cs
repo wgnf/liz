@@ -105,15 +105,11 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             fileSystem, 
             logger, 
             licenseInformationSources);
-
-        var getDownloadedPackageReferenceArtifact = new GetDownloadedPackageReferenceArtifact(
-            provideTemporaryDirectories, 
-            fileSystem);
         
         var enrichPackageReferenceWithLicenseInformation = new EnrichPackageReferenceWithLicenseInformation(
             getLicenseInformationFromArtifact, 
             logger,
-            getDownloadedPackageReferenceArtifact);
+            fileSystem);
 
         var preprocessors = new IPreprocessor[]
         {

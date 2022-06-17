@@ -2,7 +2,6 @@
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
-using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
 using System.IO.Abstractions;
 
@@ -10,51 +9,38 @@ namespace Liz.Core.License;
 
 internal sealed class EnrichPackageReferenceWithLicenseInformation : IEnrichPackageReferenceWithLicenseInformation
 {
-    private readonly IGetDownloadedPackageReferenceArtifact _getDownloadedPackageReferenceArtifact;
     private readonly IGetLicenseInformationFromArtifact _getLicenseInformationFromArtifact;
     private readonly ILogger _logger;
+    private readonly IFileSystem _fileSystem;
 
     public EnrichPackageReferenceWithLicenseInformation(
         IGetLicenseInformationFromArtifact getLicenseInformationFromArtifact,
         ILogger logger,
-        IGetDownloadedPackageReferenceArtifact getDownloadedPackageReferenceArtifact)
+        IFileSystem fileSystem)
     {
         _getLicenseInformationFromArtifact = getLicenseInformationFromArtifact ??
                                              throw new ArgumentNullException(nameof(getLicenseInformationFromArtifact));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _getDownloadedPackageReferenceArtifact = getDownloadedPackageReferenceArtifact ??
-                                                 throw new ArgumentNullException(
-                                                     nameof(getDownloadedPackageReferenceArtifact));
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
     public async Task EnrichAsync(PackageReference packageReference)
     {
         if (packageReference == null) throw new ArgumentNullException(nameof(packageReference));
+        if (packageReference.ArtifactDirectory == null) return;
 
-        if (!_getDownloadedPackageReferenceArtifact.TryGetFor(
-                packageReference,
-                out var downloadedPackageReferenceDirectory) || downloadedPackageReferenceDirectory == null)
-        {
-            var message = $"Could not find downloaded artifacts for {packageReference}, this can be due to:{Environment.NewLine}" +
-                          $"- it actually being a project-reference{Environment.NewLine}" +
-                          "- it being a manually added reference which was not being downloaded via restoring";
-            
-            _logger.LogDebug(message);
-            return;
-        }
+        var artifactDirectory = _fileSystem.DirectoryInfo.FromDirectoryName(packageReference.ArtifactDirectory);
 
-        var licenseInformation =
-            await GetLicenseInformationAsync(downloadedPackageReferenceDirectory).ConfigureAwait(false);
+        var licenseInformation = await GetLicenseInformationAsync(artifactDirectory).ConfigureAwait(false);
         packageReference.LicenseInformation = licenseInformation;
     }
 
-    private async Task<LicenseInformation> GetLicenseInformationAsync(
-        IDirectoryInfo downloadedPackageReferenceDirectory)
+    private async Task<LicenseInformation> GetLicenseInformationAsync(IDirectoryInfo artifactDirectory)
     {
-        _logger.LogDebug($"Determining license information from {downloadedPackageReferenceDirectory}...");
+        _logger.LogDebug($"Determining license information from {artifactDirectory}...");
         var licenseInformation =
             await _getLicenseInformationFromArtifact.GetFromDownloadedPackageReferenceAsync(
-                downloadedPackageReferenceDirectory).ConfigureAwait(false);
+                artifactDirectory).ConfigureAwait(false);
 
         return licenseInformation;
     }
