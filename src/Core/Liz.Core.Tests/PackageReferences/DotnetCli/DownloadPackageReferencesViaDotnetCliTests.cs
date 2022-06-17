@@ -1,6 +1,5 @@
 ﻿using Liz.Core.CliTool.Contracts;
 using Liz.Core.PackageReferences.DotnetCli;
-using Liz.Core.Projects.Contracts.Models;
 using Moq;
 using System.IO.Abstractions;
 using Xunit;
@@ -11,21 +10,20 @@ namespace Liz.Core.Tests.PackageReferences.DotnetCli;
 public class DownloadPackageReferencesViaDotnetCliTests
 {
     [Fact]
-    public async Task DownloadForProject_Fails_On_Invalid_Parameters()
+    public async Task Download_Fails_On_Invalid_Parameters()
     {
         var context = ArrangeContext<DownloadPackageReferencesViaDotnetCli>.Create();
         var sut = context.Build();
 
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
-            sut.DownloadForProjectAsync(null!, Mock.Of<IDirectoryInfo>()));
+            sut.DownloadAsync(null!, Mock.Of<IDirectoryInfo>()));
 
-        var project = new Project("SomeProject", Mock.Of<IFileInfo>(), ProjectFormatStyle.Unknown);
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
-            sut.DownloadForProjectAsync(project, null!));
+            sut.DownloadAsync(Mock.Of<IFileInfo>(), null!));
     }
 
     [Fact]
-    public async Task DownloadForProject()
+    public async Task Download()
     {
         var context = ArrangeContext<DownloadPackageReferencesViaDotnetCli>.Create();
         var sut = context.Build();
@@ -35,8 +33,7 @@ public class DownloadPackageReferencesViaDotnetCliTests
             .Setup(directory => directory.CreateSubdirectory(It.IsAny<string>()))
             .Returns(Mock.Of<IDirectoryInfo>());
 
-        var project = new Project("SomeProject", Mock.Of<IFileInfo>(), ProjectFormatStyle.Unknown);
-        await sut.DownloadForProjectAsync(project, targetDirectory.Object);
+        await sut.DownloadAsync(Mock.Of<IFileInfo>(), targetDirectory.Object);
 
         context
             .For<ICliToolExecutor>()

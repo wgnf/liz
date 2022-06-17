@@ -12,7 +12,7 @@ internal sealed class CddlLicenseTypeDefinitionProvider : ILicenseTypeDefinition
         return new[]
         {
             new LicenseTypeDefinition("CDDL-1.0", "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE", "Version 1.0"),
-            new LicenseTypeDefinition("CDDL-1.1", "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE", "Version 1.1"),
+            new LicenseTypeDefinition("CDDL-1.1", "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE", "Version 1.1")
         };
     }
 }

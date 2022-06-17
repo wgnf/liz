@@ -48,22 +48,20 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var getProjects = new GetProjectsViaSlnParser(new SolutionParser(), fileSystem);
         var parseDotnetListPackage = new ParseDotnetListPackageResult();
         var parsePackagesConfigFile = new ParsePackagesConfigFile();
+        var getProjectReferences = new GetProjectReferences(fileSystem);
 
-        var getPackageReferencesDotnetCli = new GetPackageReferencesViaDotnetCli(cliToolExecutor, parseDotnetListPackage);
-        var getPackageReferencesPackagesConfig = new GetPackageReferencesViaPackagesConfig(logger, fileSystem, parsePackagesConfigFile);
+        var getPackageReferencesDotnetCli = new GetPackageReferencesViaDotnetCli(
+            cliToolExecutor, 
+            parseDotnetListPackage,
+            getProjectReferences);
+        var getPackageReferencesPackagesConfig = new GetPackageReferencesViaPackagesConfig(
+            logger, 
+            fileSystem, 
+            parsePackagesConfigFile);
         
         var getPackageReferences = new GetPackageReferencesFacade(logger, getPackageReferencesDotnetCli, getPackageReferencesPackagesConfig);
 
         var provideTemporaryDirectories = new ProvideTemporaryDirectories(settings, fileSystem);
-
-        var downloadPackageReferencesDotnet = new DownloadPackageReferencesViaDotnetCli(cliToolExecutor);
-        var downloadPackageReferencesNuget = new DownloadPackageReferencesViaNugetCli(cliToolExecutor);
-
-        var downloadPackageReferences = new DownloadPackageReferencesFacade(
-            provideTemporaryDirectories,
-            logger,
-            downloadPackageReferencesDotnet,
-            downloadPackageReferencesNuget);
 
         var licenseInformationSources = new ILicenseInformationSource[]
         {
@@ -110,19 +108,32 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             new ExportLicenseTextsResultProcessor(settings, fileSystem)
         };
 
+        var provideNugetCacheDirectories = new ProvideNugetCacheDirectories(cliToolExecutor);
+        var findPackageReferenceArtifact = new FindPackageReferenceArtifact(
+            provideNugetCacheDirectories,
+            fileSystem,
+            logger);
+
+        var enrichPackageReferenceWithArtifactDirectory = new EnrichPackageReferenceWithArtifactDirectory(
+            findPackageReferenceArtifact);
+
+        var downloadPackageReferencesViaDotnetCli = new DownloadPackageReferencesViaDotnetCli(cliToolExecutor);
+
+        var downloadPackageReferencesFacade = new DownloadPackageReferencesFacade(
+            provideTemporaryDirectories,
+            logger,
+            downloadPackageReferencesViaDotnetCli,
+            fileSystem);
+        
         var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
             fileSystem, 
             logger, 
             licenseInformationSources);
-
-        var getDownloadedPackageReferenceArtifact = new GetDownloadedPackageReferenceArtifact(
-            provideTemporaryDirectories, 
-            fileSystem);
-        
+            
         var enrichPackageReferenceWithLicenseInformation = new EnrichPackageReferenceWithLicenseInformation(
             getLicenseInformationFromArtifact, 
             logger,
-            getDownloadedPackageReferenceArtifact);
+            fileSystem);
 
         var preprocessors = new IPreprocessor[]
         {
@@ -138,9 +149,10 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             progressHandler,
             getProjects,
             getPackageReferences,
+            enrichPackageReferenceWithArtifactDirectory,
+            downloadPackageReferencesFacade,
             enrichPackageReferenceWithLicenseInformation,
             provideTemporaryDirectories,
-            downloadPackageReferences,
             resultProcessors,
             preprocessors);
         

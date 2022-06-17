@@ -1,8 +1,8 @@
-﻿using Liz.Core.Projects.Contracts.Models;
+﻿using Liz.Core.PackageReferences.Contracts.Models;
 
 namespace Liz.Core.PackageReferences.Contracts;
 
 internal interface IDownloadPackageReferences
 {
-    Task DownloadForProjectAsync(Project project);
+    Task DownloadAndEnrichAsync(IEnumerable<PackageReference> packageReferences);
 }

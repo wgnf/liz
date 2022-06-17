@@ -4,6 +4,7 @@ using Liz.Core.CliTool.Contracts;
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.PackageReferences.DotnetCli;
+using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Models;
 using Moq;
 using System.IO.Abstractions;
@@ -60,5 +61,36 @@ public class GetPackageReferencesViaDotnetCliTests
                         arguments.Contains("package") &&
                         (!includeTransitive || arguments.Contains("include-transitive")))),
                 Times.Once);
+    }
+
+    [Fact]
+    public async Task GetFromProject_Removes_Project_References_From_Package_References()
+    {
+        var context = new ArrangeContext<GetPackageReferencesViaDotnetCli>();
+        var sut = context.Build();
+        
+        var packageReferences = new List<PackageReference>
+        {
+            new("something", "something", "something"),
+            new("liz.something", "something", "something"),
+            new("liz.core.something", "something","something")
+        };
+
+        context
+            .For<IParseDotnetListPackageResult>()
+            .Setup(parser => parser.Parse(It.IsAny<string>()))
+            .Returns(packageReferences);
+
+        context
+            .For<IGetProjectReferences>()
+            .Setup(getProjectReferences => getProjectReferences.GetProjectReferenceNames(It.IsAny<Project>()))
+            .Returns(new[] { "liz.something", "liz.core.something" });
+        
+        var project = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
+        var result = await sut.GetFromProjectAsync(project, true);
+
+        result
+            .Should()
+            .OnlyContain(package => package.Name == "something");
     }
 }

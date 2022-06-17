@@ -137,7 +137,7 @@ public abstract class ExtractLicensesSettingsBase
     ///     Gets the target file of these settings
     /// </summary>
     /// <returns>The set target file</returns>
-    public abstract string? GetTargetFile();
+    public abstract string GetTargetFile();
 
     /// <summary>
     ///     Ensures the validity of these settings and throws an exception when there's an issue
@@ -160,13 +160,13 @@ public abstract class ExtractLicensesSettingsBase
         ValidatePath(targetFile, "TargetFile");
 
         if (!File.Exists(targetFile))
-            throw new SettingsInvalidException("The given target-file does not exist");
+            throw new SettingsInvalidException($"The given target-file ('{targetFile}') does not exist");
 
         var targetFileExtension = Path.GetExtension(targetFile);
         if (!targetFileExtension.Contains("csproj", StringComparison.InvariantCultureIgnoreCase) &&
             !targetFileExtension.Contains("fsproj", StringComparison.InvariantCultureIgnoreCase) &&
             !targetFileExtension.Contains("sln", StringComparison.InvariantCultureIgnoreCase))
-            throw new SettingsInvalidException("The given target-file is not a csproj, fsproj nor sln file");
+            throw new SettingsInvalidException($"The given target-file ('{targetFile}') is not a csproj, fsproj nor sln file");
     }
 
     private void ValidateWhitelistAndBlacklist()

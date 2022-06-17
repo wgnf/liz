@@ -53,6 +53,12 @@ public sealed class PackageReference : IEquatable<PackageReference>
     /// </summary>
     /// <example>11.1.0</example>
     public string Version { get; }
+    
+    /// <summary>
+    ///     The path to the directory where the artifacts of this package are, if available
+    /// </summary>
+    /// <example>C:/Users/User/.nuget/packages/system.io/4.3.0</example>
+    public string? ArtifactDirectory { get; set; }
 
     /// <summary>
     ///     The acquired <see cref="LicenseInformation"/> of this package 
@@ -72,6 +78,7 @@ public sealed class PackageReference : IEquatable<PackageReference>
         builder.Append($"{nameof(Name)}={Name}, ");
         builder.Append($"{nameof(TargetFramework)}={TargetFramework}, ");
         builder.Append($"{nameof(Version)}={Version}, ");
+        builder.Append($"{nameof(ArtifactDirectory)}={ArtifactDirectory}, ");
         builder.Append($"{{ {nameof(LicenseInformation)}={LicenseInformation} }}");
         builder.Append(" }");
 

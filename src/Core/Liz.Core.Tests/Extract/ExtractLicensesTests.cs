@@ -256,48 +256,6 @@ public class ExtractLicensesTests
     }
     
     [Fact]
-    // https://github.com/wgnf/liz/issues/43
-    public async Task Extract_Gets_Rid_Of_Internal_Project_References()
-    {
-        var context = CreateContext();
-        var sut = context.Build();
-
-        var project = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
-
-        context
-            .For<IGetProjects>()
-            .Setup(getProjects => getProjects.GetFromFile(It.IsAny<string>()))
-            .Returns(new[] { project });
-
-        var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0")
-        {
-            LicenseInformation = new LicenseInformation
-            {
-                // everything empty!
-                Text = string.Empty,
-                Url = string.Empty
-            }
-        };
-
-        context
-            .For<IGetPackageReferences>()
-            .Setup(getPackageReferences =>
-                getPackageReferences.GetFromProjectAsync(project, It.IsAny<bool>()))
-            .ReturnsAsync(new[] { packageReference1});
-
-        context
-            .For<IEnrichPackageReferenceWithLicenseInformation>()
-            .Setup(enrich => enrich.EnrichAsync(It.IsAny<PackageReference>()))
-            .Returns(Task.CompletedTask);
-
-        var result = await sut.ExtractAsync();
-
-        result
-            .Should()
-            .BeEmpty();
-    }
-    
-    [Fact]
     public async Task Extract_Calls_Preprocessors()
     {
         var preprocessorMock = new Mock<IPreprocessor>();
@@ -341,6 +299,90 @@ public class ExtractLicensesTests
             .Returns(new[] { project });
 
         await Assert.ThrowsAsync<PreparationFailedException>(() => sut.ExtractAsync());
+    }
+    
+    [Fact]
+    public async Task Extract_Fails_When_Artifact_Directory_Could_Not_Be_Determined()
+    {
+        var context = CreateContext();
+        var sut = context.Build();
+
+        var project1 = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
+        var project2 = new Project("Something Else", Mock.Of<IFileInfo>(), ProjectFormatStyle.NonSdkStyle);
+        var projects = new List<Project> { project1, project2 };
+        
+        context
+            .For<IGetProjects>()
+            .Setup(getProjects => getProjects.GetFromFile(It.IsAny<string>()))
+            .Returns(projects);
+
+        var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0");
+        var packageReference2 = new PackageReference("Something.Else", "net6.0", "2.0.0");
+
+        context
+            .For<IGetPackageReferences>()
+            .Setup(getPackageReferences =>
+                getPackageReferences.GetFromProjectAsync(project1, It.IsAny<bool>()))
+            .ReturnsAsync(new[] { packageReference1 });
+        
+        context
+            .For<IGetPackageReferences>()
+            .Setup(getPackageReferences =>
+                getPackageReferences.GetFromProjectAsync(project2, It.IsAny<bool>()))
+            .ReturnsAsync(new[] { packageReference2 });
+
+        context
+            .For<IEnrichPackageReferenceWithArtifactDirectory>()
+            .Setup(enrich => enrich.EnrichAsync(It.IsAny<PackageReference>()))
+            .Throws<InvalidOperationException>();
+
+        await Assert.ThrowsAsync<GetArtifactDirectoryFailedException>(() => sut.ExtractAsync());
+    }
+
+    [Fact]
+    public async Task Extract_Deletes_Temporary_Directory()
+    {
+        var context = CreateContext();
+
+        var temporaryDirectory = new Mock<IDirectoryInfo>();
+        temporaryDirectory
+            .SetupGet(directory => directory.Exists)
+            .Returns(true);
+        
+        context
+            .For<IProvideTemporaryDirectories>()
+            .Setup(provideTemporaryDirectory => provideTemporaryDirectory.GetRootDirectory())
+            .Returns(temporaryDirectory.Object);
+        
+        var project1 = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
+        var project2 = new Project("Something Else", Mock.Of<IFileInfo>(), ProjectFormatStyle.NonSdkStyle);
+        var projects = new List<Project> { project1, project2 };
+        
+        context
+            .For<IGetProjects>()
+            .Setup(getProjects => getProjects.GetFromFile(It.IsAny<string>()))
+            .Returns(projects);
+
+        var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0");
+        var packageReference2 = new PackageReference("Something.Else", "net6.0", "2.0.0");
+
+        context
+            .For<IGetPackageReferences>()
+            .Setup(getPackageReferences =>
+                getPackageReferences.GetFromProjectAsync(project1, It.IsAny<bool>()))
+            .ReturnsAsync(new[] { packageReference1 });
+        
+        context
+            .For<IGetPackageReferences>()
+            .Setup(getPackageReferences =>
+                getPackageReferences.GetFromProjectAsync(project2, It.IsAny<bool>()))
+            .ReturnsAsync(new[] { packageReference2 });
+        
+        var sut = context.Build();
+
+        await sut.ExtractAsync();
+        
+        temporaryDirectory.Verify(directory => directory.Delete(true), Times.Once);
     }
 
     private static ArrangeContext<ExtractLicenses> CreateContext()

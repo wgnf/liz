@@ -62,7 +62,7 @@ internal sealed class ValidateLicenseTypesBlacklistResultProcessor : IResultProc
                 $"> {package.Name} ({package.Version}): {string.Join(", ", package.LicenseInformation.Types)}");
 
         var message = "The determined package-references contain invalid license-types according to the provided" +
-                      $"blacklist ({string.Join(", ", blacklist)}):\n{string.Join("\n", invalidPackagesDisplayMessages)}";
+                      $"blacklist ({string.Join(", ", blacklist)}):{Environment.NewLine}{string.Join(Environment.NewLine, invalidPackagesDisplayMessages)}";
 
         throw new LicenseTypesInvalidException(message);
     }

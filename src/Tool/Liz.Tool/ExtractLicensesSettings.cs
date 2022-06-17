@@ -6,10 +6,15 @@ namespace Liz.Tool;
 [ExcludeFromCodeCoverage] // simple settings DTO
 public class ExtractLicensesSettings : ExtractLicensesSettingsBase
 {
-    public string? TargetFile { get; init; }
+    private readonly string _targetFile;
 
-    public override string? GetTargetFile()
+    public ExtractLicensesSettings(string targetFile)
     {
-        return TargetFile;
+        _targetFile = targetFile;
+    }
+
+    public override string GetTargetFile()
+    {
+        return _targetFile;
     }
 }
