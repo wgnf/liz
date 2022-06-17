@@ -23,7 +23,6 @@ internal sealed class ExtractLicenses : IExtractLicenses
     private readonly IGetPackageReferences _getPackageReferences;
     private readonly IEnrichPackageReferenceWithLicenseInformation _enrichPackageReferenceWithLicenseInformation;
     private readonly IProvideTemporaryDirectories _provideTemporaryDirectories;
-    private readonly IDownloadPackageReferences _downloadPackageReferences;
     private readonly IEnumerable<IResultProcessor> _resultProcessors;
     private readonly IEnumerable<IPreprocessor> _preprocessors;
     private readonly IGetProjects _getProjects;
@@ -39,7 +38,6 @@ internal sealed class ExtractLicenses : IExtractLicenses
         IGetPackageReferences getPackageReferences,
         IEnrichPackageReferenceWithLicenseInformation enrichPackageReferenceWithLicenseInformation,
         IProvideTemporaryDirectories provideTemporaryDirectories,
-        IDownloadPackageReferences downloadPackageReferences,
         IEnumerable<IResultProcessor> resultProcessors,
         IEnumerable<IPreprocessor> preprocessors)
     {
@@ -50,7 +48,6 @@ internal sealed class ExtractLicenses : IExtractLicenses
                                                         throw new ArgumentNullException(nameof(enrichPackageReferenceWithLicenseInformation));
         _provideTemporaryDirectories = provideTemporaryDirectories 
                                      ?? throw new ArgumentNullException(nameof(provideTemporaryDirectories));
-        _downloadPackageReferences = downloadPackageReferences ?? throw new ArgumentNullException(nameof(downloadPackageReferences));
         _resultProcessors = resultProcessors ?? throw new ArgumentNullException(nameof(resultProcessors));
         _preprocessors = preprocessors ?? throw new ArgumentNullException(nameof(preprocessors));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -63,10 +60,10 @@ internal sealed class ExtractLicenses : IExtractLicenses
         {
             await PrepareAsync().ConfigureAwait(false);
             var projects = GetProjects(_settings.GetTargetFile()!).ToList();
-
-            await DownloadPackageReferencesFor(projects).ConfigureAwait(false);
             
             var packageReferences = (await GetPackageReferencesAsync(projects).ConfigureAwait(false)).ToList();
+
+            await EnrichWithArtifactDirectory(packageReferences).ConfigureAwait(false);
             await EnrichWithLicenseInformationAsync(packageReferences).ConfigureAwait(false);
 
             packageReferences = packageReferences
@@ -102,8 +99,8 @@ internal sealed class ExtractLicenses : IExtractLicenses
              * 5 main process steps:
              * - preparation
              * - get projects
-             * - download package-references
              * - get package-references
+             * - enrich with artifact-directory
              * - enrich license info
              */
             _progressHandler?.InitializeMainProcess(5, "Preparing");
@@ -139,34 +136,16 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
     }
 
-    private async Task DownloadPackageReferencesFor(IEnumerable<Project> projects)
-    {
-        var projectsList = projects.ToList();
-        
-        _logger.LogInformation("Downloading package-references for project(s)...");
-     
-        _progressHandler?.TickMainProcess("Download package-references");
-        _progressHandler?.InitializeNewSubProcess(projectsList.Count);
-        
-        foreach (var project in projectsList)
-        {
-            _progressHandler?.TickCurrentSubProcess($"Download package-references: {project.Name}");
-            
-            await _downloadPackageReferences.DownloadForProjectAsync(project).ConfigureAwait(false);
-        }
-    }
-
-    private async Task<IEnumerable<PackageReference>> GetPackageReferencesAsync(IEnumerable<Project> projects)
+    private async Task<IEnumerable<PackageReference>> GetPackageReferencesAsync(IReadOnlyCollection<Project> projects)
     {
         var packageReferences = new List<PackageReference>();
-        var projectsList = projects.ToList();
-        
+
         _logger.LogInformation("Trying to get package-references for project(s)...");
 
         _progressHandler?.TickMainProcess("Get package-references");
-        _progressHandler?.InitializeNewSubProcess(projectsList.Count);
+        _progressHandler?.InitializeNewSubProcess(projects.Count);
         
-        foreach (var project in projectsList)
+        foreach (var project in projects)
         {
             _progressHandler?.TickCurrentSubProcess($"Get package-references: {project.Name}");
 
@@ -179,6 +158,37 @@ internal sealed class ExtractLicenses : IExtractLicenses
             .ToList();
         
         return packageReferences;
+    }
+
+    private async Task EnrichWithArtifactDirectory(IReadOnlyCollection<PackageReference> packageReferences)
+    {
+        _logger.LogInformation("Trying to get artifacts for package(s)...");
+        
+        _progressHandler?.TickMainProcess("Get artifacts");
+        _progressHandler?.InitializeNewSubProcess(packageReferences.Count);
+
+        foreach (var packageReference in packageReferences)
+        {
+            _progressHandler?.TickCurrentSubProcess($"Get artifact: {packageReference.Name}");
+            await EnrichWithArtifactDirectoryForPackageReferenceAsync(packageReference).ConfigureAwait(false);
+        }
+    }
+
+    private async Task EnrichWithArtifactDirectoryForPackageReferenceAsync(PackageReference packageReference)
+    {
+        try
+        {
+            _logger.LogDebug($"Trying to get artifact directory for {packageReference}...");
+            
+            // TODO: Actually enrich...
+            await Task.Delay(500);
+            
+            _logger.LogDebug($"Found following artifact directory: '{packageReference.ArtifactDirectory}'");
+        }
+        catch (Exception exception)
+        {
+            throw new GetArtifactDirectoryFailedException(packageReference, exception);
+        }
     }
 
     private async Task<IEnumerable<PackageReference>> GetPackageReferencesForProjectAsync(Project project)
@@ -204,16 +214,14 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
     }
 
-    private async Task EnrichWithLicenseInformationAsync(IEnumerable<PackageReference> packageReferences)
+    private async Task EnrichWithLicenseInformationAsync(IReadOnlyCollection<PackageReference> packageReferences)
     {
-        var packageReferencesList = packageReferences.ToList();
-        
         _logger.LogInformation("Trying to get license information for package(s)...");
         
         _progressHandler?.TickMainProcess("Get license information");
-        _progressHandler?.InitializeNewSubProcess(packageReferencesList.Count);
+        _progressHandler?.InitializeNewSubProcess(packageReferences.Count);
 
-        foreach (var packageReference in packageReferencesList)
+        foreach (var packageReference in packageReferences)
         {
             _progressHandler?.TickCurrentSubProcess($"Get license information: {packageReference.Name}");
 

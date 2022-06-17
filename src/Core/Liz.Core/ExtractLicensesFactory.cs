@@ -56,15 +56,6 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
 
         var provideTemporaryDirectories = new ProvideTemporaryDirectories(settings, fileSystem);
 
-        var downloadPackageReferencesDotnet = new DownloadPackageReferencesViaDotnetCli(cliToolExecutor);
-        var downloadPackageReferencesNuget = new DownloadPackageReferencesViaNugetCli(cliToolExecutor);
-
-        var downloadPackageReferences = new DownloadPackageReferencesFacade(
-            provideTemporaryDirectories,
-            logger,
-            downloadPackageReferencesDotnet,
-            downloadPackageReferencesNuget);
-
         var licenseInformationSources = new ILicenseInformationSource[]
         {
             new LicenseElementLicenseInformationSource(logger, fileSystem),
@@ -140,7 +131,6 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             getPackageReferences,
             enrichPackageReferenceWithLicenseInformation,
             provideTemporaryDirectories,
-            downloadPackageReferences,
             resultProcessors,
             preprocessors);
         

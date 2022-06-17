@@ -17,7 +17,8 @@ namespace Liz.Core.PackageReferences.NuGetCli;
  *
  * Additionally for nuget-restore we unzip the .nupkg files (because that is not done automatically and it contains
  * interesting files that we want)
- */ 
+ */
+// TODO: Remove
 internal sealed class DownloadPackageReferencesViaNugetCli : IDownloadPackageReferencesViaNugetCli
 {
     private readonly ICliToolExecutor _cliToolExecutor;
