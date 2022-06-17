@@ -1,5 +1,8 @@
-﻿namespace Liz.Core.Utils.Models;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Liz.Core.Utils.Models;
+
+[ExcludeFromCodeCoverage] // simple dto
 internal sealed class Optional<TEntity>
 {
     public Optional(bool hasResult, TEntity? result)
