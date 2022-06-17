@@ -109,13 +109,13 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         };
 
         var provideNugetCacheDirectories = new ProvideNugetCacheDirectories(cliToolExecutor);
-        var findPackageReferenceArtficat = new FindPackageReferenceArtifact(
+        var findPackageReferenceArtifact = new FindPackageReferenceArtifact(
             provideNugetCacheDirectories,
             fileSystem,
             logger);
 
         var enrichPackageReferenceWithArtifactDirectory = new EnrichPackageReferenceWithArtifactDirectory(
-            findPackageReferenceArtficat);
+            findPackageReferenceArtifact);
 
         var downloadPackageReferencesViaDotnetCli = new DownloadPackageReferencesViaDotnetCli(cliToolExecutor);
 

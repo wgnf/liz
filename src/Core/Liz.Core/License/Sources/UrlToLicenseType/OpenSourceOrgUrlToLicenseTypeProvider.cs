@@ -227,7 +227,7 @@ internal sealed class OpenSourceOrgUrlToLicenseTypeProvider : IUrlToLicenseTypeM
             { "http://opensource.org/licenses/Xnet", "Xnet" },
             { "http://opensource.org/licenses/ZPL-2.0", "ZPL-2.0" },
             { "http://opensource.org/licenses/ZPL-2.1", "ZPL-2.1" },
-            { "http://opensource.org/licenses/Zlib", "Zlib" },
+            { "http://opensource.org/licenses/Zlib", "Zlib" }
         };
     }
 }

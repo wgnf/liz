@@ -176,7 +176,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         }
     }
 
-    private async Task DownloadPackagesWithoutArtifactDirectory(IReadOnlyCollection<PackageReference> packageReferences)
+    private async Task DownloadPackagesWithoutArtifactDirectory(IEnumerable<PackageReference> packageReferences)
     {
         _logger.LogInformation("Downloading packages that are not in the cache...");
 

@@ -1,6 +1,5 @@
 ﻿using Liz.Core.CliTool.Contracts;
 using Liz.Core.PackageReferences.DotnetCli;
-using Liz.Core.Projects.Contracts.Models;
 using Moq;
 using System.IO.Abstractions;
 using Xunit;
@@ -34,7 +33,6 @@ public class DownloadPackageReferencesViaDotnetCliTests
             .Setup(directory => directory.CreateSubdirectory(It.IsAny<string>()))
             .Returns(Mock.Of<IDirectoryInfo>());
 
-        var project = new Project("SomeProject", Mock.Of<IFileInfo>(), ProjectFormatStyle.Unknown);
         await sut.DownloadAsync(Mock.Of<IFileInfo>(), targetDirectory.Object);
 
         context

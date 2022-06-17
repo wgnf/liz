@@ -5,7 +5,7 @@ namespace Liz.Core.Utils.Models;
 [ExcludeFromCodeCoverage] // simple dto
 internal sealed class Optional<TEntity>
 {
-    public Optional(bool hasResult, TEntity? result)
+    private Optional(bool hasResult, TEntity? result)
     {
         HasResult = hasResult;
         Result = result;

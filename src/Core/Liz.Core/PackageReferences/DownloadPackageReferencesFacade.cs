@@ -125,7 +125,9 @@ internal sealed class DownloadPackageReferencesFacade : IDownloadPackageReferenc
         return targetProjectFileInfo;
     }
     
-    private void EnrichWithDownloadedArtifactDirectories(IDirectoryInfo targetDirectory, List<PackageReference> packageReferences)
+    private void EnrichWithDownloadedArtifactDirectories(
+        IFileSystemInfo targetDirectory, 
+        List<PackageReference> packageReferences)
     {
         foreach (var packageReference in packageReferences)
         {

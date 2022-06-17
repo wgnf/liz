@@ -66,11 +66,4 @@ public sealed class LicenseInformation
         
         _types.Add(licenseType);
     }
-    
-    internal bool IsEmpty()
-    {
-        return !Types.Any() &&
-               string.IsNullOrWhiteSpace(Url) &&
-               string.IsNullOrWhiteSpace(Url);
-    }
 }
