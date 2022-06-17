@@ -160,13 +160,13 @@ public abstract class ExtractLicensesSettingsBase
         ValidatePath(targetFile, "TargetFile");
 
         if (!File.Exists(targetFile))
-            throw new SettingsInvalidException("The given target-file does not exist");
+            throw new SettingsInvalidException($"The given target-file ('{targetFile}') does not exist");
 
         var targetFileExtension = Path.GetExtension(targetFile);
         if (!targetFileExtension.Contains("csproj", StringComparison.InvariantCultureIgnoreCase) &&
             !targetFileExtension.Contains("fsproj", StringComparison.InvariantCultureIgnoreCase) &&
             !targetFileExtension.Contains("sln", StringComparison.InvariantCultureIgnoreCase))
-            throw new SettingsInvalidException("The given target-file is not a csproj, fsproj nor sln file");
+            throw new SettingsInvalidException($"The given target-file ('{targetFile}') is not a csproj, fsproj nor sln file");
     }
 
     private void ValidateWhitelistAndBlacklist()
