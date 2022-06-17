@@ -22,6 +22,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
 {
     private readonly IGetPackageReferences _getPackageReferences;
     private readonly IEnrichPackageReferenceWithArtifactDirectory _enrichPackageReferenceWithArtifactDirectory;
+    private readonly IDownloadPackageReferences _downloadPackageReferences;
     private readonly IEnrichPackageReferenceWithLicenseInformation _enrichPackageReferenceWithLicenseInformation;
     private readonly IProvideTemporaryDirectories _provideTemporaryDirectories;
     private readonly IEnumerable<IResultProcessor> _resultProcessors;
@@ -38,6 +39,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         IGetProjects getProjects,
         IGetPackageReferences getPackageReferences,
         IEnrichPackageReferenceWithArtifactDirectory enrichPackageReferenceWithArtifactDirectory,
+        IDownloadPackageReferences downloadPackageReferences,
         IEnrichPackageReferenceWithLicenseInformation enrichPackageReferenceWithLicenseInformation,
         IProvideTemporaryDirectories provideTemporaryDirectories,
         IEnumerable<IResultProcessor> resultProcessors,
@@ -49,6 +51,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         _enrichPackageReferenceWithArtifactDirectory = enrichPackageReferenceWithArtifactDirectory ??
                                                        throw new ArgumentNullException(
                                                            nameof(enrichPackageReferenceWithArtifactDirectory));
+        _downloadPackageReferences = downloadPackageReferences ?? throw new ArgumentNullException(nameof(downloadPackageReferences));
         _enrichPackageReferenceWithLicenseInformation = enrichPackageReferenceWithLicenseInformation ?? 
                                                         throw new ArgumentNullException(nameof(enrichPackageReferenceWithLicenseInformation));
         _provideTemporaryDirectories = provideTemporaryDirectories 
@@ -69,6 +72,8 @@ internal sealed class ExtractLicenses : IExtractLicenses
             var packageReferences = (await GetPackageReferencesAsync(projects).ConfigureAwait(false)).ToList();
 
             await EnrichWithArtifactDirectory(packageReferences).ConfigureAwait(false);
+            await DownloadPackagesWithoutArtifactDirectory(packageReferences).ConfigureAwait(false);
+            
             await EnrichWithLicenseInformationAsync(packageReferences).ConfigureAwait(false);
 
             packageReferences = packageReferences
@@ -101,14 +106,15 @@ internal sealed class ExtractLicenses : IExtractLicenses
         try
         {
             /*
-             * 5 main process steps:
+             * 6 main process steps:
              * - preparation
              * - get projects
              * - get package-references
              * - enrich with artifact-directory
-             * - enrich license info
+             * - download packages without artifact-directory
+             * - enrich with license info
              */
-            _progressHandler?.InitializeMainProcess(5, "Preparing");
+            _progressHandler?.InitializeMainProcess(6, "Preparing");
             _logger.LogInformation("Preparing...");
 
             foreach (var preprocessor in _preprocessors)
@@ -177,6 +183,20 @@ internal sealed class ExtractLicenses : IExtractLicenses
             _progressHandler?.TickCurrentSubProcess($"Get artifact: {packageReference.Name}");
             await EnrichWithArtifactDirectoryForPackageReferenceAsync(packageReference).ConfigureAwait(false);
         }
+    }
+
+    private async Task DownloadPackagesWithoutArtifactDirectory(IReadOnlyCollection<PackageReference> packageReferences)
+    {
+        _logger.LogInformation("Downloading packages that are not in the cache...");
+
+        _progressHandler?.TickMainProcess("Download packages");
+        // we'll download everything in one go
+        _progressHandler?.InitializeNewSubProcess(1);
+
+        var packagesWithoutArtifactDirectory = packageReferences
+            .Where(package => package.ArtifactDirectory == null);
+
+        await _downloadPackageReferences.DownloadAndEnrichAsync(packagesWithoutArtifactDirectory).ConfigureAwait(false);
     }
 
     private async Task EnrichWithArtifactDirectoryForPackageReferenceAsync(PackageReference packageReference)

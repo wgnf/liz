@@ -109,6 +109,14 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
 
         var enrichPackageReferenceWithArtifactDirectory = new EnrichPackageReferenceWithArtifactDirectory(
             findPackageReferenceArtficat);
+
+        var downloadPackageReferencesViaDotnetCli = new DownloadPackageReferencesViaDotnetCli(cliToolExecutor);
+
+        var downloadPackageReferencesFacade = new DownloadPackageReferencesFacade(
+            provideTemporaryDirectories,
+            logger,
+            downloadPackageReferencesViaDotnetCli,
+            fileSystem);
         
         var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
             fileSystem, 
@@ -135,6 +143,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             getProjects,
             getPackageReferences,
             enrichPackageReferenceWithArtifactDirectory,
+            downloadPackageReferencesFacade,
             enrichPackageReferenceWithLicenseInformation,
             provideTemporaryDirectories,
             resultProcessors,

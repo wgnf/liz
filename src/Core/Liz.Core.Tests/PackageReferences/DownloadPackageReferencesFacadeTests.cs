@@ -1,11 +1,12 @@
 ﻿using ArrangeContext.Moq;
+using FluentAssertions;
 using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
-using Liz.Core.PackageReferences.Contracts.NuGetCli;
-using Liz.Core.Projects.Contracts.Models;
+using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Utils.Contracts;
 using Moq;
 using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
 using Xunit;
 
 namespace Liz.Core.Tests.PackageReferences;
@@ -13,85 +14,89 @@ namespace Liz.Core.Tests.PackageReferences;
 public class DownloadPackageReferencesFacadeTests
 {
     [Fact]
-    public async Task DownloadForProject_Fails_On_Invalid_Parameters()
+    public async Task DownloadAndEnrich_Fails_On_Invalid_Parameters()
     {
         var context = ArrangeContext<DownloadPackageReferencesFacade>.Create();
         var sut = context.Build();
 
-        await Assert.ThrowsAsync<ArgumentNullException>(() => sut.DownloadForProjectAsync(null!));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => sut.DownloadAndEnrichAsync(null!));
     }
 
     [Fact]
-    public async Task DownloadForProject_Creates_Download_Directory()
+    public async Task DownloadAndEnrich_Creates_Download_Directory()
     {
+        var mockFileSystem = new MockFileSystem();
+        
         var context = ArrangeContext<DownloadPackageReferencesFacade>.Create();
+        context.Use<IFileSystem>(mockFileSystem);
+        
         var sut = context.Build();
-
-        var downloadDirectory = new Mock<IDirectoryInfo>();
+        
+        const string downloadDirectory = "C:/temp/download";
+        var downloadDirectoryMock = new Mock<IDirectoryInfo>();
+        downloadDirectoryMock
+            .SetupGet(directory => directory.FullName)
+            .Returns(downloadDirectory);
+        
         context
             .For<IProvideTemporaryDirectories>()
             .Setup(provideTempDirectories => provideTempDirectories.GetDownloadDirectory())
-            .Returns(downloadDirectory.Object);
+            .Returns(downloadDirectoryMock.Object);
 
-        await sut.DownloadForProjectAsync(new Project("something", Mock.Of<IFileInfo>(), ProjectFormatStyle.Unknown));
+        var packageReferences = new[] { new PackageReference("Test", "net6.0", "1.2.3") };
+        await sut.DownloadAndEnrichAsync(packageReferences);
 
-        downloadDirectory
-            .Verify(directory => directory.Create(), Times.Once);
+        mockFileSystem
+            .AllDirectories
+            .Should()
+            .NotBeEmpty();
     }
 
     [Fact]
-    public async Task DownloadForProject_Uses_Dotnet_Cli_For_Sdk_Style_Project()
+    public async Task DownloadAndEnrich()
     {
+        var mockFileSystem = new MockFileSystem();
+        
         var context = ArrangeContext<DownloadPackageReferencesFacade>.Create();
-        var sut = context.Build();
+        context.Use<IFileSystem>(mockFileSystem);
 
+        const string downloadDirectory = "C:/temp/download";
+        var downloadDirectoryMock = new Mock<IDirectoryInfo>();
+        downloadDirectoryMock
+            .SetupGet(directory => directory.FullName)
+            .Returns(downloadDirectory);
+        
         context
             .For<IProvideTemporaryDirectories>()
             .Setup(provideTempDirectories => provideTempDirectories.GetDownloadDirectory())
-            .Returns(Mock.Of<IDirectoryInfo>());
+            .Returns(downloadDirectoryMock.Object);
+        
+        var sut = context.Build();
 
-        var project = new Project("SomeProject", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
-        await sut.DownloadForProjectAsync(project);
+        var packageReferences = new[]
+        {
+            new PackageReference("TestNet6.0-1", "net6.0", "1.2.3"),
+            new PackageReference("TestNet6.0-2", "net6.0", "1.2.5"),
+            new PackageReference("TestNetStandard", "netstandard2.0", "1.3.3.7")
+        };
 
+        // ReSharper disable once StringLiteralTypo
+        var netStandardPackageArtifactDirectory = mockFileSystem.Path.Combine(downloadDirectory, "testnetstandard", "1.3.3.7");
+        
+        // just pretend we have on artifact-directory
+        mockFileSystem.AddDirectory(netStandardPackageArtifactDirectory);
+
+        await sut.DownloadAndEnrichAsync(packageReferences);
+
+        // twice, because there are exactly two different target-frameworks declared
         context
             .For<IDownloadPackageReferencesViaDotnetCli>()
-            .Verify(
-                downloadViaDotnet =>
-                    downloadViaDotnet.DownloadForProjectAsync(It.IsAny<Project>(), It.IsAny<IDirectoryInfo>()),
-                Times.Once);
-
-        context
-            .For<IDownloadPackageReferencesViaNugetCli>()
-            .Verify(downloadViaNuget =>
-                    downloadViaNuget.DownloadForProjectAsync(It.IsAny<Project>(), It.IsAny<IDirectoryInfo>()),
-                Times.Never);
-    }
-
-    [Fact]
-    public async Task DownloadForProject_Uses_Nuget_Cli_For_Non_Sdk_Style_Project()
-    {
-        var context = ArrangeContext<DownloadPackageReferencesFacade>.Create();
-        var sut = context.Build();
-
-        context
-            .For<IProvideTemporaryDirectories>()
-            .Setup(provideTempDirectories => provideTempDirectories.GetDownloadDirectory())
-            .Returns(Mock.Of<IDirectoryInfo>());
-
-        var project = new Project("SomeProject", Mock.Of<IFileInfo>(), ProjectFormatStyle.NonSdkStyle);
-        await sut.DownloadForProjectAsync(project);
-
-        context
-            .For<IDownloadPackageReferencesViaDotnetCli>()
-            .Verify(
-                downloadViaDotnet =>
-                    downloadViaDotnet.DownloadForProjectAsync(It.IsAny<Project>(), It.IsAny<IDirectoryInfo>()),
-                Times.Never);
-
-        context
-            .For<IDownloadPackageReferencesViaNugetCli>()
-            .Verify(downloadViaNuget =>
-                    downloadViaNuget.DownloadForProjectAsync(It.IsAny<Project>(), It.IsAny<IDirectoryInfo>()),
-                Times.Once);
+            .Verify(downloader => downloader.DownloadAsync(It.IsAny<IFileInfo>(), It.IsAny<IDirectoryInfo>()),
+                Times.Exactly(2));
+        
+        // according to above there should be at least one item with the artifact-directory set
+        packageReferences
+            .Should()
+            .Contain(packageReference => packageReference.ArtifactDirectory != null);
     }
 }
