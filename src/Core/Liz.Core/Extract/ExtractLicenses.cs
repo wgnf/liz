@@ -76,15 +76,6 @@ internal sealed class ExtractLicenses : IExtractLicenses
             
             await EnrichWithLicenseInformationAsync(packageReferences).ConfigureAwait(false);
 
-            packageReferences = packageReferences
-                /*
-                 * this gets rid of all the references that have NO data in the license-information what so ever
-                 * (which basically are the internal project-references or other packages that have no information or
-                 * were not downloaded)
-                 */
-                .Where(packageReference => !packageReference.LicenseInformation.IsEmpty())
-                .ToList();
-            
             _progressHandler?.FinishMainProcess();
 
             await ProcessResultsAsync(packageReferences).ConfigureAwait(false);

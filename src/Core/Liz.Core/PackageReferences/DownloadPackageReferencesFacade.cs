@@ -41,11 +41,13 @@ internal sealed class DownloadPackageReferencesFacade : IDownloadPackageReferenc
     public async Task DownloadAndEnrichAsync(IEnumerable<PackageReference> packageReferences)
     {
         if (packageReferences == null) throw new ArgumentNullException(nameof(packageReferences));
+
+        var packageReferencesList = packageReferences.ToList();
+
+        if (!packageReferencesList.Any()) return;
         
         _logger.LogDebug("Downloading packages...");
 
-        var packageReferencesList = packageReferences.ToList();
-        
         var targetDirectory = PrepareDownloadTargetDirectory();
         var dummyProjects = PrepareDummyProjectFiles(targetDirectory, packageReferencesList);
 

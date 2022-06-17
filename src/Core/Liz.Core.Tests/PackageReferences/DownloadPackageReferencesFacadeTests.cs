@@ -23,6 +23,36 @@ public class DownloadPackageReferencesFacadeTests
     }
 
     [Fact]
+    public async Task DownloadAndEnrich_Does_Nothing_When_There_Are_No_Packages()
+    {
+        var mockFileSystem = new MockFileSystem();
+        
+        var context = ArrangeContext<DownloadPackageReferencesFacade>.Create();
+        context.Use<IFileSystem>(mockFileSystem);
+        
+        var sut = context.Build();
+        
+        const string downloadDirectory = "C:/temp/download";
+        var downloadDirectoryMock = new Mock<IDirectoryInfo>();
+        downloadDirectoryMock
+            .SetupGet(directory => directory.FullName)
+            .Returns(downloadDirectory);
+        
+        context
+            .For<IProvideTemporaryDirectories>()
+            .Setup(provideTempDirectories => provideTempDirectories.GetDownloadDirectory())
+            .Returns(downloadDirectoryMock.Object);
+
+        var packageReferences = Enumerable.Empty<PackageReference>();
+        await sut.DownloadAndEnrichAsync(packageReferences);
+
+        context
+            .For<IDownloadPackageReferencesViaDotnetCli>()
+            .Verify(downloader => downloader.DownloadAsync(It.IsAny<IFileInfo>(), It.IsAny<IDirectoryInfo>()),
+                Times.Never);
+    }
+
+    [Fact]
     public async Task DownloadAndEnrich_Creates_Download_Directory()
     {
         var mockFileSystem = new MockFileSystem();

@@ -256,48 +256,6 @@ public class ExtractLicensesTests
     }
     
     [Fact]
-    // https://github.com/wgnf/liz/issues/43
-    public async Task Extract_Gets_Rid_Of_Internal_Project_References()
-    {
-        var context = CreateContext();
-        var sut = context.Build();
-
-        var project = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
-
-        context
-            .For<IGetProjects>()
-            .Setup(getProjects => getProjects.GetFromFile(It.IsAny<string>()))
-            .Returns(new[] { project });
-
-        var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0")
-        {
-            LicenseInformation = new LicenseInformation
-            {
-                // everything empty!
-                Text = string.Empty,
-                Url = string.Empty
-            }
-        };
-
-        context
-            .For<IGetPackageReferences>()
-            .Setup(getPackageReferences =>
-                getPackageReferences.GetFromProjectAsync(project, It.IsAny<bool>()))
-            .ReturnsAsync(new[] { packageReference1});
-
-        context
-            .For<IEnrichPackageReferenceWithLicenseInformation>()
-            .Setup(enrich => enrich.EnrichAsync(It.IsAny<PackageReference>()))
-            .Returns(Task.CompletedTask);
-
-        var result = await sut.ExtractAsync();
-
-        result
-            .Should()
-            .BeEmpty();
-    }
-    
-    [Fact]
     public async Task Extract_Calls_Preprocessors()
     {
         var preprocessorMock = new Mock<IPreprocessor>();

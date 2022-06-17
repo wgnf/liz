@@ -2,6 +2,7 @@
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Models;
 
 namespace Liz.Core.PackageReferences.DotnetCli;
@@ -10,13 +11,16 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
 {
     private readonly ICliToolExecutor _cliToolExecutor;
     private readonly IParseDotnetListPackageResult _parseDotnetListPackageResult;
+    private readonly IGetProjectReferences _getProjectReferences;
 
     public GetPackageReferencesViaDotnetCli(
         ICliToolExecutor cliToolExecutor,
-        IParseDotnetListPackageResult parseDotnetListPackageResult)
+        IParseDotnetListPackageResult parseDotnetListPackageResult,
+        IGetProjectReferences getProjectReferences)
     {
         _cliToolExecutor = cliToolExecutor ?? throw new ArgumentNullException(nameof(cliToolExecutor));
         _parseDotnetListPackageResult = parseDotnetListPackageResult ?? throw new ArgumentNullException(nameof(parseDotnetListPackageResult));
+        _getProjectReferences = getProjectReferences ?? throw new ArgumentNullException(nameof(getProjectReferences));
     }
     
     public async Task<IEnumerable<PackageReference>> GetFromProjectAsync(Project project, bool includeTransitive)
@@ -25,7 +29,11 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
 
         await RunDotNetRestore(project).ConfigureAwait(false);
         var result = await RunDotNetListPackage(project, includeTransitive).ConfigureAwait(false);
-        var packageReferences = GetPackageReferencesFromListPackageResult(result);
+        var packageReferences = GetPackageReferencesFromListPackageResult(result).ToList();
+
+        if (!includeTransitive) return packageReferences;
+
+        RemoveProjectReferencePackages(project, packageReferences);
 
         return packageReferences;
     }
@@ -48,5 +56,13 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
     {
         var packageReferences = _parseDotnetListPackageResult.Parse(result);
         return packageReferences;
+    }
+
+    private void RemoveProjectReferencePackages(Project project, List<PackageReference> packageReferences)
+    {
+        var projectReferenceNames = _getProjectReferences.GetProjectReferenceNames(project);
+
+        foreach (var projectReferenceName in projectReferenceNames)
+            packageReferences.RemoveAll(packageReference => packageReference.Name == projectReferenceName);
     }
 }
