@@ -74,9 +74,8 @@ internal sealed class CommandRunner : ICommandRunner
         string? blacklistFile,
         string? exportTextsDirectory)
     {
-        var settings = new ExtractLicensesSettings
+        var settings = new ExtractLicensesSettings(targetFile.FullName)
         {
-            TargetFile = targetFile.FullName,
             IncludeTransitiveDependencies = includeTransitive,
             SuppressPrintDetails = suppressPrintDetails,
             SuppressPrintIssues = suppressPrintIssues,

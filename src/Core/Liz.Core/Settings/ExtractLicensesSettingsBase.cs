@@ -137,7 +137,7 @@ public abstract class ExtractLicensesSettingsBase
     ///     Gets the target file of these settings
     /// </summary>
     /// <returns>The set target file</returns>
-    public abstract string? GetTargetFile();
+    public abstract string GetTargetFile();
 
     /// <summary>
     ///     Ensures the validity of these settings and throws an exception when there's an issue

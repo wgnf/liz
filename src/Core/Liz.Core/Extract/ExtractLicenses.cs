@@ -67,7 +67,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         try
         {
             await PrepareAsync().ConfigureAwait(false);
-            var projects = GetProjects(_settings.GetTargetFile()!).ToList();
+            var projects = GetProjects(_settings.GetTargetFile()).ToList();
             
             var packageReferences = (await GetPackageReferencesAsync(projects).ConfigureAwait(false)).ToList();
 
