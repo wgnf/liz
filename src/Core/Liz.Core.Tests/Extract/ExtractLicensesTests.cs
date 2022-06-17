@@ -342,6 +342,44 @@ public class ExtractLicensesTests
 
         await Assert.ThrowsAsync<PreparationFailedException>(() => sut.ExtractAsync());
     }
+    
+    [Fact]
+    public async Task Extract_Fails_When_Artifact_Directory_Could_Not_Be_Determined()
+    {
+        var context = CreateContext();
+        var sut = context.Build();
+
+        var project1 = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
+        var project2 = new Project("Something Else", Mock.Of<IFileInfo>(), ProjectFormatStyle.NonSdkStyle);
+        var projects = new List<Project> { project1, project2 };
+        
+        context
+            .For<IGetProjects>()
+            .Setup(getProjects => getProjects.GetFromFile(It.IsAny<string>()))
+            .Returns(projects);
+
+        var packageReference1 = new PackageReference("Something", "net5.0", "1.1.0");
+        var packageReference2 = new PackageReference("Something.Else", "net6.0", "2.0.0");
+
+        context
+            .For<IGetPackageReferences>()
+            .Setup(getPackageReferences =>
+                getPackageReferences.GetFromProjectAsync(project1, It.IsAny<bool>()))
+            .ReturnsAsync(new[] { packageReference1 });
+        
+        context
+            .For<IGetPackageReferences>()
+            .Setup(getPackageReferences =>
+                getPackageReferences.GetFromProjectAsync(project2, It.IsAny<bool>()))
+            .ReturnsAsync(new[] { packageReference2 });
+
+        context
+            .For<IEnrichPackageReferenceWithArtifactDirectory>()
+            .Setup(enrich => enrich.EnrichAsync(It.IsAny<PackageReference>()))
+            .Throws<InvalidOperationException>();
+
+        await Assert.ThrowsAsync<GetArtifactDirectoryFailedException>(() => sut.ExtractAsync());
+    }
 
     private static ArrangeContext<ExtractLicenses> CreateContext()
     {

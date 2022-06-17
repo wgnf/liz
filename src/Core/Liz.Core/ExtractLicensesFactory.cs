@@ -101,11 +101,20 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             new ExportLicenseTextsResultProcessor(settings, fileSystem)
         };
 
+        var provideNugetCacheDirectories = new ProvideNugetCacheDirectories(cliToolExecutor);
+        var findPackageReferenceArtficat = new FindPackageReferenceArtifact(
+            provideNugetCacheDirectories,
+            fileSystem,
+            logger);
+
+        var enrichPackageReferenceWithArtifactDirectory = new EnrichPackageReferenceWithArtifactDirectory(
+            findPackageReferenceArtficat);
+        
         var getLicenseInformationFromArtifact = new GetLicenseInformationFromArtifact(
             fileSystem, 
             logger, 
             licenseInformationSources);
-        
+            
         var enrichPackageReferenceWithLicenseInformation = new EnrichPackageReferenceWithLicenseInformation(
             getLicenseInformationFromArtifact, 
             logger,
@@ -125,6 +134,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             progressHandler,
             getProjects,
             getPackageReferences,
+            enrichPackageReferenceWithArtifactDirectory,
             enrichPackageReferenceWithLicenseInformation,
             provideTemporaryDirectories,
             resultProcessors,

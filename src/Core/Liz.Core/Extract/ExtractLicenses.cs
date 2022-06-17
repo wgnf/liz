@@ -21,6 +21,7 @@ namespace Liz.Core.Extract;
 internal sealed class ExtractLicenses : IExtractLicenses
 {
     private readonly IGetPackageReferences _getPackageReferences;
+    private readonly IEnrichPackageReferenceWithArtifactDirectory _enrichPackageReferenceWithArtifactDirectory;
     private readonly IEnrichPackageReferenceWithLicenseInformation _enrichPackageReferenceWithLicenseInformation;
     private readonly IProvideTemporaryDirectories _provideTemporaryDirectories;
     private readonly IEnumerable<IResultProcessor> _resultProcessors;
@@ -36,6 +37,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
         IProgressHandler? progressHandler,
         IGetProjects getProjects,
         IGetPackageReferences getPackageReferences,
+        IEnrichPackageReferenceWithArtifactDirectory enrichPackageReferenceWithArtifactDirectory,
         IEnrichPackageReferenceWithLicenseInformation enrichPackageReferenceWithLicenseInformation,
         IProvideTemporaryDirectories provideTemporaryDirectories,
         IEnumerable<IResultProcessor> resultProcessors,
@@ -44,6 +46,9 @@ internal sealed class ExtractLicenses : IExtractLicenses
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
         _getPackageReferences = getPackageReferences ?? throw new ArgumentNullException(nameof(getPackageReferences));
+        _enrichPackageReferenceWithArtifactDirectory = enrichPackageReferenceWithArtifactDirectory ??
+                                                       throw new ArgumentNullException(
+                                                           nameof(enrichPackageReferenceWithArtifactDirectory));
         _enrichPackageReferenceWithLicenseInformation = enrichPackageReferenceWithLicenseInformation ?? 
                                                         throw new ArgumentNullException(nameof(enrichPackageReferenceWithLicenseInformation));
         _provideTemporaryDirectories = provideTemporaryDirectories 
@@ -179,9 +184,8 @@ internal sealed class ExtractLicenses : IExtractLicenses
         try
         {
             _logger.LogDebug($"Trying to get artifact directory for {packageReference}...");
-            
-            // TODO: Actually enrich...
-            await Task.Delay(500);
+
+            await _enrichPackageReferenceWithArtifactDirectory.EnrichAsync(packageReference).ConfigureAwait(false);
             
             _logger.LogDebug($"Found following artifact directory: '{packageReference.ArtifactDirectory}'");
         }
@@ -259,6 +263,8 @@ internal sealed class ExtractLicenses : IExtractLicenses
     private void CleanUpTemporaryDirectory()
     {
         var temporaryDirectory = _provideTemporaryDirectories.GetRootDirectory();
+
+        if (!temporaryDirectory.Exists) return;
         temporaryDirectory.Delete(true);
     }
 }
