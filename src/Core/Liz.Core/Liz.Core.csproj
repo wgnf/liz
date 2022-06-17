@@ -38,14 +38,14 @@
 
     <ItemGroup>
         <PackageReference Include="SlnParser" Version="2.0.0" />
-        <PackageReference Include="System.IO.Abstractions" Version="17.0.12" />
+        <PackageReference Include="System.IO.Abstractions" Version="12.2.1" />
 
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="System.Text.Json" Version="6.0.4" />
+        <PackageReference Include="System.Text.Json" Version="4.6.0" />
     </ItemGroup>
 
     <ItemGroup>
