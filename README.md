@@ -26,8 +26,8 @@
 
 - Determining all (also with transitive if desired) dependencies for the given solution/project for SDK-style and non-SDK-style projects
 - Extract license information (type, URL, text) from all currently known sources for these dependencies
-- Print the found dependencies including their license information to the console
-- Print the problems that occured during the process (missing license-information)
+- Print the found dependencies including their license information to the console/log
+- Print the problems that occured during the process (missing license-information) to the console/log
 - (Try to) determine the license-type from the license-text, if no license-type could be determined
 - (Try to) determine the license-type from the license-url, if no license-type could be determined
 - Validate the determined package-references and their license-types against a provided whitelist/blacklist
