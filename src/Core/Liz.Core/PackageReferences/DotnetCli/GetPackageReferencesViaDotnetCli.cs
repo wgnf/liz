@@ -58,7 +58,9 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
 
     private void RemoveProjectReferencePackages(Project project, List<PackageReference> packageReferences)
     {
-        var projectReferenceNames = _getProjectReferences.GetProjectReferenceNames(project);
+        var projectReferenceNames = _getProjectReferences
+            .Get(project)
+            .Select(reference => reference.Name);
 
         foreach (var projectReferenceName in projectReferenceNames)
             packageReferences.RemoveAll(packageReference => packageReference.Name == projectReferenceName);

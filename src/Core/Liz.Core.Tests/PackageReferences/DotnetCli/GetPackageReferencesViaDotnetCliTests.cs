@@ -83,8 +83,12 @@ public class GetPackageReferencesViaDotnetCliTests
 
         context
             .For<IGetProjectReferences>()
-            .Setup(getProjectReferences => getProjectReferences.GetProjectReferenceNames(It.IsAny<Project>()))
-            .Returns(new[] { "liz.something", "liz.core.something" });
+            .Setup(getProjectReferences => getProjectReferences.Get(It.IsAny<Project>()))
+            .Returns(new[]
+            {
+                new ProjectReference("liz.something"),
+                new ProjectReference("liz.core.something")
+            });
         
         var project = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);
         var result = await sut.GetFromProjectAsync(project, true);
