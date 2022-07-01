@@ -4,5 +4,5 @@ namespace Liz.Core.Projects.Contracts;
 
 internal interface IGetProjectReferences
 {
-    IEnumerable<string> GetProjectReferenceNames(Project project);
+    IEnumerable<ProjectReference> Get(Project project);
 }

@@ -11,7 +11,7 @@ public class GetProjectReferencesTests
     [Fact]
     public void Gets_Project_References_Of_Liz_Tool_Project_Correctly()
     {
-        const string lizToolProjectPath = "../../../../../Tool/Liz.Tool/Liz.Tool.csproj";
+        const string lizToolProjectPath = "../../../../../Tool/Liz.Tool.Tests/Liz.Tool.Tests.csproj";
         
         var fileSystem = new FileSystem();
         var lizToolProjectFile = fileSystem.FileInfo.FromFileName(lizToolProjectPath);
@@ -23,12 +23,12 @@ public class GetProjectReferencesTests
         var getProjectReferences = new GetProjectReferences(fileSystem);
 
         var lizToolProject = new Project("Liz.Tool", lizToolProjectFile, ProjectFormatStyle.SdkStyle);
-        var projectReferences = getProjectReferences.GetProjectReferenceNames(lizToolProject);
+        var projectReferences = getProjectReferences.Get(lizToolProject);
 
         projectReferences
             .Should()
-            .Contain("Liz.Core")
+            .Contain(reference => reference.Name == "Liz.Core")
             .And
-            .Contain("Liz.Tool");
+            .Contain(reference => reference.Name == "Liz.Tool");
     }
 }
