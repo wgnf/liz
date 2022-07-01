@@ -17,7 +17,7 @@ public class GetProjectReferencesTests
         var context = ArrangeContext<GetProjectReferences>.Create();
         var sut = context.Build();
 
-        Assert.Throws<ArgumentNullException>(() => sut.GetProjectReferenceNames(null!));
+        Assert.Throws<ArgumentNullException>(() => sut.Get(null!));
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class GetProjectReferencesTests
 
         var project = new Project("Something", projectFileMock.Object, ProjectFormatStyle.SdkStyle);
 
-        var result = sut.GetProjectReferenceNames(project);
+        var result = sut.Get(project);
 
         result
             .Should()
@@ -58,6 +58,7 @@ public class GetProjectReferencesTests
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include=""ProjectThree.csproj"" />
         <ProjectReference Include=""ProjectTwo.csproj"" />
     </ItemGroup>
 </Project>"));
@@ -70,6 +71,8 @@ public class GetProjectReferencesTests
 
     <ItemGroup>
         <ProjectReference Include=""ProjectThree.csproj"" />
+        <ProjectReference />
+        <ProjectReference Something=""SomethingThatDoesNotBelongHere"" />
     </ItemGroup>
 </Project>"));
         
@@ -80,14 +83,14 @@ public class GetProjectReferencesTests
         var projectOne = mockFileSystem.FileInfo.FromFileName("ProjectOne.csproj");
         var project = new Project("ProjectOne", projectOne, ProjectFormatStyle.SdkStyle);
 
-        var result = sut.GetProjectReferenceNames(project);
+        var result = sut.Get(project);
 
         result
             .Should()
-            .Contain("NameFromPackageId")
+            .Contain(reference => reference.Name == "NameFromPackageId")
             .And
-            .Contain("NameFromAssemblyName")
+            .Contain(reference => reference.Name == "NameFromAssemblyName")
             .And
-            .Contain("ProjectThree");
+            .Contain(reference => reference.Name == "ProjectThree");
     }
 }

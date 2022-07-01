@@ -22,6 +22,7 @@ internal sealed class GetProjectReferences : IGetProjectReferences
         if (project == null) throw new ArgumentNullException(nameof(project));
 
         var projectFile = project.File;
+        if (!projectFile.Exists) return Enumerable.Empty<ProjectReference>();
         
         var projectReference = DoGetProjectReference(projectFile);
         var projectReferences = FlattenProjectReferences(projectReference).Distinct();
@@ -107,7 +108,8 @@ internal sealed class GetProjectReferences : IGetProjectReferences
         // the project-reference is a relative path of the current project-file
         var projectReferenceFiles = projectReferencePaths
             .Select(path => _fileSystem.Path.Combine(projectFile.Directory.FullName, path))
-            .Select(combinedPath => _fileSystem.FileInfo.FromFileName(combinedPath));
+            .Select(combinedPath => _fileSystem.FileInfo.FromFileName(combinedPath))
+            .Where(file => file.Exists);
 
         return projectReferenceFiles;
     }
