@@ -16,7 +16,8 @@ public class LicenseTypesTests
     [InlineData("NetOffice.Core", "1.7.4.4", "net6.0", new[] { "MIT" })]
     [InlineData("NetOffice.Outlook", "1.7.4.4", "net6.0", new[] { "MIT" })]
     [InlineData("Microsoft.AspNet.Razor", "3.0.0", "net6.0", new[] { "MS-NETLIB" })]
-    [InlineData("YamlDotNet", "11.2.1", "net6.0", new [] { "MIT" })]
+    [InlineData("YamlDotNet", "11.2.1", "net6.0", new[] { "MIT" })]
+    [InlineData("Accord", "3.8.0", "net6.0", new[] { "LGPL-2.1" })]
     public async Task Determines_Correct_License_Types(
         string packageName,
         string packageVersion,
@@ -46,7 +47,7 @@ public class LicenseTypesTests
 
     private static string PrepareCsprojFile(
         string packageName,
-        string targetFramework, 
+        string targetFramework,
         string packageVersion)
     {
         var temporaryDirectory = Path.GetTempPath();
@@ -62,9 +63,9 @@ public class LicenseTypesTests
     <PackageReference Include=""{packageName}"" Version=""{packageVersion}"" />
   </ItemGroup>
 </Project>";
-        
+
         File.WriteAllText(temporaryProjectFile, projectFileContent);
-        
+
         return temporaryProjectFile;
     }
 
@@ -76,7 +77,7 @@ public class LicenseTypesTests
         {
             _targetFile = targetFile;
         }
-        
+
         public override string GetTargetFile()
         {
             return _targetFile;
