@@ -7,6 +7,10 @@
     "TestingGround-Solution": {
       "commandName": "Project",
       "commandLineArgs": "../../../../../../test-data/sln/TestingGround.sln -l Trace -i -sb"
+    },
+    "TestingGround-SdkStyleProject": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../../../../test-data/sln/SdkStyleProject/SdkStyleProject.csproj -l Trace -i -sb"
     }
   }
 }
