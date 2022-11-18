@@ -3,6 +3,7 @@ using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Preparation.Contracts.Models;
 using Liz.Core.Utils.Contracts;
 using System.IO.Abstractions;
 using System.Text;
@@ -21,16 +22,19 @@ internal sealed class DownloadPackageReferencesFacade : IDownloadPackageReferenc
     private readonly IDownloadPackageReferencesViaDotnetCli _downloadPackageReferencesViaDotnetCli;
     private readonly IFileSystem _fileSystem;
     private readonly ILogger _logger;
+    private readonly SourceInfo _sourceInfo;
     private readonly IProvideTemporaryDirectories _provideTemporaryDirectories;
 
     public DownloadPackageReferencesFacade(
+        SourceInfo sourceInfo,
         IProvideTemporaryDirectories provideTemporaryDirectories,
         ILogger logger,
         IDownloadPackageReferencesViaDotnetCli downloadPackageReferencesViaDotnetCli,
         IFileSystem fileSystem)
     {
+        _sourceInfo = sourceInfo ?? throw new ArgumentNullException(nameof(sourceInfo));
         _provideTemporaryDirectories = provideTemporaryDirectories
-                                     ?? throw new ArgumentNullException(nameof(provideTemporaryDirectories));
+                                       ?? throw new ArgumentNullException(nameof(provideTemporaryDirectories));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _downloadPackageReferencesViaDotnetCli = downloadPackageReferencesViaDotnetCli ??
                                                  throw new ArgumentNullException(
@@ -112,11 +116,17 @@ internal sealed class DownloadPackageReferencesFacade : IDownloadPackageReferenc
         contentBuilder.AppendLine("\t</PropertyGroup>");
 
         contentBuilder.AppendLine("\t<ItemGroup>");
-        
+
         foreach (var packageReference in packageReferences)
+        {
+            var versionString = _sourceInfo.IsCpmEnabled
+                ? "VersionOverride"
+                : "Version";
+            
             contentBuilder.AppendLine(
-                $"\t\t<PackageReference Include=\"{packageReference.Name}\" Version=\"{packageReference.Version}\" />");
-        
+                $"\t\t<PackageReference Include=\"{packageReference.Name}\" {versionString}=\"{packageReference.Version}\" />");
+        }
+
         contentBuilder.AppendLine("\t</ItemGroup>");
         contentBuilder.AppendLine("</Project>");
         
