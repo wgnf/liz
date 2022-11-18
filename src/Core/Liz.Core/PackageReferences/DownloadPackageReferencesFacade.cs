@@ -86,12 +86,40 @@ internal sealed class DownloadPackageReferencesFacade : IDownloadPackageReferenc
         IFileSystemInfo targetDirectory,
         IEnumerable<PackageReference> packageReferences)
     {
-        var packageReferencesGroupedByFramework = packageReferences.GroupBy(package => package.TargetFramework);
+        var packageReferencesList = packageReferences.ToList();
+        
+        if (_sourceInfo.IsCpmEnabled) CreateDummyPackagesPropsFile(targetDirectory, packageReferencesList);
+        
+        var packageReferencesGroupedByFramework = packageReferencesList.GroupBy(package => package.TargetFramework);
 
         var dummyProjects = packageReferencesGroupedByFramework
             .Select(packageReferenceGroup => 
                 CreateDummyProjectForFramework(targetDirectory, packageReferenceGroup.Key, packageReferenceGroup));
+
         return dummyProjects;
+    }
+
+    private void CreateDummyPackagesPropsFile(IFileSystemInfo targetDirectory, IEnumerable<PackageReference> packageReferences)
+    {
+        var contentBuilder = new StringBuilder();
+
+        contentBuilder.AppendLine("<Project>");
+        
+        // just to activate CPM for this dummy directory
+        contentBuilder.AppendLine("\t<PropertyGroup>");
+        contentBuilder.AppendLine("\t\t<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>");
+        contentBuilder.AppendLine("\t</PropertyGroup>");
+        
+        contentBuilder.AppendLine("\t<ItemGroup>");
+
+        foreach (var packageReference in packageReferences) 
+            contentBuilder.AppendLine($"\t\t<PackageVersion Include=\"{packageReference.Name}\" Version=\"{packageReference.Version}\" />");
+
+        contentBuilder.AppendLine("\t</ItemGroup>");
+        contentBuilder.AppendLine("</Project>");
+
+        var targetFilePath = _fileSystem.Path.Combine(targetDirectory.FullName, "Directory.Packages.props");
+        _fileSystem.File.WriteAllText(targetFilePath, contentBuilder.ToString());
     }
 
     private IFileInfo CreateDummyProjectForFramework(
@@ -118,14 +146,9 @@ internal sealed class DownloadPackageReferencesFacade : IDownloadPackageReferenc
         contentBuilder.AppendLine("\t<ItemGroup>");
 
         foreach (var packageReference in packageReferences)
-        {
-            var versionString = _sourceInfo.IsCpmEnabled
-                ? "VersionOverride"
-                : "Version";
-            
-            contentBuilder.AppendLine(
-                $"\t\t<PackageReference Include=\"{packageReference.Name}\" {versionString}=\"{packageReference.Version}\" />");
-        }
+            contentBuilder.AppendLine(_sourceInfo.IsCpmEnabled
+                ? $"\t\t<PackageReference Include=\"{packageReference.Name}\" />"
+                : $"\t\t<PackageReference Include=\"{packageReference.Name}\" Version=\"{packageReference.Version}\" />");
 
         contentBuilder.AppendLine("\t</ItemGroup>");
         contentBuilder.AppendLine("</Project>");

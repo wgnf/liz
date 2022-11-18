@@ -68,25 +68,10 @@ internal sealed class CheckCpmPreprocessor : IPreprocessor
         var xmlDocument = XDocument.Parse(propsFileContent);
 
         var enablingElement = xmlDocument.Descendants("ManagePackageVersionsCentrally").FirstOrDefault();
-        var versionOverrideElement = xmlDocument.Descendants("EnablePackageVersionOverride").FirstOrDefault();
         var importElement = xmlDocument.Descendants("Import").FirstOrDefault();
         
         // if we have an enabling element we can check if its available
-        if (enablingElement != null)
-        {
-            if (!enablingElement.Value.ToLower().Equals("true")) return false;
-            
-            /*
-             * NOTE:
-             * when CPM is enabled, but 'EnablePackageVersionOverride' is not, we get problems when downloading packages
-             * that are not in cache, so we'll let the user know!
-             */
-            if (versionOverrideElement?.Value.ToLower().Equals("false") ?? false)
-                _logger.LogWarning("CPM is enabled for the target-file, but 'EnablePackageVersionOverride' is turned off, " +
-                                   "which can lead to problems when trying to download packages that are currently not in cache!");
-
-            return true;
-        }
+        if (enablingElement != null) return enablingElement.Value.ToLower().Equals("true");
 
         // when theres no enabling element and no import (without the proper Attribute), CPM is not enabled!
         var importProject = importElement?.Attribute("Project");
