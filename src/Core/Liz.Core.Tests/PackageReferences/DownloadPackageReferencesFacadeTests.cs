@@ -3,6 +3,7 @@ using FluentAssertions;
 using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Preparation.Contracts.Models;
 using Liz.Core.Utils.Contracts;
 using Moq;
 using System.IO.Abstractions;
@@ -16,7 +17,7 @@ public class DownloadPackageReferencesFacadeTests
     [Fact]
     public async Task DownloadAndEnrich_Fails_On_Invalid_Parameters()
     {
-        var context = ArrangeContext<DownloadPackageReferencesFacade>.Create();
+        var context = CreateContext();
         var sut = context.Build();
 
         await Assert.ThrowsAsync<ArgumentNullException>(() => sut.DownloadAndEnrichAsync(null!));
@@ -27,7 +28,7 @@ public class DownloadPackageReferencesFacadeTests
     {
         var mockFileSystem = new MockFileSystem();
         
-        var context = ArrangeContext<DownloadPackageReferencesFacade>.Create();
+        var context = CreateContext();
         context.Use<IFileSystem>(mockFileSystem);
         
         var sut = context.Build();
@@ -57,7 +58,7 @@ public class DownloadPackageReferencesFacadeTests
     {
         var mockFileSystem = new MockFileSystem();
         
-        var context = ArrangeContext<DownloadPackageReferencesFacade>.Create();
+        var context = CreateContext();
         context.Use<IFileSystem>(mockFileSystem);
         
         var sut = context.Build();
@@ -82,12 +83,15 @@ public class DownloadPackageReferencesFacadeTests
             .NotBeEmpty();
     }
 
-    [Fact]
-    public async Task DownloadAndEnrich()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task DownloadAndEnrich(bool isCpmEnabled)
     {
         var mockFileSystem = new MockFileSystem();
-        
+
         var context = ArrangeContext<DownloadPackageReferencesFacade>.Create();
+        context.Use(new SourceInfo { IsCpmEnabled = isCpmEnabled });
         context.Use<IFileSystem>(mockFileSystem);
 
         const string downloadDirectory = "C:/temp/download";
@@ -128,5 +132,14 @@ public class DownloadPackageReferencesFacadeTests
         packageReferences
             .Should()
             .Contain(packageReference => packageReference.ArtifactDirectory != null);
+    }
+
+    private static ArrangeContext<DownloadPackageReferencesFacade> CreateContext()
+    {
+        var context = ArrangeContext<DownloadPackageReferencesFacade>.Create();
+        
+        context.Use(new SourceInfo());
+
+        return context;
     }
 }

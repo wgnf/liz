@@ -1,11 +1,12 @@
 ﻿using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
+using Liz.Core.Preparation.Contracts;
 using Liz.Core.Preparation.Contracts.Models;
 using Liz.Core.Settings;
 using System.IO.Abstractions;
 using System.Xml.Linq;
 
-namespace Liz.Core.Preparation.Contracts;
+namespace Liz.Core.Preparation;
 
 /// <summary>
 ///     preprocessor that checks if the source-code is managed using Central Package Management (CPM) and writes it to the current
@@ -60,10 +61,11 @@ internal sealed class CheckCpmPreprocessor : IPreprocessor
         return candidatePackagesProps != null && IsCpmEnabledThroughPropsFile(candidatePackagesProps);
     }
 
+    // if the file was found we have to check if CPM is actually activated
     private bool IsCpmEnabledThroughPropsFile(IFileInfo propsFile)
     {
-        // if the file was found we have to check if CPM is actually activated
-        var xmlDocument = XDocument.Load(propsFile.FullName);
+        var propsFileContent = _fileSystem.File.ReadAllText(propsFile.FullName);
+        var xmlDocument = XDocument.Parse(propsFileContent);
 
         var enablingElement = xmlDocument.Descendants("ManagePackageVersionsCentrally").FirstOrDefault();
         var versionOverrideElement = xmlDocument.Descendants("EnablePackageVersionOverride").FirstOrDefault();
