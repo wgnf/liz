@@ -1,18 +1,22 @@
 ﻿using Liz.Core.CliTool.Contracts;
 using Liz.Core.Utils.Contracts;
+using System.IO.Abstractions;
 
 namespace Liz.Core.Utils;
 
 internal sealed class ProvideNugetCacheDirectories : IProvideNugetCacheDirectories
 {
     private readonly ICliToolExecutor _cliToolExecutor;
+    private readonly IFileSystem _fileSystem;
 
     private IEnumerable<string>? _nugetCacheDirectories;
 
     public ProvideNugetCacheDirectories(
-        ICliToolExecutor cliToolExecutor)
+        ICliToolExecutor cliToolExecutor,
+        IFileSystem fileSystem)
     {
         _cliToolExecutor = cliToolExecutor ?? throw new ArgumentNullException(nameof(cliToolExecutor));
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
     public async Task<IEnumerable<string>> GetAsync()
@@ -23,6 +27,16 @@ internal sealed class ProvideNugetCacheDirectories : IProvideNugetCacheDirectori
 
     private async Task<IEnumerable<string>> GetCacheDirectoriesAsync()
     {
+        var cacheDirectories = await GetNugetLocalsGlobalPackagesAsync();
+
+        if (TryGetNugetFallbackFolder(out var nugetFallbackFolder)) 
+            cacheDirectories.Add(nugetFallbackFolder);
+        
+        return cacheDirectories;
+    }
+
+    private async Task<IList<string>> GetNugetLocalsGlobalPackagesAsync()
+    {
         // refer to https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-nuget-locals
         var result = await _cliToolExecutor
             .ExecuteWithResultAsync("dotnet", "nuget locals global-packages --list --force-english-output")
@@ -32,7 +46,15 @@ internal sealed class ProvideNugetCacheDirectories : IProvideNugetCacheDirectori
         return cacheDirectories;
     }
 
-    private static IEnumerable<string> ParseCliOutput(string cliOutput)
+    private bool TryGetNugetFallbackFolder(out string nugetFallbackFolder)
+    {
+        var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        nugetFallbackFolder = _fileSystem.Path.Combine(programFiles, "dotnet", "sdk", "NuGetFallbackFolder");
+
+        return _fileSystem.Directory.Exists(nugetFallbackFolder);
+    }
+
+    private static IList<string> ParseCliOutput(string cliOutput)
     {
         const string searchString = "global-packages: ";
 

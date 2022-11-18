@@ -14,10 +14,10 @@ public class FindPackageReferenceArtifactTests
     [InlineData("abc", "1.33.7", false)]
     public async Task Finds_Package_Reference_Artifact(string packageName, string packageVersion, bool expectedOutcome)
     {
+        var fileSystem = new FileSystem();
         var logger = new Logging.Null.NullLogger();
         var cliExecutor = new DefaultCliToolExecutor(logger);
-        var provideNugetCaches = new ProvideNugetCacheDirectories(cliExecutor);
-        var fileSystem = new FileSystem();
+        var provideNugetCaches = new ProvideNugetCacheDirectories(cliExecutor, fileSystem);
 
         var findPackageReferenceArtifact = new FindPackageReferenceArtifact(provideNugetCaches, fileSystem, logger);
 

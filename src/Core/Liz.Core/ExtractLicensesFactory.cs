@@ -111,7 +111,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             new ExportLicenseTextsResultProcessor(settings, fileSystem)
         };
 
-        var provideNugetCacheDirectories = new ProvideNugetCacheDirectories(cliToolExecutor);
+        var provideNugetCacheDirectories = new ProvideNugetCacheDirectories(cliToolExecutor, fileSystem);
         var findPackageReferenceArtifact = new FindPackageReferenceArtifact(
             provideNugetCacheDirectories,
             fileSystem,

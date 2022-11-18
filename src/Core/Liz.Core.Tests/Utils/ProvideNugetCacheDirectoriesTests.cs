@@ -3,6 +3,8 @@ using FluentAssertions;
 using Liz.Core.CliTool.Contracts;
 using Liz.Core.Utils;
 using Moq;
+using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
 using Xunit;
 
 namespace Liz.Core.Tests.Utils;
@@ -13,6 +15,8 @@ public class ProvideNugetCacheDirectoriesTests
     public async Task Provides_Cache_Directories()
     {
         var context = ArrangeContext<ProvideNugetCacheDirectories>.Create();
+        context.Use<IFileSystem>(new MockFileSystem());
+        
         var sut = context.Build();
 
         const string expectedDirectory = @"C:\Users\some-user\.nuget\packages\";
@@ -26,7 +30,7 @@ public class ProvideNugetCacheDirectoriesTests
 
         result
             .Should()
-            .OnlyContain(directory => directory == expectedDirectory);
+            .Contain(directory => directory == expectedDirectory);
 
         // getting the directory should be cached, so a second call should just return the cache
         _ = await sut.GetAsync();
