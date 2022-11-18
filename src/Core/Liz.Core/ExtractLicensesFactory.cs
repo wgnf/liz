@@ -13,6 +13,7 @@ using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.PackageReferences.NuGetCli;
 using Liz.Core.Preparation;
 using Liz.Core.Preparation.Contracts;
+using Liz.Core.Preparation.Contracts.Models;
 using Liz.Core.Progress;
 using Liz.Core.Projects;
 using Liz.Core.Result;
@@ -38,6 +39,8 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         IProgressHandler? progressHandler = null)
     {
         settings.EnsureValidity();
+
+        var sourceInfo = new SourceInfo();
         
         var logger = GetLogger(logLevel, loggerProvider);
         var fileSystem = new FileSystem();
@@ -120,6 +123,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var downloadPackageReferencesViaDotnetCli = new DownloadPackageReferencesViaDotnetCli(cliToolExecutor);
 
         var downloadPackageReferencesFacade = new DownloadPackageReferencesFacade(
+            sourceInfo,
             provideTemporaryDirectories,
             logger,
             downloadPackageReferencesViaDotnetCli,
@@ -137,6 +141,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
 
         var preprocessors = new IPreprocessor[]
         {
+            new CheckCpmPreprocessor(sourceInfo, settings, logger, fileSystem),
             new DeserializeLicenseTypeDefinitionsPreprocessor(settings, logger, fileContentProvider),
             new DeserializeUrlToLicenseTypeMappingPreprocessor(settings, logger, fileContentProvider),
             new DeserializeLicenseTypeWhitelistPreprocessor(settings, logger, fileContentProvider),
