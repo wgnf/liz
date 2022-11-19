@@ -48,10 +48,18 @@ internal sealed class ProvideNugetCacheDirectories : IProvideNugetCacheDirectori
 
     private bool TryGetNugetFallbackFolder(out string nugetFallbackFolder)
     {
-        var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-        nugetFallbackFolder = _fileSystem.Path.Combine(programFiles, "dotnet", "sdk", "NuGetFallbackFolder");
+        try
+        {
+            var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            nugetFallbackFolder = _fileSystem.Path.Combine(programFiles, "dotnet", "sdk", "NuGetFallbackFolder");
 
-        return _fileSystem.Directory.Exists(nugetFallbackFolder);
+            return _fileSystem.Directory.Exists(nugetFallbackFolder);
+        }
+        catch (Exception)
+        {
+            nugetFallbackFolder = string.Empty;
+            return false;
+        }
     }
 
     private static IList<string> ParseCliOutput(string cliOutput)
