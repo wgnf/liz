@@ -8,7 +8,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/wgnf/liz?style=social)](https://github.com/wgnf/liz/network/members)
 [![GitHub watchers](https://img.shields.io/github/watchers/wgnf/liz?style=social)](https://github.com/wgnf/liz/watchers)
 
-**liz** (ˈlɪz) is a tool to extract license-information from your project/solution aimed on a **fast** and **correct** process. Whether it's via a dotnet-CLI-Tool, Cake-Addin or Nuke-Addon.
+**liz** (ˈlɪz - like the nickname for a person named "Elizabeth") is a tool to extract license-information from your project/solution aimed on a **fast** and **correct** process. Whether it's via a dotnet-CLI-Tool, Cake-Addin or Nuke-Addon.
 
 ---
 
