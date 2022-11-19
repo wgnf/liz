@@ -91,7 +91,7 @@ public sealed class PackageReference : IEquatable<PackageReference>
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return Name == other.Name && Version == other.Version;
+        return string.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) && string.Equals(Version, other.Version, StringComparison.InvariantCultureIgnoreCase);
     }
 
     /// <inheritdoc />
@@ -103,7 +103,10 @@ public sealed class PackageReference : IEquatable<PackageReference>
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        return HashCode.Combine(Name, Version);
+        var hashCode = new HashCode();
+        hashCode.Add(Name, StringComparer.InvariantCultureIgnoreCase);
+        hashCode.Add(Version, StringComparer.InvariantCultureIgnoreCase);
+        return hashCode.ToHashCode();
     }
 
     /// <summary>
