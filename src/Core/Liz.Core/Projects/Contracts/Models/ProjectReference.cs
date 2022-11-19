@@ -7,15 +7,20 @@ internal sealed class ProjectReference : IEquatable<ProjectReference>
 {
     private readonly List<ProjectReference> _projectReferences = new();
 
-    public ProjectReference(string name)
+    public ProjectReference(string name, string fileName)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+        if (string.IsNullOrWhiteSpace(fileName))
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(fileName));
 
         Name = name;
+        FileName = fileName;
     }
 
     public string Name { get; }
+    
+    public string FileName { get; }
 
     public IEnumerable<ProjectReference> ProjectReferences => _projectReferences;
 

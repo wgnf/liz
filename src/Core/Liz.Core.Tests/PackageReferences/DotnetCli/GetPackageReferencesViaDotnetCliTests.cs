@@ -86,8 +86,8 @@ public class GetPackageReferencesViaDotnetCliTests
             .Setup(getProjectReferences => getProjectReferences.Get(It.IsAny<Project>()))
             .Returns(new[]
             {
-                new ProjectReference("liz.something"),
-                new ProjectReference("liz.core.something")
+                new ProjectReference("liz.something", "liz.something.csproj"),
+                new ProjectReference("liz.core.something", "liz.core.something.csproj")
             });
         
         var project = new Project("Something", Mock.Of<IFileInfo>(), ProjectFormatStyle.SdkStyle);

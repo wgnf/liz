@@ -1,7 +1,9 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
 using Liz.Core.Projects;
+using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Models;
+using Liz.Core.Settings;
 using Moq;
 using SlnParser.Contracts;
 using System.IO.Abstractions;
@@ -243,5 +245,45 @@ public class GetProjectsViaSlnParserTests
                 project.Name == "someFile" &&
                 project.File.Name == file &&
                 project.FormatStyle == ProjectFormatStyle.NonSdkStyle);
+    }
+
+    [Fact]
+    public void Should_Also_Return_Any_Non_Sdk_Style_Project_When_Starting_At_Sdk_Style_And_Include_Transitive()
+    {
+        var mockFileSystem = new MockFileSystem();
+        
+        var context = new ArrangeContext<GetProjectsViaSlnParser>();
+        context.Use<IFileSystem>(mockFileSystem);
+
+        context.For<ExtractLicensesSettingsBase>().Object.IncludeTransitiveDependencies = true;
+        
+        var sut = context.Build();
+        
+        const string sdkStyleProjectFile = "someFile.csproj";
+        const string sdkStyleProjectFileContent = @"<Project><Sdk /></Project>";
+        
+        mockFileSystem.AddFile(sdkStyleProjectFile, new MockFileData(sdkStyleProjectFileContent));
+
+        const string nonSdkStyleProjectFile = "anotherFile.csproj";
+        const string nonSdkStyleProjectFileContent = @"<Project></Project>";
+        
+        mockFileSystem.AddFile(nonSdkStyleProjectFile, new MockFileData(nonSdkStyleProjectFileContent));
+
+        context
+            .For<IGetProjectReferences>()
+            .Setup(getProjectReferences => getProjectReferences.Get(It.IsAny<Project>()))
+            .Returns(new[]
+            {
+                // name is not relevant here!
+                new ProjectReference(sdkStyleProjectFile, sdkStyleProjectFile),
+                new ProjectReference(nonSdkStyleProjectFile, nonSdkStyleProjectFile)
+            });
+        
+        var projects = sut.GetFromFile(sdkStyleProjectFile);
+
+        projects
+            .Should()
+            .Contain(project => project.Name == "anotherFile" &&
+                                project.FormatStyle == ProjectFormatStyle.NonSdkStyle);
     }
 }
