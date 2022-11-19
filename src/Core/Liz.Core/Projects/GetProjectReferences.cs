@@ -32,7 +32,8 @@ internal sealed class GetProjectReferences : IGetProjectReferences
 
     private ProjectReference DoGetProjectReference(IFileInfo projectFile)
     {
-        var projectFileContent = _fileSystem.File.ReadAllText(projectFile.FullName);
+        var projectFileName = projectFile.FullName;
+        var projectFileContent = _fileSystem.File.ReadAllText(projectFileName);
         var projectReferenceName = DetermineProjectReferenceName(projectFileContent, projectFile);
 
         // if something is in the (local class-)cache, we don't have to run the whole thing again
@@ -40,7 +41,7 @@ internal sealed class GetProjectReferences : IGetProjectReferences
             .FirstOrDefault(reference => reference.Name == projectReferenceName);
         if (cachedCandidate != null) return cachedCandidate;
 
-        var currentProjectReference = new ProjectReference(projectReferenceName);
+        var currentProjectReference = new ProjectReference(projectReferenceName, projectFileName);
         var subProjectReferenceFiles = DetermineSubProjectReferenceFiles(projectFileContent, projectFile);
 
         foreach (var subProjectReferenceFile in subProjectReferenceFiles)

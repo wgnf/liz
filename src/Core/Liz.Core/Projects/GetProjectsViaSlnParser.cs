@@ -1,5 +1,6 @@
 ﻿using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Models;
+using Liz.Core.Settings;
 using SlnParser.Contracts;
 using System.IO.Abstractions;
 using System.Xml.Linq;
@@ -9,12 +10,20 @@ namespace Liz.Core.Projects;
 internal sealed class GetProjectsViaSlnParser : IGetProjects
 {
     private readonly IFileSystem _fileSystem;
+    private readonly IGetProjectReferences _getProjectReferences;
+    private readonly ExtractLicensesSettingsBase _settings;
     private readonly ISolutionParser _solutionParser;
 
-    public GetProjectsViaSlnParser(ISolutionParser solutionParser, IFileSystem fileSystem)
+    public GetProjectsViaSlnParser(
+        ExtractLicensesSettingsBase settings,
+        ISolutionParser solutionParser, 
+        IFileSystem fileSystem,
+        IGetProjectReferences getProjectReferences)
     {
+        _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _solutionParser = solutionParser ?? throw new ArgumentNullException(nameof(solutionParser));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        _getProjectReferences = getProjectReferences ?? throw new ArgumentNullException(nameof(getProjectReferences));
     }
 
     public IEnumerable<Project> GetFromFile(string targetFile)
@@ -55,9 +64,22 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
     {
         // NOTE: we just assume that the Project-Name == File-Name here (it's not all too important, because it'll only be used for logs) 
         var projectName = _fileSystem.Path.GetFileNameWithoutExtension(targetFile.FullName);
+        var project = new Project(projectName, targetFile, DetermineProjectFormatStyle(targetFile.FullName));
 
-        // NOTE: we only return the target-file, because there is nothing else to gather in this case...
-        return new[] { new Project(projectName, targetFile, DetermineProjectFormatStyle(targetFile.FullName)) };
+        if (!_settings.IncludeTransitiveDependencies || project.FormatStyle != ProjectFormatStyle.SdkStyle)
+            return new[] { project };
+        
+        /*
+         * NOTE:
+         * if 'include transitive' is activated and 'project' is SDK-Style we have to check if there are any project-references to
+         * a Non-SDK-Style project, because package-references of these projects are not correctly included otherwise
+         *
+         * c.f.: https://github.com/wgnf/liz/issues/116
+         */
+        var projectReferencesNonSdkStyle = DetermineProjectReferencesNonSdkStyle(project);
+        var projects = new[] { project }.Concat(projectReferencesNonSdkStyle);
+
+        return projects;
     }
 
     private IEnumerable<Project> GetProjectFromSolutionFile(IFileSystemInfo fileInfo)
@@ -105,5 +127,26 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
         var hasSdkElement = xmlDocument.Descendants("Sdk").Any();
 
         return hasSdkAttribute || hasSdkElement;
+    }
+
+    private IEnumerable<Project> DetermineProjectReferencesNonSdkStyle(Project startingProject)
+    {
+        var projectReferences = _getProjectReferences.Get(startingProject);
+        var projectReferencesWithStyle = projectReferences
+            .Select(projectReference => new
+            {
+                Reference = projectReference, 
+                Style = DetermineProjectFormatStyle(projectReference.FileName)
+            });
+
+        return projectReferencesWithStyle
+            .Where(projectReferenceWithStyle => projectReferenceWithStyle.Style == ProjectFormatStyle.NonSdkStyle)
+            .Select(projectReferenceWithStyle =>
+            {
+                var projectName = _fileSystem.Path.GetFileNameWithoutExtension(projectReferenceWithStyle.Reference.FileName);
+                var fileInfo = _fileSystem.FileInfo.FromFileName(projectReferenceWithStyle.Reference.FileName);
+
+                return new Project(projectName, fileInfo, projectReferenceWithStyle.Style);
+            });
     }
 }

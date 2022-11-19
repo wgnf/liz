@@ -47,11 +47,11 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
         var cliToolExecutor = new DefaultCliToolExecutor(logger);
         var httpClient = new HttpClientWrapper();
         var fileContentProvider = new FileContentProvider(fileSystem, httpClient);
+        var getProjectReferences = new GetProjectReferences(fileSystem);
 
-        var getProjects = new GetProjectsViaSlnParser(new SolutionParser(), fileSystem);
+        var getProjects = new GetProjectsViaSlnParser(settings, new SolutionParser(), fileSystem, getProjectReferences);
         var parseDotnetListPackage = new ParseDotnetListPackageResult();
         var parsePackagesConfigFile = new ParsePackagesConfigFile();
-        var getProjectReferences = new GetProjectReferences(fileSystem);
 
         var getPackageReferencesDotnetCli = new GetPackageReferencesViaDotnetCli(
             cliToolExecutor, 
