@@ -2,14 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <LangVersion>10</LangVersion>
         <IsPackable>false</IsPackable>
-
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <WarningLevel>5</WarningLevel>
     </PropertyGroup>
 
     <ItemGroup>

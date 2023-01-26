@@ -2,13 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <LangVersion>10</LangVersion>
-        
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <WarningLevel>5</WarningLevel>
     </PropertyGroup>
     
     <!-- NuGet Package relevant stuff -->
