@@ -313,6 +313,31 @@ public class ExtractLicensesSettingsExtensionsTests
                 .Be(value);
         }
     }
+    
+    [Fact]
+    public void ExtractLicensesSettings_Sets_Timespan_Settings()
+    {
+        var value = TimeSpan.FromSeconds(12);
+        var properties = GetExtractLicensesSettingsProperties()
+            .Where(property => property.PropertyType == typeof(TimeSpan));
+
+        foreach (var property in properties)
+        {
+            var setMethod = typeof(ExtractLicensesSettingsExtensions).GetMethod($"Set{property.Name}");
+
+            var settingsInstance = new ExtractLicensesSettings();
+            
+            Assert.Throws<TargetInvocationException>(() =>
+                setMethod?.Invoke(null, new object?[] { null, value }));
+                
+            setMethod?.Invoke(null, new object?[] { settingsInstance, value });
+
+            property
+                .GetValue(settingsInstance)
+                .Should()
+                .Be(value);
+        }
+    }
 
     private static IEnumerable<PropertyInfo> GetExtractLicensesSettingsProperties()
     {

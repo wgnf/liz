@@ -40,6 +40,7 @@ public sealed class CommandRunnerTests
             null,
             null,
             null,
+            null, 
             null));
     }
 
@@ -74,6 +75,7 @@ public sealed class CommandRunnerTests
             null,
             null,
             null,
+            null, 
             null);
 
         extractLicenses.Verify(e => e.ExtractAsync(), Times.Once());

@@ -132,6 +132,19 @@ public abstract class ExtractLicensesSettingsBase
     ///     </para>
     /// </summary>
     public string? ExportLicenseTextsDirectory { get; set; }
+    
+    /// <summary>
+    ///     <para>
+    ///         The timeout for a request (i.e. to get the license text from a website).
+    ///     </para>
+    ///     <para>
+    ///         After this amount of time a request will be considered as failed and aborted.
+    ///     </para>
+    ///     <para>
+    ///         This defaults to 10 seconds
+    ///     </para>
+    /// </summary>
+    public TimeSpan RequestTimeout { get; set; } = TimeSpan.FromSeconds(10);
 
     /// <summary>
     ///     Gets the target file of these settings
