@@ -71,7 +71,7 @@ To develop and work with **liz** you just need to clone this Repo somewhere on y
   
 Before you can start, you should restore all NuGet-Packages using `dotnet restore` if that's not done for you by your IDE.  
   
-As this uses .NET 6.0, you need to install the .NET 6.0.x SDK (as configured by the `global.json`).
+As this uses .NET 7.0, you need to install the .NET 7.0.x SDK (as configured by the `global.json`).
 
 ## 👋 Want to Contribute?
 
