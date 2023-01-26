@@ -474,4 +474,29 @@ public static class ExtractLicensesSettingsExtensions
         settings.ExportLicenseTextsDirectory = exportLicenseTextsDirectory;
         return settings;
     }
+
+    /// <summary>
+    ///     <para>
+    ///         The timeout for a request (i.e. to get the license text from a website).
+    ///     </para>
+    ///     <para>
+    ///         After this amount of time a request will be considered as failed and aborted.
+    ///     </para>
+    ///     <para>
+    ///         This defaults to 10 seconds
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="requestTimeout">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the parameter <paramref name="settings"/> is null</exception>
+    public static ExtractLicensesSettings SetRequestTimeout(
+        this ExtractLicensesSettings settings,
+        TimeSpan requestTimeout)
+    {
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+
+        settings.RequestTimeout = requestTimeout;
+        return settings;
+    }
 }

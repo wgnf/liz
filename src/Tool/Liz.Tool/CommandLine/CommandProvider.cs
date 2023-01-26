@@ -31,7 +31,8 @@ internal sealed class CommandProvider
             string? urlToLicenseTypeMapping,
             string? whitelist,
             string? blacklist,
-            string? exportTexts) =>
+            string? exportTexts,
+            int? requestTimeout) =>
         {
             await _commandRunner.RunAsync(
                 targetFile, 
@@ -44,7 +45,8 @@ internal sealed class CommandProvider
                 urlToLicenseTypeMapping,
                 whitelist,
                 blacklist,
-                exportTexts)
+                exportTexts,
+                requestTimeout)
                 .ConfigureAwait(false);
         }, symbols.ToArray());
 
@@ -79,7 +81,8 @@ internal sealed class CommandProvider
             GetUrlToLicenseTypeMappingOption(),
             GetLicenseTypeWhitelistOption(),
             GetLicenseTypeBlacklistOption(),
-            GetExportLicenseTextsDirectoryOption()
+            GetExportLicenseTextsDirectoryOption(),
+            GetRequestTimeoutOption()
         };
         return options;
     }
@@ -179,6 +182,15 @@ internal sealed class CommandProvider
             new[] { "--export-texts", "-et" },
             () => null,
             "A path to a directory to where the determined license-texts will be exported. Each license-text will be written to an individual file with the file-name being: \"<package-name>-<package-version>.txt\". If the license-text is the content of a website, the contents will be written into an \".html\" file instead");
+        return option;
+    }
+
+    private static Option GetRequestTimeoutOption()
+    {
+        var option = new Option<int?>(
+            new[] { "--timeout", "-t" },
+            () => null,
+            "The timeout for a request (i.e. to get the license text from a website). After this amount of time a request will be considered as failed and aborted.");
         return option;
     }
 }
