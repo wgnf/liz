@@ -23,6 +23,9 @@ internal sealed class CakeLogger : ILogger
         var actualMessage = exception == null 
             ? message 
             : $"{message}{Environment.NewLine}{Environment.NewLine}{exception}";
+
+        actualMessage = actualMessage.Replace("{", "{{");
+        actualMessage = actualMessage.Replace("}", "}}");
         
         _cakeContext.Log.Write(verbosity, cakeLogLevel, actualMessage);
     }
