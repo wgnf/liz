@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build", "build\Build.csproj", "{4D3283B8-6860-4EF5-88B8-14898F12237B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liz.Cake", "..\..\..\src\Cake\Liz.Cake\Liz.Cake.csproj", "{DD514234-B5B4-47AB-9B8A-67A8AD8214EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liz.Core", "..\..\..\src\Core\Liz.Core\Liz.Core.csproj", "{914CA8AF-9033-47B3-955F-B5E1E235D764}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{4D3283B8-6860-4EF5-88B8-14898F12237B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D3283B8-6860-4EF5-88B8-14898F12237B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D3283B8-6860-4EF5-88B8-14898F12237B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD514234-B5B4-47AB-9B8A-67A8AD8214EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD514234-B5B4-47AB-9B8A-67A8AD8214EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD514234-B5B4-47AB-9B8A-67A8AD8214EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD514234-B5B4-47AB-9B8A-67A8AD8214EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{914CA8AF-9033-47B3-955F-B5E1E235D764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{914CA8AF-9033-47B3-955F-B5E1E235D764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{914CA8AF-9033-47B3-955F-B5E1E235D764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{914CA8AF-9033-47B3-955F-B5E1E235D764}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

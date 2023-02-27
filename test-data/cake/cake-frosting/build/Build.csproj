@@ -1,11 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Cake.ExtractLicenses" Version="0.1.0-cake-addin0001" />
-    <PackageReference Include="Cake.Frosting" Version="2.0.0" />
+<!--    <PackageReference Include="Cake.ExtractLicenses" Version="2.0.0" />-->
+    <PackageReference Include="Cake.Frosting" Version="3.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\Cake\Liz.Cake\Liz.Cake.csproj" />
   </ItemGroup>
 </Project>
