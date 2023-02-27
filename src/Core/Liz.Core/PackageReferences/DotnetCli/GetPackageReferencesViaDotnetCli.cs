@@ -38,7 +38,7 @@ internal sealed class GetPackageReferencesViaDotnetCli : IGetPackageReferencesVi
 
     private async Task RunDotNetRestore(Project project)
     {
-        await _cliToolExecutor.ExecuteAsync("dotnet", $"restore {project.File}").ConfigureAwait(false);
+        await _cliToolExecutor.ExecuteAsync("dotnet", $"restore \"{project.File}\"").ConfigureAwait(false);
     }
 
     private async Task<string> RunDotNetListPackage(Project project, bool includeTransitive)
