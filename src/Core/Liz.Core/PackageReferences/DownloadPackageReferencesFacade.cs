@@ -58,7 +58,14 @@ internal sealed class DownloadPackageReferencesFacade : IDownloadPackageReferenc
         foreach (var dummyProject in dummyProjects)
         {
             _logger.LogDebug($"Downloading packages of {dummyProject}...");
-            await _downloadPackageReferencesViaDotnetCli.DownloadAsync(dummyProject, targetDirectory).ConfigureAwait(false);
+            try
+            {
+                await _downloadPackageReferencesViaDotnetCli.DownloadAsync(dummyProject, targetDirectory).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogDebug($"Unable to download from {dummyProject}", exception);
+            }
         }
 
         EnrichWithDownloadedArtifactDirectories(targetDirectory, packageReferencesList);

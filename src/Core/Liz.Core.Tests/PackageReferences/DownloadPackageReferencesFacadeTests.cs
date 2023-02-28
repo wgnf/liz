@@ -1,5 +1,6 @@
 ﻿using ArrangeContext.Moq;
 using FluentAssertions;
+using Liz.Core.Logging.Contracts;
 using Liz.Core.PackageReferences;
 using Liz.Core.PackageReferences.Contracts.DotnetCli;
 using Liz.Core.PackageReferences.Contracts.Models;
@@ -132,6 +133,57 @@ public class DownloadPackageReferencesFacadeTests
         packageReferences
             .Should()
             .Contain(packageReference => packageReference.ArtifactDirectory != null);
+    }
+    
+    [Fact]
+    public async Task DownloadAndEnrich_Handles_Exceptions()
+    {
+        var mockFileSystem = new MockFileSystem();
+
+        var context = CreateContext();
+        context.Use<IFileSystem>(mockFileSystem);
+
+        const string downloadDirectory = "C:/temp/download";
+        var downloadDirectoryMock = new Mock<IDirectoryInfo>();
+        downloadDirectoryMock
+            .SetupGet(directory => directory.FullName)
+            .Returns(downloadDirectory);
+        
+        context
+            .For<IProvideTemporaryDirectories>()
+            .Setup(provideTempDirectories => provideTempDirectories.GetDownloadDirectory())
+            .Returns(downloadDirectoryMock.Object);
+        
+        var sut = context.Build();
+
+        var packageReferences = new[]
+        {
+            new PackageReference("TestNet6.0-1", "net6.0", "1.2.3"),
+            new PackageReference("TestNet6.0-2", "net6.0", "1.2.5"),
+            new PackageReference("TestNetStandard", "netstandard2.0", "1.3.3.7")
+        };
+
+        // ReSharper disable once StringLiteralTypo
+        var netStandardPackageArtifactDirectory = mockFileSystem.Path.Combine(downloadDirectory, "testnetstandard", "1.3.3.7");
+        
+        // just pretend we have on artifact-directory
+        mockFileSystem.AddDirectory(netStandardPackageArtifactDirectory);
+        
+        // twice, because there are exactly two different target-frameworks declared
+        context
+            .For<IDownloadPackageReferencesViaDotnetCli>()
+            .Setup(downloader => downloader.DownloadAsync(It.IsAny<IFileInfo>(), It.IsAny<IDirectoryInfo>()))
+            .Throws<InvalidOperationException>();
+
+        await sut.DownloadAndEnrichAsync(packageReferences);
+
+        context
+            .For<ILogger>()
+            .Verify(logger => logger.Log(
+                LogLevel.Debug, 
+                It.Is<string>(message => message.Contains("Unable to download")), 
+                It.Is<Exception>(exception => exception != null)), 
+                Times.AtLeast(1));
     }
 
     private static ArrangeContext<DownloadPackageReferencesFacade> CreateContext()
