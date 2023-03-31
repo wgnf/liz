@@ -135,6 +135,17 @@ public abstract class ExtractLicensesSettingsBase
     
     /// <summary>
     ///     <para>
+    ///         A path to a JSON-file to which the determined license- and package-information will be exported
+    ///         All the information will be written to a single JSON-file. 
+    ///     </para>
+    ///     <para>
+    ///         If the file already exists it will be overwritten.
+    ///     </para>
+    /// </summary>
+    public string? ExportJsonFile { get; set; }
+    
+    /// <summary>
+    ///     <para>
     ///         The timeout for a request (i.e. to get the license text from a website).
     ///     </para>
     ///     <para>
@@ -161,6 +172,7 @@ public abstract class ExtractLicensesSettingsBase
         ValidateTargetFile();
         ValidateWhitelistAndBlacklist();
         ValidateExportTextsDirectory();
+        ValidateExportJsonFile();
     }
 
     private void ValidateTargetFile()
@@ -168,18 +180,24 @@ public abstract class ExtractLicensesSettingsBase
         var targetFile = GetTargetFile();
 
         if (string.IsNullOrWhiteSpace(targetFile))
+        {
             throw new SettingsInvalidException("The target-file cannot be null/empty/whitespace");
+        }
 
         ValidatePath(targetFile, "TargetFile");
 
         if (!File.Exists(targetFile))
+        {
             throw new SettingsInvalidException($"The given target-file ('{targetFile}') does not exist");
+        }
 
         var targetFileExtension = Path.GetExtension(targetFile);
         if (!targetFileExtension.Contains("csproj", StringComparison.InvariantCultureIgnoreCase) &&
             !targetFileExtension.Contains("fsproj", StringComparison.InvariantCultureIgnoreCase) &&
             !targetFileExtension.Contains("sln", StringComparison.InvariantCultureIgnoreCase))
+        {
             throw new SettingsInvalidException($"The given target-file ('{targetFile}') is not a csproj, fsproj nor sln file");
+        }
     }
 
     private void ValidateWhitelistAndBlacklist()
@@ -187,14 +205,26 @@ public abstract class ExtractLicensesSettingsBase
         // this will ensure the mutual exclusivity of the license-type whitelist and blacklist
         if ((LicenseTypeWhitelist.Any() || !string.IsNullOrWhiteSpace(LicenseTypeWhitelistFilePath)) &&
             (LicenseTypeBlacklist.Any() || !string.IsNullOrWhiteSpace(LicenseTypeBlacklistFilePath)))
+        {
             throw new SettingsInvalidException("License-type whitelist and blacklist are mutually exclusive. " +
                                                "You cannot use them together. Either use the whitelist or the blacklist.");
+        }
     }
 
     private void ValidateExportTextsDirectory()
     {
         if (!string.IsNullOrWhiteSpace(ExportLicenseTextsDirectory))
+        {
             ValidatePath(ExportLicenseTextsDirectory, nameof(ExportLicenseTextsDirectory));
+        }
+    }
+
+    private void ValidateExportJsonFile()
+    {
+        if (!string.IsNullOrWhiteSpace(ExportJsonFile))
+        {
+            ValidatePath(ExportJsonFile, nameof(ExportJsonFile));
+        }
     }
 
     private void ValidatePath(string path, string settingsName)

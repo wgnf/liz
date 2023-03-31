@@ -21,8 +21,15 @@ public static class ExtractLicensesSettingsExtensions
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="targetFile"/> is null</exception>
     public static ExtractLicensesSettings SetTargetFile(this ExtractLicensesSettings settings, AbsolutePath targetFile)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        if (targetFile == null) throw new ArgumentNullException(nameof(targetFile));
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
+        if (targetFile == null)
+        {
+            throw new ArgumentNullException(nameof(targetFile));
+        }
 
         settings.TargetFile = targetFile;
         return settings;
@@ -38,8 +45,11 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         bool value)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.IncludeTransitiveDependencies = value;
         return settings;
     }
@@ -51,8 +61,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings EnableIncludeTransitiveDependencies(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.IncludeTransitiveDependencies = true;
         return settings;
     }
@@ -64,8 +77,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings DisableIncludeTransitiveDependencies(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.IncludeTransitiveDependencies = false;
         return settings;
     }
@@ -77,8 +93,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ToggleIncludeTransitiveDependencies(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.IncludeTransitiveDependencies = !settings.IncludeTransitiveDependencies;
         return settings;
     }
@@ -90,8 +109,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ResetIncludeTransitiveDependencies(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.IncludeTransitiveDependencies = new ExtractLicensesSettings().IncludeTransitiveDependencies;
         return settings;
     }
@@ -107,8 +129,11 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         bool value)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.SuppressPrintDetails = value;
         return settings;
     }
@@ -120,8 +145,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings EnableSuppressPrintDetails(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.SuppressPrintDetails = true;
         return settings;
     }
@@ -133,8 +161,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings DisableSuppressPrintDetails(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.SuppressPrintDetails = false;
         return settings;
     }
@@ -146,8 +177,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ToggleSuppressPrintDetails(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.SuppressPrintDetails = !settings.SuppressPrintDetails;
         return settings;
     }
@@ -159,8 +193,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ResetSuppressPrintDetails(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.SuppressPrintDetails = new ExtractLicensesSettings().SuppressPrintDetails;
         return settings;
     }
@@ -175,8 +212,11 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         bool value)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.SuppressPrintIssues = value;
         return settings;
     }
@@ -188,8 +228,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings EnableSuppressPrintIssues(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.SuppressPrintIssues = true;
         return settings;
     }
@@ -201,8 +244,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings DisableSuppressPrintIssues(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.SuppressPrintIssues = false;
         return settings;
     }
@@ -214,8 +260,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ToggleSuppressPrintIssues(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.SuppressPrintIssues = !settings.SuppressPrintIssues;
         return settings;
     }
@@ -227,8 +276,11 @@ public static class ExtractLicensesSettingsExtensions
     /// <returns>The settings</returns>
     public static ExtractLicensesSettings ResetSuppressPrintIssues(this ExtractLicensesSettings settings)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         settings.SuppressPrintIssues = new ExtractLicensesSettings().SuppressPrintIssues;
         return settings;
     }
@@ -245,10 +297,17 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         List<LicenseTypeDefinition> licenseTypeDefinitions)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        if (licenseTypeDefinitions == null) throw new ArgumentNullException(nameof(licenseTypeDefinitions));
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
 
-        settings.LicenseTypeDefinitions = licenseTypeDefinitions ?? throw new ArgumentNullException(nameof(licenseTypeDefinitions));
+        if (licenseTypeDefinitions == null)
+        {
+            throw new ArgumentNullException(nameof(licenseTypeDefinitions));
+        }
+
+        settings.LicenseTypeDefinitions = licenseTypeDefinitions;
         return settings;
     }
     
@@ -273,9 +332,15 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         string licenseTypeDefinitionsFilePath)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         if (string.IsNullOrWhiteSpace(licenseTypeDefinitionsFilePath))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(licenseTypeDefinitionsFilePath));
+        }
 
         settings.LicenseTypeDefinitionsFilePath = licenseTypeDefinitionsFilePath;
         return settings;
@@ -292,8 +357,15 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         Dictionary<string, string> urlToLicenseTypeMapping)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        if (urlToLicenseTypeMapping == null) throw new ArgumentNullException(nameof(urlToLicenseTypeMapping));
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
+        if (urlToLicenseTypeMapping == null)
+        {
+            throw new ArgumentNullException(nameof(urlToLicenseTypeMapping));
+        }
 
         settings.UrlToLicenseTypeMapping = urlToLicenseTypeMapping;
         return settings;
@@ -320,9 +392,15 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         string urlToLicenseTypeMappingFilePath)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         if (string.IsNullOrWhiteSpace(urlToLicenseTypeMappingFilePath))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(urlToLicenseTypeMappingFilePath));
+        }
 
         settings.UrlToLicenseTypeMappingFilePath = urlToLicenseTypeMappingFilePath;
         return settings;
@@ -347,8 +425,15 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         List<string> licenseTypeWhiteList)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        if (licenseTypeWhiteList == null) throw new ArgumentNullException(nameof(licenseTypeWhiteList));
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
+        if (licenseTypeWhiteList == null)
+        {
+            throw new ArgumentNullException(nameof(licenseTypeWhiteList));
+        }
 
         settings.LicenseTypeWhitelist = licenseTypeWhiteList;
         return settings;
@@ -378,9 +463,15 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         string licenseTypeWhitelistFilePath)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         if (string.IsNullOrWhiteSpace(licenseTypeWhitelistFilePath))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(licenseTypeWhitelistFilePath));
+        }
 
         settings.LicenseTypeWhitelistFilePath = licenseTypeWhitelistFilePath;
         return settings;
@@ -406,8 +497,15 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         List<string> licenseTypeBlacklist)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
-        if (licenseTypeBlacklist == null) throw new ArgumentNullException(nameof(licenseTypeBlacklist));
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
+        if (licenseTypeBlacklist == null)
+        {
+            throw new ArgumentNullException(nameof(licenseTypeBlacklist));
+        }
 
         settings.LicenseTypeBlacklist = licenseTypeBlacklist;
         return settings;
@@ -438,9 +536,15 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         string licenseTypeBlacklistFilePath)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         if (string.IsNullOrWhiteSpace(licenseTypeBlacklistFilePath))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(licenseTypeBlacklistFilePath));
+        }
 
         settings.LicenseTypeBlacklistFilePath = licenseTypeBlacklistFilePath;
         return settings;
@@ -467,9 +571,15 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         string exportLicenseTextsDirectory)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         if (string.IsNullOrWhiteSpace(exportLicenseTextsDirectory))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(exportLicenseTextsDirectory));
+        }
 
         settings.ExportLicenseTextsDirectory = exportLicenseTextsDirectory;
         return settings;
@@ -494,9 +604,46 @@ public static class ExtractLicensesSettingsExtensions
         this ExtractLicensesSettings settings,
         TimeSpan requestTimeout)
     {
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
 
         settings.RequestTimeout = requestTimeout;
+        return settings;
+    }
+    
+    /// <summary>
+    ///     <para>
+    ///         A path to a JSON-file to which the determined license- and package-information will be exported
+    ///         All the information will be written to a single JSON-file. 
+    ///     </para>
+    ///     <para>
+    ///         If the file already exists it will be overwritten.
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="exportJsonFile">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the parameter <paramref name="settings"/> is null</exception>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when the parameter <paramref name="exportJsonFile"/> is either null, empty or whitespace
+    /// </exception>
+    public static ExtractLicensesSettings SetExportJsonFile(
+        this ExtractLicensesSettings settings,
+        string exportJsonFile)
+    {
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
+        if (string.IsNullOrWhiteSpace(exportJsonFile))
+        {
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(exportJsonFile));
+        }
+
+        settings.ExportJsonFile = exportJsonFile;
         return settings;
     }
 }
