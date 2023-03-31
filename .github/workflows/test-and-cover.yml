@@ -17,7 +17,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
 
       - name: Run tests with nuke
         run: ./build/build.sh -Target Test -Configuration Debug
