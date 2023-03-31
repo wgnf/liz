@@ -9,34 +9,41 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
 {
     private readonly IEnumerable<ILicenseTypeDefinitionProvider> _licenseTypeDefinitionProviders;
     private readonly ILogger _logger;
-    private IEnumerable<LicenseTypeDefinition> _typeDefinitions;
 
     private bool _isInitialized;
+    private IEnumerable<LicenseTypeDefinition> _typeDefinitions;
 
     public LicenseTypeFromTextLicenseInformationSource(
         IEnumerable<ILicenseTypeDefinitionProvider> licenseTypeDefinitionProviders,
         ILogger logger)
     {
-        _licenseTypeDefinitionProviders = licenseTypeDefinitionProviders ?? throw new ArgumentNullException(nameof(licenseTypeDefinitionProviders));
+        _licenseTypeDefinitionProviders = licenseTypeDefinitionProviders ??
+                                          throw new ArgumentNullException(nameof(licenseTypeDefinitionProviders));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         _typeDefinitions = Enumerable.Empty<LicenseTypeDefinition>();
     }
-    
+
     // needs to be after the stuff that possibly gets the license-text
     public int Order => 10;
-    
+
     public Task GetInformationAsync(GetLicenseInformationContext licenseInformationContext)
     {
-        if (licenseInformationContext == null) throw new ArgumentNullException(nameof(licenseInformationContext));
+        if (licenseInformationContext == null)
+        {
+            throw new ArgumentNullException(nameof(licenseInformationContext));
+        }
 
         Initialize();
 
         // no need to attempt getting the license-type from the text, when there's no text, duh
-        if (string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text)) return Task.CompletedTask;
-        
+        if (string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text))
+        {
+            return Task.CompletedTask;
+        }
+
         var licenseText = RemoveControlCharacters(licenseInformationContext.LicenseInformation.Text);
-        
+
         /*
          * NOTE:
          * Ignoring Webpages for now (until sanitation (https://github.com/wgnf/liz/issues/28) works reliably), because
@@ -44,10 +51,13 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
          * have phrases in links and scripts that target other license types
          */
         if (licenseText.Contains("<!DOCTYPE html>", StringComparison.InvariantCultureIgnoreCase))
+        {
             return Task.CompletedTask;
+        }
 
-        _logger.LogDebug($"Attempting to get license-type from license-text for\n{licenseInformationContext.LicenseInformation.Text}");
-        
+        _logger.LogDebug(
+            $"Attempting to get license-type from license-text for\n{licenseInformationContext.LicenseInformation.Text}");
+
         HandleTypeDefinitions(licenseInformationContext, licenseText);
 
         return Task.CompletedTask;
@@ -55,16 +65,22 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
 
     private void HandleTypeDefinitions(GetLicenseInformationContext licenseInformationContext, string licenseText)
     {
-        foreach (var typeDefinition in _typeDefinitions) HandleTypeDefinition(licenseInformationContext, licenseText, typeDefinition);
+        foreach (var typeDefinition in _typeDefinitions)
+        {
+            HandleTypeDefinition(licenseInformationContext, licenseText, typeDefinition);
+        }
     }
 
     private static void HandleTypeDefinition(
-        GetLicenseInformationContext licenseInformationContext, 
+        GetLicenseInformationContext licenseInformationContext,
         string licenseText,
         LicenseTypeDefinition typeDefinition)
     {
         // no need to check if it already is contained
-        if (licenseInformationContext.LicenseInformation.Types.Contains(typeDefinition.LicenseType)) return;
+        if (licenseInformationContext.LicenseInformation.Types.Contains(typeDefinition.LicenseType))
+        {
+            return;
+        }
 
         var containsAllSnippets = typeDefinition
             .InclusiveTextSnippets
@@ -74,15 +90,17 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
             .ExclusiveTextSnippets
             .Any(snippet => licenseText.Contains(RemoveControlCharacters(snippet), StringComparison.InvariantCultureIgnoreCase));
 
-        if (containsAllSnippets && !containsAnExclusion) 
+        if (containsAllSnippets && !containsAnExclusion)
+        {
             licenseInformationContext.LicenseInformation.AddLicenseType(typeDefinition.LicenseType);
+        }
     }
 
     private static string RemoveControlCharacters(string input)
     {
         return new string(input.Where(character => !char.IsControl(character)).ToArray());
     }
-    
+
     /*
      * NOTE:
      * We need this here, because some definitions come from the settings which are partly set by a preprocessor,
@@ -90,8 +108,11 @@ internal sealed class LicenseTypeFromTextLicenseInformationSource : ILicenseInfo
      */
     private void Initialize()
     {
-        if (_isInitialized) return;
-        
+        if (_isInitialized)
+        {
+            return;
+        }
+
         _typeDefinitions = _licenseTypeDefinitionProviders.SelectMany(provider => provider.Get());
         _isInitialized = true;
     }

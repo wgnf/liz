@@ -11,7 +11,7 @@ internal sealed class UrlToLicenseTypeFromSettingsProvider : IUrlToLicenseTypeMa
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
     }
-    
+
     public IDictionary<string, string> Get()
     {
         return _settings.UrlToLicenseTypeMapping;

@@ -21,13 +21,15 @@ public class LicenseTypeDefinition
     public LicenseTypeDefinition(string licenseType, params string[] textSnippets)
     {
         if (string.IsNullOrWhiteSpace(licenseType))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(licenseType));
+        }
 
         LicenseType = licenseType;
         InclusiveTextSnippets = textSnippets ?? throw new ArgumentNullException(nameof(textSnippets));
         ExclusiveTextSnippets = Enumerable.Empty<string>();
     }
-    
+
     /// <summary>
     ///     The defined license-type
     /// </summary>

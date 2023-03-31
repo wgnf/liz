@@ -1,52 +1,52 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+  </PropertyGroup>
 
-    <!-- NuGet Package relevant stuff -->
-    <PropertyGroup>
-        <PackageId>Cake.ExtractLicenses</PackageId>
-        <PackageIcon>liz-logo-cake.png</PackageIcon>
-        <AssemblyName>Cake.ExtractLicenses</AssemblyName>
-        
-        <SignAssembly>true</SignAssembly>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  <!-- NuGet Package relevant stuff -->
+  <PropertyGroup>
+    <PackageId>Cake.ExtractLicenses</PackageId>
+    <PackageIcon>liz-logo-cake.png</PackageIcon>
+    <AssemblyName>Cake.ExtractLicenses</AssemblyName>
 
-        <Authors>Martin Wagenführ</Authors>
-        <Description>
-            The Cake-Addin of the Liz-Tool - which helps to extract license-information from your solution/project
-            aimed on a fast and correct process.
-        </Description>
-        <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>cake-addin;Cake;Addin;License;Extract;Extract;Information;Liz</PackageTags>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    </PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-    <ItemGroup>
-        <PackageReference Include="Cake.Core" Version="3.0.0" PrivateAssets="all" />
+    <Authors>Martin Wagenführ</Authors>
+    <Description>
+      The Cake-Addin of the Liz-Tool - which helps to extract license-information from your solution/project
+      aimed on a fast and correct process.
+    </Description>
+    <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>cake-addin;Cake;Addin;License;Extract;Extract;Information;Liz</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
 
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Cake.Core" Version="3.0.0" PrivateAssets="all"/>
 
-    <ItemGroup>
-        <None Include="../../../LICENSE" Pack="true" PackagePath="" />
-        <None Include="../../../res/liz-logo-cake.png" Pack="true" PackagePath="" />
-    </ItemGroup>
-    
-    <ItemGroup>
-      <ProjectReference Include="..\..\Core\Liz.Core\Liz.Core.csproj" />
-    </ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../../LICENSE" Pack="true" PackagePath=""/>
+    <None Include="../../../res/liz-logo-cake.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Liz.Core\Liz.Core.csproj"/>
+  </ItemGroup>
 
 </Project>

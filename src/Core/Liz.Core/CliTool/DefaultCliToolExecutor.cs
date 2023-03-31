@@ -1,8 +1,8 @@
-﻿using Liz.Core.CliTool.Contracts;
+﻿using System.Diagnostics;
+using Liz.Core.CliTool.Contracts;
 using Liz.Core.CliTool.Contracts.Exceptions;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
-using System.Diagnostics;
 
 namespace Liz.Core.CliTool;
 
@@ -14,21 +14,33 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-    
+
     public async Task ExecuteAsync(string fileName, string arguments)
     {
-        if (arguments == null) throw new ArgumentNullException(nameof(arguments));
+        if (arguments == null)
+        {
+            throw new ArgumentNullException(nameof(arguments));
+        }
+
         if (string.IsNullOrWhiteSpace(fileName))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(fileName));
+        }
 
         _ = await ExecuteWithResultAsync(fileName, arguments).ConfigureAwait(false);
     }
-    
+
     public async Task<string> ExecuteWithResultAsync(string fileName, string arguments)
     {
-        if (arguments == null) throw new ArgumentNullException(nameof(arguments));
+        if (arguments == null)
+        {
+            throw new ArgumentNullException(nameof(arguments));
+        }
+
         if (string.IsNullOrWhiteSpace(fileName))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(fileName));
+        }
 
         var result = await ExecuteInternalAsync(fileName, arguments).ConfigureAwait(false);
         return result;
@@ -38,10 +50,12 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
     {
         var process = StartProcess(fileName, arguments);
         if (process == null)
+        {
             throw new CliToolExecutionFailedException(
                 fileName,
-                arguments, 
+                arguments,
                 "Tool could not be started properly");
+        }
 
         /*
          * NOTE:
@@ -52,12 +66,15 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
          */
         var standardOutput = await GatherStandardOutput(process).ConfigureAwait(false);
         var errorOutput = await GatherErrorOutput(process).ConfigureAwait(false);
-        
+
         process.WaitForExit();
 
         // NOTE: We can generally assume that an exit code of 0 indicates the success of a process 
-        if (process.ExitCode == 0) return standardOutput;
-        
+        if (process.ExitCode == 0)
+        {
+            return standardOutput;
+        }
+
         throw new CliToolExecutionFailedException(fileName, arguments, process.ExitCode, errorOutput, standardOutput);
     }
 
@@ -74,13 +91,15 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
                 RedirectStandardOutput = true,
                 UseShellExecute = false
             };
-            
+
             _logger.LogDebug($"CLI: Executing file '{fileName}' with arguments '{arguments}'...");
 
             var process = Process.Start(processStartInfo);
             if (process == null)
+            {
                 throw new InvalidOperationException("Could not start process");
-            
+            }
+
             return process;
         }
         catch (Exception ex)
@@ -89,7 +108,7 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         }
     }
 
-    private async static Task<string> GatherErrorOutput(Process process)
+    private static async Task<string> GatherErrorOutput(Process process)
     {
         var standardError = process.StandardError;
         var errorOutput = await standardError.ReadToEndAsync().ConfigureAwait(false);
@@ -97,11 +116,11 @@ internal sealed class DefaultCliToolExecutor : ICliToolExecutor
         return errorOutput;
     }
 
-    private async static Task<string> GatherStandardOutput(Process process)
+    private static async Task<string> GatherStandardOutput(Process process)
     {
         var standardOutput = process.StandardOutput;
         var standardOutputResult = await standardOutput.ReadToEndAsync().ConfigureAwait(false);
-        
+
         return standardOutputResult;
     }
 }

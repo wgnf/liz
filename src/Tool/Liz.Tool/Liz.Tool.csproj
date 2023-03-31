@@ -1,54 +1,54 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
 
-    <!-- NuGet Package relevant stuff -->
-    <PropertyGroup>
-        <PackageIcon>liz-logo-150x.png</PackageIcon>
-        
-        <PackAsTool>true</PackAsTool>
-        <ToolCommandName>liz</ToolCommandName>
+  <!-- NuGet Package relevant stuff -->
+  <PropertyGroup>
+    <PackageIcon>liz-logo-150x.png</PackageIcon>
 
-        <SignAssembly>true</SignAssembly>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>liz</ToolCommandName>
 
-        <Authors>Martin Wagenführ</Authors>
-        <Description>
-            The dotnet-CLI-tool of the Liz-Tool - which helps to extract license-information from your solution/project
-            aimed on a fast and correct process.
-        </Description>
-        <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>dotnet;CLI;Tool;License;Extract;Extract;Information;Liz</PackageTags>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    </PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-    <ItemGroup>
-        <PackageReference Include="ShellProgressBar" Version="5.1.0" />
-        <PackageReference Include="System.CommandLine" Version="2.0.0-beta3.22114.1" />
+    <Authors>Martin Wagenführ</Authors>
+    <Description>
+      The dotnet-CLI-tool of the Liz-Tool - which helps to extract license-information from your solution/project
+      aimed on a fast and correct process.
+    </Description>
+    <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>dotnet;CLI;Tool;License;Extract;Extract;Information;Liz</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
 
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ShellProgressBar" Version="5.1.0"/>
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta3.22114.1"/>
 
-    <ItemGroup>
-        <None Include="../../../LICENSE" Pack="true" PackagePath="" />
-        <None Include="../../../res/liz-logo-150x.png" Pack="true" PackagePath="" />
-    </ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\Core\Liz.Core\Liz.Core.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Include="../../../LICENSE" Pack="true" PackagePath=""/>
+    <None Include="../../../res/liz-logo-150x.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Liz.Core\Liz.Core.csproj"/>
+  </ItemGroup>
 
 </Project>

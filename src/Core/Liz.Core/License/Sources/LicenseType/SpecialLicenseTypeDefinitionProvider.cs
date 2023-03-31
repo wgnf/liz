@@ -5,7 +5,7 @@ using Liz.Core.License.Contracts.Models;
 
 namespace Liz.Core.License.Sources.LicenseType;
 
-internal sealed class SpecialLicenseTypeDefinitionProvider :ILicenseTypeDefinitionProvider
+internal sealed class SpecialLicenseTypeDefinitionProvider : ILicenseTypeDefinitionProvider
 {
     public IEnumerable<LicenseTypeDefinition> Get()
     {

@@ -1,9 +1,9 @@
-﻿using Liz.Core.License.Contracts;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO.Abstractions;
+using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
-using System.Diagnostics.CodeAnalysis;
-using System.IO.Abstractions;
 
 namespace Liz.Core.License.Sources.LicenseInformation;
 
@@ -30,11 +30,21 @@ internal sealed class LicenseFileLicenseInformationSource : ILicenseInformationS
 
     public async Task GetInformationAsync(GetLicenseInformationContext licenseInformationContext)
     {
-        if (licenseInformationContext == null) throw new ArgumentNullException(nameof(licenseInformationContext));
+        if (licenseInformationContext == null)
+        {
+            throw new ArgumentNullException(nameof(licenseInformationContext));
+        }
 
-        if (licenseInformationContext.ArtifactDirectory == null) return;
+        if (licenseInformationContext.ArtifactDirectory == null)
+        {
+            return;
+        }
+
         // we do not need to do this when there's already text
-        if (!string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text)) return;
+        if (!string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text))
+        {
+            return;
+        }
 
         _logger.LogDebug("Get license-information from a file containing 'license'");
 

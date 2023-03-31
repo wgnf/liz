@@ -11,7 +11,8 @@ internal sealed class ApacheLicenseTypeDefinitionProvider : ILicenseTypeDefiniti
     {
         return new[]
         {
-            new LicenseTypeDefinition("Apache-1.0", "The Apache Group", "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met"),
+            new LicenseTypeDefinition("Apache-1.0", "The Apache Group",
+                "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met"),
             new LicenseTypeDefinition("Apache-1.1", "Apache License", "1.1"),
             new LicenseTypeDefinition("Apache-2.0", "Apache License", "Version 2.0")
         };

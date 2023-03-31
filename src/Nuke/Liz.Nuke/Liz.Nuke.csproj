@@ -1,50 +1,50 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
 
-    <!-- NuGet Package relevant stuff -->
-    <PropertyGroup>
-        <PackageIcon>liz-logo-nuke.png</PackageIcon>
+  <!-- NuGet Package relevant stuff -->
+  <PropertyGroup>
+    <PackageIcon>liz-logo-nuke.png</PackageIcon>
 
-        <SignAssembly>true</SignAssembly>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <SignAssembly>true</SignAssembly>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-        <Authors>Martin Wagenführ</Authors>
-        <Description>
-            The Nuke-Addon of the Liz-Tool - which helps to extract license-information from your solution/project
-            aimed on a fast and correct process.
-        </Description>
-        <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>Nuke;nuke-addon;Addon;License;Extract;Extract;Information;Liz</PackageTags>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    </PropertyGroup>
+    <Authors>Martin Wagenführ</Authors>
+    <Description>
+      The Nuke-Addon of the Liz-Tool - which helps to extract license-information from your solution/project
+      aimed on a fast and correct process.
+    </Description>
+    <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Nuke;nuke-addon;Addon;License;Extract;Extract;Information;Liz</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Nuke.Common" Version="6.0.0" />
-        
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Nuke.Common" Version="6.0.0"/>
 
-    <ItemGroup>
-        <None Include="../../../LICENSE" Pack="true" PackagePath="" />
-        <None Include="../../../res/liz-logo-nuke.png" Pack="true" PackagePath="" />
-    </ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\Core\Liz.Core\Liz.Core.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Include="../../../LICENSE" Pack="true" PackagePath=""/>
+    <None Include="../../../res/liz-logo-nuke.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Liz.Core\Liz.Core.csproj"/>
+  </ItemGroup>
 
 </Project>

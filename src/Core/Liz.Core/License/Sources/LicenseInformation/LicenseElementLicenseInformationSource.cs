@@ -1,9 +1,9 @@
-﻿using Liz.Core.License.Contracts;
+﻿using System.IO.Abstractions;
+using System.Xml.Linq;
+using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
-using System.IO.Abstractions;
-using System.Xml.Linq;
 
 namespace Liz.Core.License.Sources.LicenseInformation;
 
@@ -33,9 +33,15 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
 
     public async Task GetInformationAsync(GetLicenseInformationContext licenseInformationContext)
     {
-        if (licenseInformationContext == null) throw new ArgumentNullException(nameof(licenseInformationContext));
+        if (licenseInformationContext == null)
+        {
+            throw new ArgumentNullException(nameof(licenseInformationContext));
+        }
 
-        if (licenseInformationContext.NugetSpecificationFileXml == null) return;
+        if (licenseInformationContext.NugetSpecificationFileXml == null)
+        {
+            return;
+        }
 
         _logger.LogDebug("Get license-information from 'license' element from the 'nuspec' file...");
 
@@ -48,8 +54,10 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
         GetLicenseInformationContext licenseInformationContext,
         XContainer nugetSpecificationFileXml)
     {
-        if (!TryGetLicenseElement(nugetSpecificationFileXml, out var licenseElement) || licenseElement == null) 
+        if (!TryGetLicenseElement(nugetSpecificationFileXml, out var licenseElement) || licenseElement == null)
+        {
             return;
+        }
 
         _logger.LogDebug("Found 'license' element");
         await GetLicenseInformationBasedOnLicenseElementAsync(licenseInformationContext, licenseElement)
@@ -71,8 +79,11 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
                 .Descendants()
                 .FirstOrDefault(element => element.Name.LocalName == "license");
 
-            if (licenseElement != null) return true;
-            
+            if (licenseElement != null)
+            {
+                return true;
+            }
+
             _logger.LogDebug("Could not get 'license' element");
             return false;
         }
@@ -127,12 +138,15 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
         GetLicenseInformationContext licenseInformationContext,
         string licenseElementValue)
     {
-        if (licenseInformationContext.ArtifactDirectory == null) return;
-        
+        if (licenseInformationContext.ArtifactDirectory == null)
+        {
+            return;
+        }
+
         var licenseFile = _fileSystem
             .Path
             .Combine(licenseInformationContext.ArtifactDirectory.FullName, licenseElementValue);
-        
+
         var licenseFileInfo = _fileSystem
             .FileInfo
             .FromFileName(licenseFile);

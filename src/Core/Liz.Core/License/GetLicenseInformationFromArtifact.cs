@@ -1,17 +1,17 @@
-﻿using Liz.Core.License.Contracts;
+﻿using System.IO.Abstractions;
+using System.Xml.Linq;
+using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
-using System.IO.Abstractions;
-using System.Xml.Linq;
 
 namespace Liz.Core.License;
 
 internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformationFromArtifact
 {
     private const string NugetSpecificationFileExtension = "nuspec";
-    private readonly IEnumerable<ILicenseInformationSource> _licenseInformationSources;
     private readonly IFileSystem _fileSystem;
+    private readonly IEnumerable<ILicenseInformationSource> _licenseInformationSources;
     private readonly ILogger _logger;
 
     public GetLicenseInformationFromArtifact(
@@ -22,12 +22,15 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _licenseInformationSources = enrichLicenseInformationResults
-                                           ?? throw new ArgumentNullException(nameof(enrichLicenseInformationResults));
+                                     ?? throw new ArgumentNullException(nameof(enrichLicenseInformationResults));
     }
 
     public async Task<LicenseInformation> GetFromDownloadedPackageReferenceAsync(IDirectoryInfo downloadDirectory)
     {
-        if (downloadDirectory == null) throw new ArgumentNullException(nameof(downloadDirectory));
+        if (downloadDirectory == null)
+        {
+            throw new ArgumentNullException(nameof(downloadDirectory));
+        }
 
         var licenseInformation = await GetFromArtifactAsync(downloadDirectory).ConfigureAwait(false);
         return licenseInformation;
@@ -38,7 +41,9 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
         var licenseInformationContext = await CreateContext(artifactDirectory).ConfigureAwait(false);
 
         foreach (var licenseInformationSource in _licenseInformationSources.OrderBy(e => e.Order))
+        {
             await licenseInformationSource.GetInformationAsync(licenseInformationContext).ConfigureAwait(false);
+        }
 
         return licenseInformationContext.LicenseInformation;
     }

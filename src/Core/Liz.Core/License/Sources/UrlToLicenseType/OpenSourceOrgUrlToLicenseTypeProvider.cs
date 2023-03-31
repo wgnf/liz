@@ -119,7 +119,6 @@ internal sealed class OpenSourceOrgUrlToLicenseTypeProvider : IUrlToLicenseTypeM
             { "https://opensource.org/licenses/ZPL-2.0", "ZPL-2.0" },
             { "https://opensource.org/licenses/ZPL-2.1", "ZPL-2.1" },
             { "https://opensource.org/licenses/Zlib", "Zlib" },
-            
             { "http://opensource.org/licenses/0BSD", "0BSD" },
             { "http://opensource.org/licenses/BSD-1-Clause", "BSD-1-Clause" },
             { "http://opensource.org/licenses/BSD-2-Clause", "BSD-2-Clause" },

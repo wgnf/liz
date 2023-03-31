@@ -10,6 +10,7 @@ indent_style = space
 
 indent_size = 2
 
+
 # --- XML config files ---
 [*.{props,targets,ruleset,config,nuspec,resx,vsixmanifest,vsct}]
 

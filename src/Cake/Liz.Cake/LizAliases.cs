@@ -29,12 +29,19 @@ public static class LizAliases
     /// <exception cref="ArgumentNullException">Thrown when any of the parameters is null</exception>
     [CakeMethodAlias]
     [CakeAliasCategory("ExtractLicenses")]
-    public async static Task<IEnumerable<PackageReference>> ExtractLicensesAsync(
+    public static async Task<IEnumerable<PackageReference>> ExtractLicensesAsync(
         this ICakeContext context, 
         ExtractLicensesSettings settings)
     {
-        if (context == null) throw new ArgumentNullException(nameof(context));
-        if (settings == null) throw new ArgumentNullException(nameof(settings));
+        if (context == null)
+        {
+            throw new ArgumentNullException(nameof(context));
+        }
+
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
 
         var extractLicenses = GetExtractLicensesInstance(context, settings);
 

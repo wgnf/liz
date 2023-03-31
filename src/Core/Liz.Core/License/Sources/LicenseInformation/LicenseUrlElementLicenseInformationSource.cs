@@ -1,18 +1,18 @@
-﻿using Liz.Core.License.Contracts;
+﻿using System.IO.Abstractions;
+using System.Xml.Linq;
+using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
 using Liz.Core.Utils.Contracts.Wrappers;
-using System.IO.Abstractions;
-using System.Xml.Linq;
 
 namespace Liz.Core.License.Sources.LicenseInformation;
 
 internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInformationSource
 {
-    private readonly ILogger _logger;
     private readonly IFileSystem _fileSystem;
     private readonly IHttpClient _httpClient;
+    private readonly ILogger _logger;
 
     public LicenseUrlElementLicenseInformationSource(ILogger logger, IFileSystem fileSystem, IHttpClient httpClient)
     {
@@ -20,15 +20,21 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
-    
+
     public int Order => 2;
-    
+
     public async Task GetInformationAsync(GetLicenseInformationContext licenseInformationContext)
     {
-        if (licenseInformationContext == null) throw new ArgumentNullException(nameof(licenseInformationContext));
+        if (licenseInformationContext == null)
+        {
+            throw new ArgumentNullException(nameof(licenseInformationContext));
+        }
 
-        if (licenseInformationContext.NugetSpecificationFileXml == null) return;
-        
+        if (licenseInformationContext.NugetSpecificationFileXml == null)
+        {
+            return;
+        }
+
         _logger.LogDebug("Get license-information from 'licenseUrl' element from the 'nuspec' file...");
 
         await GetLicenseInformationFromLicenseUrlElementAsync(
@@ -37,12 +43,14 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
     }
 
     private async Task GetLicenseInformationFromLicenseUrlElementAsync(
-        GetLicenseInformationContext licenseInformationContext, 
+        GetLicenseInformationContext licenseInformationContext,
         XContainer nugetSpecificationFileXml)
     {
-        if (!TryGetLicenseUrlElement(nugetSpecificationFileXml, out var licenseUrlElement) || licenseUrlElement == null) 
+        if (!TryGetLicenseUrlElement(nugetSpecificationFileXml, out var licenseUrlElement) || licenseUrlElement == null)
+        {
             return;
-        
+        }
+
         _logger.LogDebug("Found 'licenseUrl' element");
         await GetLicenseInformationBasedOnLicenseUrlElementAsync(licenseInformationContext, licenseUrlElement)
             .ConfigureAwait(false);
@@ -51,7 +59,7 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
     private bool TryGetLicenseUrlElement(XContainer nugetSpecificationXml, out XElement? licenseUrlElement)
     {
         licenseUrlElement = null;
-        
+
         try
         {
             /*
@@ -63,8 +71,11 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
                 .Descendants()
                 .FirstOrDefault(element => element.Name.LocalName == "licenseUrl");
 
-            if (licenseUrlElement != null) return true;
-            
+            if (licenseUrlElement != null)
+            {
+                return true;
+            }
+
             _logger.LogDebug("Could not get 'license' element");
             return false;
         }
@@ -76,20 +87,24 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
     }
 
     private async Task GetLicenseInformationBasedOnLicenseUrlElementAsync(
-        GetLicenseInformationContext licenseInformationContext, 
+        GetLicenseInformationContext licenseInformationContext,
         XElement licenseUrlElement)
     {
         _logger.LogDebug("Getting license information from 'licenseUrl' element...");
 
         var licenseUrlElementValue = licenseUrlElement.Value;
         licenseInformationContext.LicenseInformation.Url = licenseUrlElementValue;
-        
+
         /*
          * NOTE:
          * We abort early here, to save time and resources when the license-text was already extracted.
          * Because when it already was determined we can assume that it's already the right one
          */
-        if (!string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text)) return;
+        if (!string.IsNullOrWhiteSpace(licenseInformationContext.LicenseInformation.Text))
+        {
+            return;
+        }
+
         await HandleLicenseUrlAsync(licenseInformationContext, licenseUrlElementValue).ConfigureAwait(false);
     }
 
@@ -97,9 +112,13 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
     {
         var isWebResource = licenseUrl.StartsWith("http");
         if (isWebResource)
+        {
             await HandleLicenseWebResourceAsync(licenseInformationContext, licenseUrl).ConfigureAwait(false);
+        }
         else
+        {
             await HandleLicenseFileAsync(licenseInformationContext, licenseUrl).ConfigureAwait(false);
+        }
     }
 
     private async Task HandleLicenseFileAsync(
@@ -107,12 +126,14 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
         string licenseElementValue)
     {
         if (licenseInformationContext.ArtifactDirectory == null)
+        {
             return;
-        
+        }
+
         var licenseFile =
             _fileSystem.Path.Combine(licenseInformationContext.ArtifactDirectory.FullName, licenseElementValue);
         var licenseFileInfo = _fileSystem.FileInfo.FromFileName(licenseFile);
-        
+
         _logger.LogDebug($"Specified license file should be: '{licenseFileInfo}'");
 
         if (!licenseFileInfo.Exists)
@@ -125,9 +146,9 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
             await _fileSystem.File.ReadAllTextAsync(licenseFileInfo.FullName).ConfigureAwait(false);
         licenseInformationContext.LicenseInformation.Text = rawLicenseTextFromFile;
     }
-    
+
     private async Task HandleLicenseWebResourceAsync(
-        GetLicenseInformationContext licenseInformationContext, 
+        GetLicenseInformationContext licenseInformationContext,
         string licenseUrl)
     {
         _logger.LogDebug($"Downloading raw license-text from '{licenseUrl}'...");

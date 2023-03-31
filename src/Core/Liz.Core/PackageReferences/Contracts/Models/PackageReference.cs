@@ -23,11 +23,19 @@ public sealed class PackageReference : IEquatable<PackageReference>
     public PackageReference(string name, string targetFramework, string version)
     {
         if (string.IsNullOrWhiteSpace(name))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+        }
+
         if (string.IsNullOrWhiteSpace(targetFramework))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(targetFramework));
+        }
+
         if (string.IsNullOrWhiteSpace(version))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(version));
+        }
 
         Name = name;
         TargetFramework = targetFramework;
@@ -89,8 +97,16 @@ public sealed class PackageReference : IEquatable<PackageReference>
     /// <inheritdoc />
     public bool Equals(PackageReference? other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
         return string.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) && string.Equals(Version, other.Version, StringComparison.InvariantCultureIgnoreCase);
     }
 

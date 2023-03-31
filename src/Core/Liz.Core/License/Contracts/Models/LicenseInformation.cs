@@ -12,7 +12,7 @@ public sealed class LicenseInformation
     private readonly List<string> _types = new();
 
     /// <summary>
-    ///     Creates a new instance of <see cref="LicenseInformation"/>
+    ///     Creates a new instance of <see cref="LicenseInformation" />
     /// </summary>
     public LicenseInformation()
     {
@@ -59,11 +59,16 @@ public sealed class LicenseInformation
     internal void AddLicenseType(string licenseType)
     {
         if (string.IsNullOrWhiteSpace(licenseType))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(licenseType));
-        
+        }
+
         // no need to add if already contained
-        if (_types.Contains(licenseType)) return;
-        
+        if (_types.Contains(licenseType))
+        {
+            return;
+        }
+
         _types.Add(licenseType);
     }
 }

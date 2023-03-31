@@ -1,5 +1,5 @@
-﻿using Liz.Core.PackageReferences.Contracts.Models;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Liz.Core.PackageReferences.Contracts.Models;
 
 namespace Liz.Core.PackageReferences.Contracts.Exceptions;
 

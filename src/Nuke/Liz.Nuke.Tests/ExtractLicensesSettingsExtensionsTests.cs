@@ -20,7 +20,10 @@ public class ExtractLicensesSettingsExtensionsTests
                 .HaveMethod($"Set{property.Name}", new[] { typeof(ExtractLicensesSettings), property.PropertyType });
             
             // boolean properties have some more corresponding methods...
-            if (property.PropertyType != typeof(bool)) continue;
+            if (property.PropertyType != typeof(bool))
+            {
+                continue;
+            }
 
             typeof(ExtractLicensesSettingsExtensions)
                 .Should()

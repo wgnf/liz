@@ -1,49 +1,49 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-    </PropertyGroup>
-    
-    <!-- NuGet Package relevant stuff -->
-    <PropertyGroup>
-        <PackageIcon>liz-logo-150x.png</PackageIcon>
-        
-        <SignAssembly>true</SignAssembly>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        
-        <Authors>Martin Wagenführ</Authors>
-        <Description>
-            The Core-Component of the Liz-Tool - which helps to extract license-information from your solution/project
-            aimed on a fast and correct process.
-        </Description>
-        <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>Core;License;Extract;Extract;Information;Liz</PackageTags>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="SlnParser" Version="2.0.1" />
-        <PackageReference Include="System.IO.Abstractions" Version="12.2.1" />
+  <!-- NuGet Package relevant stuff -->
+  <PropertyGroup>
+    <PackageIcon>liz-logo-150x.png</PackageIcon>
 
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
+    <SignAssembly>true</SignAssembly>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-        <PackageReference Include="System.Text.Json" Version="4.6.0" />
-    </ItemGroup>
+    <Authors>Martin Wagenführ</Authors>
+    <Description>
+      The Core-Component of the Liz-Tool - which helps to extract license-information from your solution/project
+      aimed on a fast and correct process.
+    </Description>
+    <PackageProjectUrl>https://github.com/wgnf/liz</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/wgnf/liz</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Core;License;Extract;Extract;Information;Liz</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <None Include="../../../LICENSE" Pack="true" PackagePath="" />
-        <None Include="../../../res/liz-logo-150x.png" Pack="true" PackagePath="" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SlnParser" Version="2.0.1"/>
+    <PackageReference Include="System.IO.Abstractions" Version="12.2.1"/>
+
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="System.Text.Json" Version="4.6.0"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../../LICENSE" Pack="true" PackagePath=""/>
+    <None Include="../../../res/liz-logo-150x.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
 </Project>

@@ -1,5 +1,5 @@
-﻿using Liz.Core.License.Contracts.Models;
-using System.IO.Abstractions;
+﻿using System.IO.Abstractions;
+using Liz.Core.License.Contracts.Models;
 
 namespace Liz.Core.License.Contracts;
 

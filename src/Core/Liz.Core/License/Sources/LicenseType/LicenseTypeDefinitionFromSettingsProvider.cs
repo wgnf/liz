@@ -12,7 +12,7 @@ internal sealed class LicenseTypeDefinitionFromSettingsProvider : ILicenseTypeDe
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
     }
-    
+
     public IEnumerable<LicenseTypeDefinition> Get()
     {
         return _settings.LicenseTypeDefinitions;

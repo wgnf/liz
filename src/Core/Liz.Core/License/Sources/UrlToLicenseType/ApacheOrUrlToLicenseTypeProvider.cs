@@ -10,7 +10,6 @@ internal sealed class ApacheOrUrlToLicenseTypeProvider : IUrlToLicenseTypeMappin
         {
             { "http://www.apache.org/licenses/LICENSE-2.0.html", "Apache-2.0" },
             { "http://www.apache.org/licenses/LICENSE-2.0", "Apache-2.0" },
-            
             { "https://www.apache.org/licenses/LICENSE-2.0.html", "Apache-2.0" },
             { "https://www.apache.org/licenses/LICENSE-2.0", "Apache-2.0" }
         };

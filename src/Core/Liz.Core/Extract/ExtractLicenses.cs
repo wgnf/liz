@@ -20,16 +20,16 @@ namespace Liz.Core.Extract;
 
 internal sealed class ExtractLicenses : IExtractLicenses
 {
-    private readonly IGetPackageReferences _getPackageReferences;
-    private readonly IEnrichPackageReferenceWithArtifactDirectory _enrichPackageReferenceWithArtifactDirectory;
     private readonly IDownloadPackageReferences _downloadPackageReferences;
+    private readonly IEnrichPackageReferenceWithArtifactDirectory _enrichPackageReferenceWithArtifactDirectory;
     private readonly IEnrichPackageReferenceWithLicenseInformation _enrichPackageReferenceWithLicenseInformation;
-    private readonly IProvideTemporaryDirectories _provideTemporaryDirectories;
-    private readonly IEnumerable<IResultProcessor> _resultProcessors;
-    private readonly IEnumerable<IPreprocessor> _preprocessors;
+    private readonly IGetPackageReferences _getPackageReferences;
     private readonly IGetProjects _getProjects;
     private readonly ILogger _logger;
+    private readonly IEnumerable<IPreprocessor> _preprocessors;
     private readonly IProgressHandler? _progressHandler;
+    private readonly IProvideTemporaryDirectories _provideTemporaryDirectories;
+    private readonly IEnumerable<IResultProcessor> _resultProcessors;
     private readonly ExtractLicensesSettingsBase _settings;
 
     public ExtractLicenses(
@@ -51,11 +51,13 @@ internal sealed class ExtractLicenses : IExtractLicenses
         _enrichPackageReferenceWithArtifactDirectory = enrichPackageReferenceWithArtifactDirectory ??
                                                        throw new ArgumentNullException(
                                                            nameof(enrichPackageReferenceWithArtifactDirectory));
-        _downloadPackageReferences = downloadPackageReferences ?? throw new ArgumentNullException(nameof(downloadPackageReferences));
-        _enrichPackageReferenceWithLicenseInformation = enrichPackageReferenceWithLicenseInformation ?? 
-                                                        throw new ArgumentNullException(nameof(enrichPackageReferenceWithLicenseInformation));
-        _provideTemporaryDirectories = provideTemporaryDirectories 
-                                     ?? throw new ArgumentNullException(nameof(provideTemporaryDirectories));
+        _downloadPackageReferences =
+            downloadPackageReferences ?? throw new ArgumentNullException(nameof(downloadPackageReferences));
+        _enrichPackageReferenceWithLicenseInformation = enrichPackageReferenceWithLicenseInformation ??
+                                                        throw new ArgumentNullException(
+                                                            nameof(enrichPackageReferenceWithLicenseInformation));
+        _provideTemporaryDirectories = provideTemporaryDirectories
+                                       ?? throw new ArgumentNullException(nameof(provideTemporaryDirectories));
         _resultProcessors = resultProcessors ?? throw new ArgumentNullException(nameof(resultProcessors));
         _preprocessors = preprocessors ?? throw new ArgumentNullException(nameof(preprocessors));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -68,12 +70,12 @@ internal sealed class ExtractLicenses : IExtractLicenses
         {
             await PrepareAsync().ConfigureAwait(false);
             var projects = GetProjects(_settings.GetTargetFile()).ToList();
-            
+
             var packageReferences = (await GetPackageReferencesAsync(projects).ConfigureAwait(false)).ToList();
 
             await EnrichWithArtifactDirectory(packageReferences).ConfigureAwait(false);
             await DownloadPackagesWithoutArtifactDirectory(packageReferences).ConfigureAwait(false);
-            
+
             await EnrichWithLicenseInformationAsync(packageReferences).ConfigureAwait(false);
 
             _progressHandler?.FinishMainProcess();
@@ -109,7 +111,9 @@ internal sealed class ExtractLicenses : IExtractLicenses
             _logger.LogInformation("Preparing...");
 
             foreach (var preprocessor in _preprocessors)
+            {
                 await preprocessor.PreprocessAsync().ConfigureAwait(false);
+            }
         }
         catch (Exception exception)
         {
@@ -127,7 +131,8 @@ internal sealed class ExtractLicenses : IExtractLicenses
 
             var projects = _getProjects.GetFromFile(targetFile).ToList();
 
-            var foundProjectsLogString = string.Join(Environment.NewLine, projects.Select(project => $"\t- {project.File.FullName}"));
+            var foundProjectsLogString =
+                string.Join(Environment.NewLine, projects.Select(project => $"\t- {project.File.FullName}"));
             _logger.LogDebug($"Found following projects for '{targetFile}':{Environment.NewLine}{foundProjectsLogString}");
 
             return projects;
@@ -146,7 +151,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
 
         _progressHandler?.TickMainProcess("Get package-references");
         _progressHandler?.InitializeNewSubProcess(projects.Count);
-        
+
         foreach (var project in projects)
         {
             _progressHandler?.TickCurrentSubProcess($"Get package-references: {project.Name}");
@@ -154,18 +159,18 @@ internal sealed class ExtractLicenses : IExtractLicenses
             var referencesFromProject = await GetPackageReferencesForProjectAsync(project).ConfigureAwait(false);
             packageReferences.AddRange(referencesFromProject);
         }
-        
+
         packageReferences = packageReferences
             .Distinct()
             .ToList();
-        
+
         return packageReferences;
     }
 
     private async Task EnrichWithArtifactDirectory(IReadOnlyCollection<PackageReference> packageReferences)
     {
         _logger.LogInformation("Trying to get artifacts for package(s)...");
-        
+
         _progressHandler?.TickMainProcess("Get artifacts");
         _progressHandler?.InitializeNewSubProcess(packageReferences.Count);
 
@@ -197,7 +202,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
             _logger.LogDebug($"Trying to get artifact directory for {packageReference}...");
 
             await _enrichPackageReferenceWithArtifactDirectory.EnrichAsync(packageReference).ConfigureAwait(false);
-            
+
             _logger.LogDebug($"Found following artifact directory: '{packageReference.ArtifactDirectory}'");
         }
         catch (Exception exception)
@@ -232,7 +237,7 @@ internal sealed class ExtractLicenses : IExtractLicenses
     private async Task EnrichWithLicenseInformationAsync(IReadOnlyCollection<PackageReference> packageReferences)
     {
         _logger.LogInformation("Trying to get license information for package(s)...");
-        
+
         _progressHandler?.TickMainProcess("Get license information");
         _progressHandler?.InitializeNewSubProcess(packageReferences.Count);
 
@@ -258,11 +263,11 @@ internal sealed class ExtractLicenses : IExtractLicenses
             throw new GetLicenseInformationFailedException(packageReference, exception);
         }
     }
-    
+
     private async Task ProcessResultsAsync(IReadOnlyCollection<PackageReference> packageReferences)
     {
         _logger.LogInformation("Processing results...");
-        
+
         foreach (var resultProcessor in _resultProcessors)
         {
             _logger.LogDebug($"Processing with '{resultProcessor.GetType().Name}'");
@@ -275,7 +280,11 @@ internal sealed class ExtractLicenses : IExtractLicenses
     {
         var temporaryDirectory = _provideTemporaryDirectories.GetRootDirectory();
 
-        if (!temporaryDirectory.Exists) return;
+        if (!temporaryDirectory.Exists)
+        {
+            return;
+        }
+
         temporaryDirectory.Delete(true);
     }
 }
