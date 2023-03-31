@@ -135,7 +135,7 @@ public abstract class ExtractLicensesSettingsBase
     
     /// <summary>
     ///     <para>
-    ///         A path to a JSON-file to which the determined license- and package-information will be exported
+    ///         A path to a JSON-file to which the determined license- and package-information will be exported.
     ///         All the information will be written to a single JSON-file. 
     ///     </para>
     ///     <para>
