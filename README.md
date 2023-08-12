@@ -14,11 +14,11 @@
 
 ## 🖥️ Tools
 
-| Tool | Documentation | Version | Downloads |
-|------|---------------|---------|-----------|
-| `Liz.Tool` | [link](doc/documentation-dotnet-tool.md) | [![Latest Release .NET Tool](https://img.shields.io/nuget/v/Liz.Tool)](https://www.nuget.org/packages/Liz.Tool/) | [![Downloads .NET Tool](https://img.shields.io/nuget/dt/Liz.Tool)](https://www.nuget.org/packages/Liz.Tool/) |
-| `Cake.ExtractLicenses` | [link](doc/documenation-cake-addin.md) | [![Latest Release Cake Addin](https://img.shields.io/nuget/v/Cake.ExtractLicenses)](https://www.nuget.org/packages/Cake.ExtractLicenses/) | [![Downloads Cake Addin](https://img.shields.io/nuget/dt/Cake.ExtractLicenses)](https://www.nuget.org/packages/Cake.ExtractLicenses/) |
-| `Liz.Nuke` | [link](doc/documentation-nuke-addon.md) | [![Latest Release Nuke Addon](https://img.shields.io/nuget/v/Liz.Nuke)](https://www.nuget.org/packages/Liz.Nuke/) | [![Downloads Nuke Addon](https://img.shields.io/nuget/dt/Liz.Nuke)](https://www.nuget.org/packages/Liz.Nuke/) |
+| Tool | Documentation | Version | Downloads | Supported Version |
+|------|---------------|---------|-----------|-------------------|
+| `Liz.Tool` | [link](doc/documentation-dotnet-tool.md) | [![Latest Release .NET Tool](https://img.shields.io/nuget/v/Liz.Tool)](https://www.nuget.org/packages/Liz.Tool/) | [![Downloads .NET Tool](https://img.shields.io/nuget/dt/Liz.Tool)](https://www.nuget.org/packages/Liz.Tool/) | `-` |
+| `Cake.ExtractLicenses` | [link](doc/documenation-cake-addin.md) | [![Latest Release Cake Addin](https://img.shields.io/nuget/v/Cake.ExtractLicenses)](https://www.nuget.org/packages/Cake.ExtractLicenses/) | [![Downloads Cake Addin](https://img.shields.io/nuget/dt/Cake.ExtractLicenses)](https://www.nuget.org/packages/Cake.ExtractLicenses/) | `>= 3.0.0` |
+| `Liz.Nuke` | [link](doc/documentation-nuke-addon.md) | [![Latest Release Nuke Addon](https://img.shields.io/nuget/v/Liz.Nuke)](https://www.nuget.org/packages/Liz.Nuke/) | [![Downloads Nuke Addon](https://img.shields.io/nuget/dt/Liz.Nuke)](https://www.nuget.org/packages/Liz.Nuke/) | `>= 6.0.0` |
 
 ## 🌐 Features
 
