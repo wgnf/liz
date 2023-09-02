@@ -16,6 +16,7 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IsTrimmable>true</IsTrimmable>
 
     <Authors>Martin Wagenführ</Authors>
     <Description>
@@ -30,7 +31,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SlnParser" Version="2.0.2" />
+    <PackageReference Include="DotNet.Glob" Version="3.1.3" />
+    <PackageReference Include="SlnParser" Version="3.0.0" />
     <PackageReference Include="System.IO.Abstractions" Version="12.2.1" />
 
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">

@@ -120,6 +120,60 @@ public abstract class ExtractLicensesSettingsBase
     ///     </para>
     /// </summary>
     public string? LicenseTypeBlacklistFilePath { get; set; }
+
+    /// <summary>
+    ///     <para>
+    ///         A list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against absolute path of the project-file.
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    /// </summary>
+    public List<string> ProjectExclusionGlobs { get; set; } = new();
+    
+    /// <summary>
+    ///     <para>
+    ///         A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing
+    ///         a list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against the absolute path of the project-file. 
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    ///     <para>
+    ///         If both <see cref="ProjectExclusionGlobs"/> and <see cref="ProjectExclusionGlobsFilePath"/> are given,
+    ///         those two will be merged.
+    ///     </para>
+    /// </summary>
+    public string? ProjectExclusionGlobsFilePath { get; set; }
+    
+    /// <summary>
+    ///     <para>
+    ///         A list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against the name of the package.
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    /// </summary>
+    public List<string> PackageExclusionGlobs { get; set; } = new();
+    
+    /// <summary>
+    ///     <para>
+    ///         A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing
+    ///         a list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against the name of the package. 
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    ///     <para>
+    ///         If both <see cref="PackageExclusionGlobs"/> and <see cref="PackageExclusionGlobsFilePath"/> are given,
+    ///         those two will be merged.
+    ///     </para>
+    /// </summary>
+    public string? PackageExclusionGlobsFilePath { get; set; }
     
     /// <summary>
     ///     <para>
@@ -132,6 +186,17 @@ public abstract class ExtractLicensesSettingsBase
     ///     </para>
     /// </summary>
     public string? ExportLicenseTextsDirectory { get; set; }
+    
+    /// <summary>
+    ///     <para>
+    ///         A path to a JSON-file to which the determined license- and package-information will be exported.
+    ///         All the information will be written to a single JSON-file. 
+    ///     </para>
+    ///     <para>
+    ///         If the file already exists it will be overwritten.
+    ///     </para>
+    /// </summary>
+    public string? ExportJsonFile { get; set; }
     
     /// <summary>
     ///     <para>
@@ -161,6 +226,7 @@ public abstract class ExtractLicensesSettingsBase
         ValidateTargetFile();
         ValidateWhitelistAndBlacklist();
         ValidateExportTextsDirectory();
+        ValidateExportJsonFile();
     }
 
     private void ValidateTargetFile()
@@ -168,18 +234,24 @@ public abstract class ExtractLicensesSettingsBase
         var targetFile = GetTargetFile();
 
         if (string.IsNullOrWhiteSpace(targetFile))
+        {
             throw new SettingsInvalidException("The target-file cannot be null/empty/whitespace");
+        }
 
         ValidatePath(targetFile, "TargetFile");
 
         if (!File.Exists(targetFile))
+        {
             throw new SettingsInvalidException($"The given target-file ('{targetFile}') does not exist");
+        }
 
         var targetFileExtension = Path.GetExtension(targetFile);
         if (!targetFileExtension.Contains("csproj", StringComparison.InvariantCultureIgnoreCase) &&
             !targetFileExtension.Contains("fsproj", StringComparison.InvariantCultureIgnoreCase) &&
             !targetFileExtension.Contains("sln", StringComparison.InvariantCultureIgnoreCase))
+        {
             throw new SettingsInvalidException($"The given target-file ('{targetFile}') is not a csproj, fsproj nor sln file");
+        }
     }
 
     private void ValidateWhitelistAndBlacklist()
@@ -187,14 +259,26 @@ public abstract class ExtractLicensesSettingsBase
         // this will ensure the mutual exclusivity of the license-type whitelist and blacklist
         if ((LicenseTypeWhitelist.Any() || !string.IsNullOrWhiteSpace(LicenseTypeWhitelistFilePath)) &&
             (LicenseTypeBlacklist.Any() || !string.IsNullOrWhiteSpace(LicenseTypeBlacklistFilePath)))
+        {
             throw new SettingsInvalidException("License-type whitelist and blacklist are mutually exclusive. " +
                                                "You cannot use them together. Either use the whitelist or the blacklist.");
+        }
     }
 
     private void ValidateExportTextsDirectory()
     {
         if (!string.IsNullOrWhiteSpace(ExportLicenseTextsDirectory))
+        {
             ValidatePath(ExportLicenseTextsDirectory, nameof(ExportLicenseTextsDirectory));
+        }
+    }
+
+    private void ValidateExportJsonFile()
+    {
+        if (!string.IsNullOrWhiteSpace(ExportJsonFile))
+        {
+            ValidatePath(ExportJsonFile, nameof(ExportJsonFile));
+        }
     }
 
     private void ValidatePath(string path, string settingsName)

@@ -62,7 +62,7 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             fileSystem, 
             parsePackagesConfigFile);
         
-        var getPackageReferences = new GetPackageReferencesFacade(logger, getPackageReferencesDotnetCli, getPackageReferencesPackagesConfig);
+        var getPackageReferences = new GetPackageReferencesFacade(settings, logger, getPackageReferencesDotnetCli, getPackageReferencesPackagesConfig);
 
         var provideTemporaryDirectories = new ProvideTemporaryDirectories(settings, fileSystem);
 
@@ -108,7 +108,9 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             new PrintPackageIssuesResultProcessor(settings, logger),
             new ValidateLicenseTypesWhitelistResultProcessor(settings, logger),
             new ValidateLicenseTypesBlacklistResultProcessor(settings, logger),
-            new ExportLicenseTextsResultProcessor(settings, fileSystem)
+            // exporters...
+            new ExportLicenseTextsResultProcessor(settings, fileSystem, logger),
+            new ExportToJsonResultProcessor(settings, fileSystem, logger)
         };
 
         var provideNugetCacheDirectories = new ProvideNugetCacheDirectories(cliToolExecutor, fileSystem);
@@ -145,7 +147,9 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             new DeserializeLicenseTypeDefinitionsPreprocessor(settings, logger, fileContentProvider),
             new DeserializeUrlToLicenseTypeMappingPreprocessor(settings, logger, fileContentProvider),
             new DeserializeLicenseTypeWhitelistPreprocessor(settings, logger, fileContentProvider),
-            new DeserializeLicenseTypeBlacklistPreprocessor(settings, logger, fileContentProvider)
+            new DeserializeLicenseTypeBlacklistPreprocessor(settings, logger, fileContentProvider),
+            new DeserializeProjectExclusionGlobsPreprocessor(settings, logger, fileContentProvider),
+            new DeserializePackageExclusionGlobsPreprocessor(settings, logger, fileContentProvider)
         };
 
         var extractLicenses = new ExtractLicenses(

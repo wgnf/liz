@@ -4,6 +4,7 @@ using Liz.Core.Settings;
 using SlnParser.Contracts;
 using System.IO.Abstractions;
 using System.Xml.Linq;
+using DotNet.Globbing;
 
 namespace Liz.Core.Projects;
 
@@ -29,24 +30,31 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
     public IEnumerable<Project> GetFromFile(string targetFile)
     {
         if (string.IsNullOrWhiteSpace(targetFile))
+        {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(targetFile));
+        }
 
         var fileInfo = _fileSystem.FileInfo.FromFileName(targetFile);
         
         ValidateProvidedTargetFile(fileInfo);
         var projects = GetProjects(fileInfo);
+        projects = HandleExclusions(projects);
         return projects;
     }
 
     private static void ValidateProvidedTargetFile(IFileSystemInfo targetFile)
     {
         if (!targetFile.Exists)
+        {
             throw new FileNotFoundException($"The provided target-file '{targetFile.FullName}' could not be found");
+        }
 
         if (targetFile.Extension is not (".sln" or ".csproj" or ".fsproj"))
+        {
             throw new ArgumentException(
                 $"The provided target-file '{targetFile.FullName}' is not of the right type " +
                 "(only 'sln', 'csproj' and 'fsproj' is supported");
+        }
     }
 
     private IEnumerable<Project> GetProjects(IFileInfo targetFile)
@@ -67,8 +75,10 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
         var project = new Project(projectName, targetFile, DetermineProjectFormatStyle(targetFile.FullName));
 
         if (!_settings.IncludeTransitiveDependencies || project.FormatStyle != ProjectFormatStyle.SdkStyle)
+        {
             return new[] { project };
-        
+        }
+
         /*
          * NOTE:
          * if 'include transitive' is activated and 'project' is SDK-Style we have to check if there are any project-references to
@@ -148,5 +158,22 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
 
                 return new Project(projectName, fileInfo, projectReferenceWithStyle.Style);
             });
+    }
+
+    private IEnumerable<Project> HandleExclusions(IEnumerable<Project> projects)
+    {
+        // this basically filters out any project which matches a given exclusion-glob
+        var exclusionGlobs = _settings.ProjectExclusionGlobs;
+        var filteredProjects = projects.Where(project =>
+        {
+            return !exclusionGlobs.Exists(glob =>
+            {
+                var globPattern = Glob.Parse(glob);
+                var isMatch = globPattern.IsMatch(project.File.FullName);
+                return isMatch;
+            });
+        });
+
+        return filteredProjects;
     }
 }
