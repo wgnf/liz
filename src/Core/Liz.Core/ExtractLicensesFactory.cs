@@ -108,7 +108,9 @@ public sealed class ExtractLicensesFactory : IExtractLicensesFactory
             new PrintPackageIssuesResultProcessor(settings, logger),
             new ValidateLicenseTypesWhitelistResultProcessor(settings, logger),
             new ValidateLicenseTypesBlacklistResultProcessor(settings, logger),
-            new ExportLicenseTextsResultProcessor(settings, fileSystem)
+            // exporters...
+            new ExportLicenseTextsResultProcessor(settings, fileSystem, logger),
+            new ExportToJsonResultProcessor(settings, fileSystem, logger)
         };
 
         var provideNugetCacheDirectories = new ProvideNugetCacheDirectories(cliToolExecutor, fileSystem);

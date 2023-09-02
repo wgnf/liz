@@ -32,6 +32,7 @@ internal sealed class CommandProvider
             string? whitelist,
             string? blacklist,
             string? exportTexts,
+            string? exportJson,
             int? requestTimeout) =>
         {
             await _commandRunner.RunAsync(
@@ -46,6 +47,7 @@ internal sealed class CommandProvider
                 whitelist,
                 blacklist,
                 exportTexts,
+                exportJson,
                 requestTimeout)
                 .ConfigureAwait(false);
         }, symbols.ToArray());
@@ -63,7 +65,11 @@ internal sealed class CommandProvider
         symbols.Add(targetFileArgument);
 
         var options = GetOptions().ToList();
-        foreach (var option in options) rootCommand.AddOption(option);
+        foreach (var option in options)
+        {
+            rootCommand.AddOption(option);
+        }
+
         symbols.AddRange(options);
         return (rootCommand, symbols);
     }
@@ -82,6 +88,7 @@ internal sealed class CommandProvider
             GetLicenseTypeWhitelistOption(),
             GetLicenseTypeBlacklistOption(),
             GetExportLicenseTextsDirectoryOption(),
+            GetExportJsonFileOption(),
             GetRequestTimeoutOption()
         };
         return options;
@@ -182,6 +189,15 @@ internal sealed class CommandProvider
             new[] { "--export-texts", "-et" },
             () => null,
             "A path to a directory to where the determined license-texts will be exported. Each license-text will be written to an individual file with the file-name being: \"<package-name>-<package-version>.txt\". If the license-text is the content of a website, the contents will be written into an \".html\" file instead");
+        return option;
+    }
+
+    private static Option GetExportJsonFileOption()
+    {
+        var option = new Option<string?>(
+            new[] { "--export-json", "-ej" },
+            () => null,
+            "A path to a JSON-file t which the determined license- and package-information will be exported. All the information will be written to a single JSON-file. If the file already exists it will be overwritten.");
         return option;
     }
 

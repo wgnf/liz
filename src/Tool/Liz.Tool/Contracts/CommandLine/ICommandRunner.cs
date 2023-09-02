@@ -16,5 +16,6 @@ public interface ICommandRunner
         string? whitelist,
         string? blacklist,
         string? exportTexts,
+        string? exportJson,
         int? requestTimeout);
 }
