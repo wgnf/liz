@@ -36,6 +36,7 @@ internal sealed class EnrichPackageReferenceWithLicenseInformation : IEnrichPack
             return;
         }
 
+        _logger.LogDebug($"Enriching license-information for package {packageReference}");
         var artifactDirectory = _fileSystem.DirectoryInfo.FromDirectoryName(packageReference.ArtifactDirectory);
 
         var licenseInformation = await GetLicenseInformationAsync(artifactDirectory).ConfigureAwait(false);
