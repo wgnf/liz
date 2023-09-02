@@ -120,6 +120,33 @@ public abstract class ExtractLicensesSettingsBase
     ///     </para>
     /// </summary>
     public string? LicenseTypeBlacklistFilePath { get; set; }
+
+    /// <summary>
+    ///     <para>
+    ///         A list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against absolute path of the project-file.
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    /// </summary>
+    public List<string> ProjectExclusionGlobs { get; set; } = new();
+    
+    /// <summary>
+    ///     <para>
+    ///         A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing
+    ///         a list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against the absolute path of the project-file. 
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    ///     <para>
+    ///         If both <see cref="ProjectExclusionGlobs"/> and <see cref="ProjectExclusionGlobsFilePath"/> are given,
+    ///         those two will be merged.
+    ///     </para>
+    /// </summary>
+    public string? ProjectExclusionGlobsFilePath { get; set; }
     
     /// <summary>
     ///     <para>
