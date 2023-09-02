@@ -81,6 +81,7 @@ To analyze a project your solution you have to use
 | `--export-texts`, `-et` | A path to a directory to where the determined license-texts will be exported. </br> Each license-text will be written to an individual file with the file-name being: `<package-name>-<package-version>.txt`. If the license-text is the content of a website, the contents will be written into an \".html\" file instead |
 | `--export-json`, `-ej` | A path to a JSON-file to which the determined license- and package-information will be exported. All the information will be written to a single JSON-file. </br> If the file already exists it will be overwritten. |
 | `--timeout`, `-t` | The timeout for a request (i.e. to get the license text from a website) in **seconds**. </br> After this amount of time a request will be considered as failed and aborted. </br> This defaults to 10 seconds |
+| `--project-excludes`, `-pe` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least one glob-pattern. The pattern will be matched against the absolute path of the project-file. All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) |
 
 ## Examples
 
@@ -264,4 +265,34 @@ You can also use files that are stored remotely. Just use the web link to the re
 
 # local
 > dotnet liz "path/to/project.csproj" --blacklist "http://path/to/blacklist.json"
+```
+
+#### Excluding projects
+
+Create a JSON-File that contains your glob-patterns. If you want to exclude all your test-projects when you're scanning a whole solution, create a `project-excludes.json` (you can choose any other name of course) like this:
+
+```json
+[
+  "*/**/*Tests.csproj"
+]
+```
+
+This will disallow every project whose file-name ends with `Tests.csproj`. You can then use it like this:
+
+```bash
+# global
+> liz "path/to/solution.sln" --project-excludes "path/to/project-excludes.json"
+
+# local
+> dotnet liz "path/to/solution.sln" --project-excludes "path/to/project-excludes.json"
+```
+
+You can also use files that are stored remotely. Just usse the web link to the resource:
+
+```bash
+# global
+> liz "path/to/solution.sln" --project-excludes "http://path/to/project-excludes.json"
+
+# local
+> dotnet liz "path/to/solution.sln" --project-excludes "http://path/to/project-excludes.json"
 ```

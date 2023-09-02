@@ -45,6 +45,8 @@ The settings contain the following options which can be set according to your ne
 | `ExportLicenseTextsDirectory` | A path to a directory to where the determined license-texts will be exported </br> Each license-text will be written to an individual file with the file-name being: `<package-name>-<package-version>.txt`. If the license-text is the content of a website, the contents will be written into an ".html" file instead |
 | `ExportJsonFile` | A path to a JSON-file to which the determined license- and package-information will be exported. All the information will be written to a single JSON-file. </br> If the file already exists it will be overwritten. |
 | `RequestTimeout` | The timeout for a request (i.e. to get the license text from a website). </br> After this amount of time a request will be considered as failed and aborted. </br> This defaults to 10 seconds |
+| `ProjectExclusionGlobs` | A list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least one glob-pattern. The pattern will be matched against absolute path of the project-file. </br> All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) |
+| `ProjectExclusionGlobsFilePath` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least one glob-pattern The pattern will be matched against the absolute path of the project-file. </br> All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) </br> If both `ProjectExclusionGlobs` and `ProjectExclusionGlobsFilePath` are given, those two will be merged. |
 
 To support the Nuke-specific way of configuring the settings in a Fluent-API way, following extensions were added as well:
 
@@ -86,6 +88,9 @@ To support the Nuke-specific way of configuring the settings in a Fluent-API way
 | `SetExportJsonFileDirectory` | Sets the `ExportJsonFile` property to the given value |
 | | |
 | `SetRequestTimeout` | Sets the `RequestTimeout` property to the given value |
+| | |
+| `SetProjectExclusionGlobs` | Sets the `ProjectExclusionGlobs` property to the given value |
+| `SetProjectExclusionGlobsFilePath` | Sets the `ProjectExclusionGlobsFilePath` property to the given value |
 
 ## Example Usages
 
@@ -265,4 +270,14 @@ await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
 // or even a path to a remote file
 await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
   .SetLicenseTypeBlacklistFilePath("http://path/to/file.json");
+```
+
+#### Exluding projects
+
+If you want to for instance exclude all the test-projects when you're scanning a whole solution, you can use something like the following:
+
+```cs
+// this will specifically disallow any project that ends with "Tests.csproj"
+await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
+  .SetProjectExclusionGlobs(new List<string>{ "*/**/*Tests.csproj" }));
 ```

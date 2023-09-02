@@ -105,7 +105,7 @@ public static class Program
         var projectExclusionsOption = new Option<string?>(
             new[] { "--project-excludes", "-pe" },
             () => null,
-            "TODO");
+            "A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least one glob-pattern. The pattern will be matched against the absolute path of the project-file. All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns");
         rootCommand.AddOption(projectExclusionsOption);
         
         rootCommand.SetHandler(async context =>
