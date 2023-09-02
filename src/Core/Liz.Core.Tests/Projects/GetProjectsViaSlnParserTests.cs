@@ -12,6 +12,7 @@ using Xunit;
 
 namespace Liz.Core.Tests.Projects;
 
+// TODO: the tests here involving file-system are literal garbage...
 public class GetProjectsViaSlnParserTests
 {
     [Fact]
@@ -285,5 +286,83 @@ public class GetProjectsViaSlnParserTests
             .Should()
             .Contain(project => project.Name == "anotherFile" &&
                                 project.FormatStyle == ProjectFormatStyle.NonSdkStyle);
+    }
+    
+    [Fact]
+    public void Should_Exclude_Projects_Based_On_Globs()
+    {
+        var settings = Mock.Of<ExtractLicensesSettingsBase>();
+        // excluding fsproj projects
+        settings.ProjectExclusionGlobs.Add("*/**/*.fsproj");
+        
+        var context = new ArrangeContext<GetProjectsViaSlnParser>();
+        context.Use(settings);
+        
+        var sut = context.Build();
+
+        const string targetFile = "something";
+        
+        var targetFileMock = new Mock<IFileInfo>();
+        targetFileMock
+            .Setup(file => file.Exists)
+            .Returns(true);
+        targetFileMock
+            .Setup(file => file.Extension)
+            .Returns(".sln");
+        
+        context
+            .For<IFileSystem>()
+            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(targetFile))
+            .Returns(targetFileMock.Object);
+
+        var existingFileFsProject = new FileInfo("some/file.fsproj");
+
+        var existingFsproj = new SolutionProject(Guid.NewGuid(), "SomeFsproj", Guid.NewGuid(), ProjectType.Test,
+            existingFileFsProject);
+        
+        var existingFileCsProject = new FileInfo("some/file.csproj");
+
+        var existingCsproj = new SolutionProject(Guid.NewGuid(), "SomeCsproj", Guid.NewGuid(), ProjectType.Test,
+            existingFileCsProject);
+
+        var solution = new Mock<ISolution>();
+        solution
+            .Setup(sln => sln.AllProjects)
+            .Returns(new IProject[] { existingFsproj, existingCsproj });
+
+        context
+            .For<IFileSystem>()
+            .Setup(fileSystem => fileSystem.File.Exists(It.Is<string>(s => s == existingFileFsProject.FullName)))
+            .Returns(true);
+        
+        context
+            .For<IFileSystem>()
+            .Setup(fileSystem => fileSystem.File.Exists(It.Is<string>(s => s == existingFileCsProject.FullName)))
+            .Returns(true);
+
+        context
+            .For<ISolutionParser>()
+            .Setup(slnParser => slnParser.Parse(It.IsAny<string>()))
+            .Returns(solution.Object);
+
+        context
+            .For<IFileSystem>()
+            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(existingFileFsProject.FullName))
+            .Returns(new FileSystem().FileInfo.FromFileName(existingFileFsProject.FullName));
+        
+        context
+            .For<IFileSystem>()
+            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(existingFileCsProject.FullName))
+            .Returns(new FileSystem().FileInfo.FromFileName(existingFileCsProject.FullName));
+
+        var projects = sut.GetFromFile(targetFile).ToList();
+
+        projects
+            .Should()
+            .HaveCount(1);
+        
+        projects
+            .Should()
+            .ContainSingle(project => project.Name == existingCsproj.Name);
     }
 }

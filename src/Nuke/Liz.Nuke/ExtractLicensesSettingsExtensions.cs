@@ -522,7 +522,7 @@ public static class ExtractLicensesSettingsExtensions
     ///         This option is mutually exclusive with "LicenseTypeWhitelist" and "LicenseTypeWhitelistFilePath"
     ///     </para>
     ///     <para>
-    ///         If both LicenseTypeBlacklist" and "LicenseTypeBlacklistFilePath" are given, those two will be merged
+    ///         If both "LicenseTypeBlacklist" and "LicenseTypeBlacklistFilePath" are given, those two will be merged
     ///     </para>
     /// </summary>
     /// <param name="settings">The settings to set the value on</param>
@@ -644,6 +644,77 @@ public static class ExtractLicensesSettingsExtensions
         }
 
         settings.ExportJsonFile = exportJsonFile;
+        return settings;
+    }
+    
+    /// <summary>
+    ///     <para>
+    ///         Set a list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against absolute path of the project-file.
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="projectExclusionGlobs">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown when the parameters <paramref name="settings"/> or <paramref name="projectExclusionGlobs"/> are null
+    /// </exception>
+    public static ExtractLicensesSettings SetProjectExclusionGlobs(
+        this ExtractLicensesSettings settings,
+        List<string> projectExclusionGlobs)
+    {
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
+        if (projectExclusionGlobs == null)
+        {
+            throw new ArgumentNullException(nameof(projectExclusionGlobs));
+        }
+
+        settings.ProjectExclusionGlobs = projectExclusionGlobs;
+        return settings;
+    }
+
+    /// <summary>
+    ///     <para>
+    ///         Set a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing
+    ///         a list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against the absolute path of the project-file. 
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    ///     <para>
+    ///         If both "ProjectExclusionGlobs" and "ProjectExclusionGlobsFilePath" are given, those two will be merged.
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="projectExclusionGlobsFilePath">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the parameter <paramref name="settings"/> is null</exception>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when the parameter <paramref name="projectExclusionGlobsFilePath"/> is either null, empty or whitespace
+    /// </exception>
+    public static ExtractLicensesSettings SetProjectExclusionGlobsFilePath(
+        this ExtractLicensesSettings settings,
+        string projectExclusionGlobsFilePath)
+    {
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
+        if (string.IsNullOrWhiteSpace(projectExclusionGlobsFilePath))
+        {
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(projectExclusionGlobsFilePath));
+        }
+
+        settings.ProjectExclusionGlobsFilePath = projectExclusionGlobsFilePath;
         return settings;
     }
 }

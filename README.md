@@ -34,11 +34,13 @@
 - Export license-information in various forms:
   - license-texts into text-files in a given directory
   - all the gathered information into a single JSON-file
+- Filtering
+  - Exclude projects using [glob-patterns](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns)
 
 ### Planned features
 
 - [#11](https://github.com/wgnf/liz/issues/11) & [#12](https://github.com/wgnf/liz/issues/12) Mapping from package-reference to license-information
-- [#5](https://github.com/wgnf/liz/issues/5) & [#7](https://github.com/wgnf/liz/issues/7) Filter for projects and dependencies
+- [#7](https://github.com/wgnf/liz/issues/7) Filter dependencies
 - [#6](https://github.com/wgnf/liz/issues/6) Ability to provide manual dependencies
 - [#1](https://github.com/wgnf/liz/issues/1) Caching for even faster analyzation times
 - [#28](https://github.com/wgnf/liz/issues/28) Sanitize HTML-Tags

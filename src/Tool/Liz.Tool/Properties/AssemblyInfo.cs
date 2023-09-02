@@ -1,3 +1,3 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics.CodeAnalysis;
 
-[assembly: InternalsVisibleTo("Liz.Tool.Tests")]
+[assembly: ExcludeFromCodeCoverage]
