@@ -64,6 +64,8 @@ The settings contain the following options which can be set according to your ne
 | `RequestTimeout` | The timeout for a request (i.e. to get the license text from a website). </br> After this amount of time a request will be considered as failed and aborted. </br> This defaults to 10 seconds |
 | `ProjectExclusionGlobs` | A list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least one glob-pattern. The pattern will be matched against absolute path of the project-file. </br> All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) |
 | `ProjectExclusionGlobsFilePath` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least one glob-pattern The pattern will be matched against the absolute path of the project-file. </br> All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) </br> If both `ProjectExclusionGlobs` and `ProjectExclusionGlobsFilePath` are given, those two will be merged. |
+| `PackageExclusionGlobs` | A list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least one glob-pattern. The pattern will be matched against the name of the package. </br> All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) |
+| `PackageExclusionGlobsFilePath` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least one glob-pattern The pattern will be matched against the name of the package. </br> All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) </br> If both `PackageExclusionGlobs` and `PackageExclusionGlobsFilePath` are given, those two will be merged. |
 
 ## Example Usages
 
@@ -306,3 +308,19 @@ var settings = new ExtractLicensesSettings
 ```
 
 when all your test-projects end with `Tests.csproj`.
+
+#### Excluding packages
+
+If you want to exclude certain packages, you can use something like the following:
+
+```cs
+var settings = new ExtractLicensesSettings
+{
+    PackageExclusionGlobs = new
+    {
+        "YourCompany*"
+    }
+}
+```
+
+When you i.e. want to exclude all packages from your company.

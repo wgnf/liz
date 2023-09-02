@@ -108,6 +108,12 @@ public static class Program
             "A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least one glob-pattern. The pattern will be matched against the absolute path of the project-file. All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns");
         rootCommand.AddOption(projectExclusionsOption);
         
+        var packageExclusionsOption = new Option<string?>(
+            new[] { "--dependency-excludes", "-de" },
+            () => null,
+            "A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least one glob-pattern. The pattern will be matched against the name of the package. All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns");
+        rootCommand.AddOption(packageExclusionsOption);
+        
         rootCommand.SetHandler(async context =>
         {
             var targetFile = context.ParseResult.GetValueForArgument(targetFileArgument);
@@ -123,7 +129,8 @@ public static class Program
                 LicenseTypeBlacklistFilePath = context.ParseResult.GetValueForOption(blacklistOption),
                 ExportLicenseTextsDirectory = context.ParseResult.GetValueForOption(exportTextsOption),
                 ExportJsonFile = context.ParseResult.GetValueForOption(exportJsonOption),
-                ProjectExclusionGlobsFilePath = context.ParseResult.GetValueForOption(projectExclusionsOption)
+                ProjectExclusionGlobsFilePath = context.ParseResult.GetValueForOption(projectExclusionsOption),
+                PackageExclusionGlobsFilePath = context.ParseResult.GetValueForOption(packageExclusionsOption)
             };
 
             var requestTimeout = context.ParseResult.GetValueForOption(timeoutOption);

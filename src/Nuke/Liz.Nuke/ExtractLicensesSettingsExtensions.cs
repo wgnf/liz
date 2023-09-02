@@ -717,4 +717,75 @@ public static class ExtractLicensesSettingsExtensions
         settings.ProjectExclusionGlobsFilePath = projectExclusionGlobsFilePath;
         return settings;
     }
+    
+    /// <summary>
+    ///     <para>
+    ///         Set a list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against the name of the package.
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="packageExclusionGlobs">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown when the parameters <paramref name="settings"/> or <paramref name="packageExclusionGlobs"/> are null
+    /// </exception>
+    public static ExtractLicensesSettings SetPackageExclusionGlobs(
+        this ExtractLicensesSettings settings,
+        List<string> packageExclusionGlobs)
+    {
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
+        if (packageExclusionGlobs == null)
+        {
+            throw new ArgumentNullException(nameof(packageExclusionGlobs));
+        }
+
+        settings.PackageExclusionGlobs = packageExclusionGlobs;
+        return settings;
+    }
+
+    /// <summary>
+    ///     <para>
+    ///         Set a path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing
+    ///         a list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against the name of the package. 
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    ///     <para>
+    ///         If both "PackageExclusionGlobs" and "PackageExclusionGlobsFilePath" are given, those two will be merged.
+    ///     </para>
+    /// </summary>
+    /// <param name="settings">The settings to set the value on</param>
+    /// <param name="packageExclusionGlobsFilePath">The value to set</param>
+    /// <returns>The settings</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the parameter <paramref name="settings"/> is null</exception>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when the parameter <paramref name="packageExclusionGlobsFilePath"/> is either null, empty or whitespace
+    /// </exception>
+    public static ExtractLicensesSettings SetPackageExclusionGlobsFilePath(
+        this ExtractLicensesSettings settings,
+        string packageExclusionGlobsFilePath)
+    {
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
+        if (string.IsNullOrWhiteSpace(packageExclusionGlobsFilePath))
+        {
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(packageExclusionGlobsFilePath));
+        }
+
+        settings.PackageExclusionGlobsFilePath = packageExclusionGlobsFilePath;
+        return settings;
+    }
 }

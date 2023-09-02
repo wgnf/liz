@@ -11,7 +11,7 @@ public class GetProjectReferencesTests
     [Fact]
     public void Gets_Project_References_Of_Liz_Tool_Project_Correctly()
     {
-        const string lizToolProjectPath = "../../../../../Tool/Liz.Tool.Tests/Liz.Tool.Tests.csproj";
+        const string lizToolProjectPath = "../../../../../Tool/Liz.Tool/Liz.Tool.csproj";
         
         var fileSystem = new FileSystem();
         var lizToolProjectFile = fileSystem.FileInfo.FromFileName(lizToolProjectPath);

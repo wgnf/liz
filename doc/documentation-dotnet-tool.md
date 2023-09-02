@@ -82,6 +82,7 @@ To analyze a project your solution you have to use
 | `--export-json`, `-ej` | A path to a JSON-file to which the determined license- and package-information will be exported. All the information will be written to a single JSON-file. </br> If the file already exists it will be overwritten. |
 | `--timeout`, `-t` | The timeout for a request (i.e. to get the license text from a website) in **seconds**. </br> After this amount of time a request will be considered as failed and aborted. </br> This defaults to 10 seconds |
 | `--project-excludes`, `-pe` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least one glob-pattern. The pattern will be matched against the absolute path of the project-file. All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) |
+| `--dependency-excludes`, `-de` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least one glob-pattern. The pattern will be matched against the name of the package. All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) |
 
 ## Examples
 
@@ -295,4 +296,34 @@ You can also use files that are stored remotely. Just usse the web link to the r
 
 # local
 > dotnet liz "path/to/solution.sln" --project-excludes "http://path/to/project-excludes.json"
+```
+
+#### Excluding packages
+
+Create a JSON-File that contains your glob-patterns. If you want to exclude all the packages of your company, create a `package-excludes.json` (you can choose any other name of course) like this:
+
+```json
+[
+  "YourCompany*"
+]
+```
+
+This will disallow every package whose name starts with "YourCompany". You can then use it like this:
+
+```bash
+# global
+> liz "path/to/project.csproj" --dependency-excludes "path/to/package-excludes.json"
+
+# local
+> dotnet liz "path/to/project.csproj" --dependency-excludes "path/to/package-excludes.json"
+```
+
+You can also use files that are stored remotely. Just usse the web link to the resource:
+
+```bash
+# global
+> liz "path/to/project.csproj" --dependency-excludes "http://path/to/package-excludes.json"
+
+# local
+> dotnet liz "path/to/project.csproj" --dependency-excludes "http://path/to/package-excludes.json"
 ```

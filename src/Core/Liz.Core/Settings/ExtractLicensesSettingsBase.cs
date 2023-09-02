@@ -150,6 +150,33 @@ public abstract class ExtractLicensesSettingsBase
     
     /// <summary>
     ///     <para>
+    ///         A list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against the name of the package.
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    /// </summary>
+    public List<string> PackageExclusionGlobs { get; set; } = new();
+    
+    /// <summary>
+    ///     <para>
+    ///         A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing
+    ///         a list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least
+    ///         one glob-pattern. The pattern will be matched against the name of the package. 
+    ///     </para>
+    ///     <para>
+    ///         All available patterns can be found here: https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns
+    ///     </para>
+    ///     <para>
+    ///         If both <see cref="PackageExclusionGlobs"/> and <see cref="PackageExclusionGlobsFilePath"/> are given,
+    ///         those two will be merged.
+    ///     </para>
+    /// </summary>
+    public string? PackageExclusionGlobsFilePath { get; set; }
+    
+    /// <summary>
+    ///     <para>
     ///         A path to a directory to where the determined license-texts will be exported
     ///     </para>
     ///     <para>

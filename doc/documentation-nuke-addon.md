@@ -47,6 +47,8 @@ The settings contain the following options which can be set according to your ne
 | `RequestTimeout` | The timeout for a request (i.e. to get the license text from a website). </br> After this amount of time a request will be considered as failed and aborted. </br> This defaults to 10 seconds |
 | `ProjectExclusionGlobs` | A list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least one glob-pattern. The pattern will be matched against absolute path of the project-file. </br> All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) |
 | `ProjectExclusionGlobsFilePath` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of glob-patterns to exclude certain projects. A project will be excluded when it matches at least one glob-pattern The pattern will be matched against the absolute path of the project-file. </br> All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) </br> If both `ProjectExclusionGlobs` and `ProjectExclusionGlobsFilePath` are given, those two will be merged. |
+| `PackageExclusionGlobs` | A list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least one glob-pattern. The pattern will be matched against the name of the package. </br> All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) |
+| `PackageExclusionGlobsFilePath` | A path to a JSON-File (local or remote - remote will be downloaded automatically if available) containing a list of glob-patterns to exclude certain packages. A package will be excluded when it matches at least one glob-pattern The pattern will be matched against the name of the package. </br> All available patterns can be found [here](https://github.com/dazinator/DotNet.Glob/tree/3.1.3#patterns) </br> If both `PackageExclusionGlobs` and `PackageExclusionGlobsFilePath` are given, those two will be merged. |
 
 To support the Nuke-specific way of configuring the settings in a Fluent-API way, following extensions were added as well:
 
@@ -91,6 +93,9 @@ To support the Nuke-specific way of configuring the settings in a Fluent-API way
 | | |
 | `SetProjectExclusionGlobs` | Sets the `ProjectExclusionGlobs` property to the given value |
 | `SetProjectExclusionGlobsFilePath` | Sets the `ProjectExclusionGlobsFilePath` property to the given value |
+| | |
+| `SetPackageExclusionGlobs` | Sets the `PackageExclusionGlobs` property to the given value |
+| `SetPackageExclusionGlobsFilePath` | Sets the `PackageExclusionGlobsFilePath` property to the given value |
 
 ## Example Usages
 
@@ -280,4 +285,14 @@ If you want to for instance exclude all the test-projects when you're scanning a
 // this will specifically disallow any project that ends with "Tests.csproj"
 await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
   .SetProjectExclusionGlobs(new List<string>{ "*/**/*Tests.csproj" }));
+```
+
+#### Exluding packages
+
+If you want to for instance exclude all the packages of your company, you can use something like the following:
+
+```cs
+// this will specifically disallow any project that ends with "Tests.csproj"
+await ExtractLicensesTasks.ExtractLicensesAsync(settings => settings
+  .SetPackageExclusionGlobs(new List<string>{ "YourCompany*" }));
 ```
