@@ -11,4 +11,9 @@ internal sealed record Project(string Name, IFileInfo File, ProjectFormatStyle F
     public IFileInfo File { get; } = File;
     
     public ProjectFormatStyle FormatStyle { get; } = FormatStyle;
+
+    public override string ToString()
+    {
+        return $"{Name} ('{File.FullName}')";
+    }
 }
