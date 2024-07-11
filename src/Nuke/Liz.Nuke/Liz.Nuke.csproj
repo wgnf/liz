@@ -18,6 +18,9 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <IsTrimmable>true</IsTrimmable>
 
+    <!-- because using the latest System.Text.Json version -->
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+
     <Authors>Martin Wagenführ</Authors>
     <Description>
       The Nuke-Addon of the Liz-Tool - which helps to extract license-information from your solution/project
