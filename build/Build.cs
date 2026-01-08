@@ -2,21 +2,18 @@ using System.Diagnostics.CodeAnalysis;
 using Liz.Nuke;
 using Nuke.Common;
 using Nuke.Common.CI;
-using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
-using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 // ReSharper disable UnusedMember.Local
 
 namespace Liz.Build;
 
-[CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
 class Build : NukeBuild
@@ -46,9 +43,7 @@ class Build : NukeBuild
         {
             SourceDirectory
                 .GlobDirectories("**/bin", "**/obj")
-                .ForEach(DeleteDirectory);
-
-            EnsureCleanDirectory(OutputDirectory);
+                .ForEach(dir => Directory.Delete(dir, true));
         });
 
     Target Restore => _ => _
@@ -110,7 +105,8 @@ class Build : NukeBuild
                     .SetConfiguration(Configuration)
                     .EnableNoBuild()
                     .EnableNoRestore()
-                    .SetVersion(GitVersion?.NuGetVersionV2)
+                    // TODO: this is not the right version because it omits the pre-release stuff but NUKE does not provide the correct GitVersion shit for some fucking reason
+                    .SetVersion(GitVersion?.MajorMinorPatch ?? "0.1.0")
                     .SetAssemblyVersion(GitVersion?.AssemblySemVer)
                     .SetFileVersion(GitVersion?.AssemblySemFileVer)
                     .SetInformationalVersion(GitVersion?.InformationalVersion));
