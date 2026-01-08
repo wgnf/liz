@@ -48,11 +48,11 @@ internal sealed class FileContentProvider : IFileContentProvider
     {
         var response = await _httpClient.GetAsync(remoteFilePath).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
-
-        var tempFile = _fileSystem.Path.GetTempFileName();
+        
+        var tempFile = _fileSystem.Path.Combine(_fileSystem.Path.GetTempPath(), _fileSystem.Path.GetRandomFileName());
         await using var fileStream = _fileSystem
             .FileStream
-            .Create(tempFile, FileMode.Create, FileAccess.Write);
+            .New(tempFile, FileMode.Create, FileAccess.Write);
 
         await response.Content.CopyToAsync(fileStream).ConfigureAwait(false);
 

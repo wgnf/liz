@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.CliTool;
 using Liz.Core.CliTool.Contracts.Exceptions;
 using Xunit;

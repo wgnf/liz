@@ -1,6 +1,6 @@
-﻿using Liz.Core.Logging.Contracts;
+﻿using System.Diagnostics.CodeAnalysis;
+using Liz.Core.Logging.Contracts;
 using Liz.Tool.Logging;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Tool.Progress;
 
@@ -14,7 +14,7 @@ internal sealed class ProgressBarLoggerProvider : ILoggerProvider
     {
         _commandLineLoggerProvider = commandLineLoggerProvider ?? throw new ArgumentNullException(nameof(commandLineLoggerProvider));
     }
-    
+
     public ILogger Get(LogLevel logLevel)
     {
         _instance ??= new ProgressBarProgressHandlerLogger(logLevel, _commandLineLoggerProvider);

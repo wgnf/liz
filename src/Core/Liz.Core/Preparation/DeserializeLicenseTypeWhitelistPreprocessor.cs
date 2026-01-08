@@ -44,7 +44,7 @@ internal sealed class DeserializeLicenseTypeWhitelistPreprocessor : IPreprocesso
 
     private static IEnumerable<string> DeserializeLicenseTypeWhitelist(string fileContent)
     {
-        var licenseTypeWhitelist = JsonSerializer.Deserialize<List<string>>(fileContent);
+        var licenseTypeWhitelist = JsonSerializer.Deserialize<List<string>>(fileContent, SourceGenerationContext.Default.ListString);
 
         return licenseTypeWhitelist?.Where(entry => !string.IsNullOrWhiteSpace(entry)) ?? Enumerable.Empty<string>();
     }

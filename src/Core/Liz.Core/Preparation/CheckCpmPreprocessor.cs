@@ -34,7 +34,7 @@ internal sealed class CheckCpmPreprocessor : IPreprocessor
     public Task PreprocessAsync()
     {
         var targetFile = _settings.GetTargetFile();
-        var targetFileInfo = _fileSystem.FileInfo.FromFileName(targetFile);
+        var targetFileInfo = _fileSystem.FileInfo.New(targetFile);
         var currentDirectory = targetFileInfo.Directory;
 
         while (currentDirectory != null)
@@ -70,17 +70,22 @@ internal sealed class CheckCpmPreprocessor : IPreprocessor
         var enablingElement = xmlDocument.Descendants("ManagePackageVersionsCentrally").FirstOrDefault();
         var importElement = xmlDocument.Descendants("Import").FirstOrDefault();
         
-        // if we have an enabling element we can check if its available
+        // if we have an enabling element we can check if it's available
         if (enablingElement != null) return enablingElement.Value.ToLower().Equals("true");
 
-        // when theres no enabling element and no import (without the proper Attribute), CPM is not enabled!
+        // when there is no enabling element and no import (without the proper Attribute), CPM is not enabled!
         var importProject = importElement?.Attribute("Project");
         if (importProject == null || string.IsNullOrWhiteSpace(importProject.Value)) return false;
         
         // we get here when the 'importElement' is not null, so we can follow that to see if something is enabled there...
         // NOTE: the path in the Attribute is most likely a path relative to the currents file directory we're looking at
+        if (propsFile.Directory == null)
+        {
+            return false;
+        }
+        
         var importedFilePath = _fileSystem.Path.Combine(propsFile.Directory.FullName, importProject.Value);
-        var importedFile = _fileSystem.FileInfo.FromFileName(importedFilePath);
+        var importedFile = _fileSystem.FileInfo.New(importedFilePath);
         
         // ReSharper disable once TailRecursiveCall
         return IsCpmEnabledThroughPropsFile(importedFile);

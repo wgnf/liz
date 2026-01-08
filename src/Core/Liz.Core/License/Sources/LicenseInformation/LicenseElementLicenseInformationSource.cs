@@ -149,7 +149,7 @@ internal sealed class LicenseElementLicenseInformationSource : ILicenseInformati
 
         var licenseFileInfo = _fileSystem
             .FileInfo
-            .FromFileName(licenseFile);
+            .New(licenseFile);
 
         _logger.LogDebug($"Specified license file should be: '{licenseFileInfo}'");
 

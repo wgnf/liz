@@ -105,7 +105,7 @@ internal sealed class GetLicenseInformationFromArtifact : IGetLicenseInformation
     private async Task<XDocument> LoadNugetSpecificationFileAsXmlFileAsync(IFileSystemInfo nugetSpecificationFile)
     {
         await using var fileStream =
-            _fileSystem.FileStream.Create(nugetSpecificationFile.FullName, FileMode.Open, FileAccess.Read);
+            _fileSystem.FileStream.New(nugetSpecificationFile.FullName, FileMode.Open, FileAccess.Read);
         var xmlDocument = await XDocument
             .LoadAsync(fileStream, LoadOptions.None, CancellationToken.None)
             .ConfigureAwait(false);

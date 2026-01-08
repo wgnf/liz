@@ -38,5 +38,5 @@ public enum LogLevel
     /// <summary>
     ///     does not log anything
     /// </summary>
-    None = 6
+    None = 6,
 }

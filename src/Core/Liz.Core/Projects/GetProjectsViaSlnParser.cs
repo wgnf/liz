@@ -34,7 +34,7 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(targetFile));
         }
 
-        var fileInfo = _fileSystem.FileInfo.FromFileName(targetFile);
+        var fileInfo = _fileSystem.FileInfo.New(targetFile);
         
         ValidateProvidedTargetFile(fileInfo);
         var projects = GetProjects(fileInfo);
@@ -103,7 +103,7 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
             .Select(project => 
                 new Project(
                     project.Name, 
-                    _fileSystem.FileInfo.FromFileName(project.File.FullName), 
+                    _fileSystem.FileInfo.New(project.File.FullName), 
                     DetermineProjectFormatStyle(project.File.FullName)))
             .ToList();
 
@@ -126,7 +126,7 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
     
     private bool IsSdkStyle(string projectFile)
     {
-        using var fileStream = _fileSystem.FileStream.Create(projectFile, FileMode.Open, FileAccess.Read);
+        using var fileStream = _fileSystem.FileStream.New(projectFile, FileMode.Open, FileAccess.Read);
         var xmlDocument = XDocument.Load(fileStream);
 
         var projectRoot = xmlDocument
@@ -154,7 +154,7 @@ internal sealed class GetProjectsViaSlnParser : IGetProjects
             .Select(projectReferenceWithStyle =>
             {
                 var projectName = _fileSystem.Path.GetFileNameWithoutExtension(projectReferenceWithStyle.Reference.FileName);
-                var fileInfo = _fileSystem.FileInfo.FromFileName(projectReferenceWithStyle.Reference.FileName);
+                var fileInfo = _fileSystem.FileInfo.New(projectReferenceWithStyle.Reference.FileName);
 
                 return new Project(projectName, fileInfo, projectReferenceWithStyle.Style);
             });

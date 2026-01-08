@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.Utils;
 using Liz.Core.Utils.Contracts.Wrappers;
 using Moq;
@@ -29,15 +29,15 @@ public class FileContentProviderTests
 
         var mockFileSystem = new MockFileSystem();
 
-        var path = mockFileSystem.Path.GetTempFileName();
-        mockFileSystem.AddFile(path, new MockFileData(fileContent));
+        var tempFile = mockFileSystem.Path.Combine(mockFileSystem.Path.GetTempPath(),mockFileSystem.Path.GetRandomFileName());
+        mockFileSystem.AddFile(tempFile, new MockFileData(fileContent));
         
         var context = ArrangeContext<FileContentProvider>.Create();
         context.Use<IFileSystem>(mockFileSystem);
         
         var sut = context.Build();
 
-        var result = await sut.GetFileContentAsync(path);
+        var result = await sut.GetFileContentAsync(tempFile);
 
         result
             .Should()
@@ -78,7 +78,7 @@ public class FileContentProviderTests
             { "something.txt", new MockFileData(fileContent) }
         });
 
-        await using var fileStream = mockFileSystem.FileStream.Create("something.txt", FileMode.Open);
+        await using var fileStream = mockFileSystem.FileStream.New("something.txt", FileMode.Open);
         
         var context = ArrangeContext<FileContentProvider>.Create();
         context.Use<IFileSystem>(mockFileSystem);

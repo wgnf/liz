@@ -9,8 +9,8 @@ namespace Liz.Core.Result;
 
 internal sealed class ValidateLicenseTypesWhitelistResultProcessor : IResultProcessor
 {
-    private readonly ExtractLicensesSettingsBase _settings;
     private readonly ILogger _logger;
+    private readonly ExtractLicensesSettingsBase _settings;
 
     public ValidateLicenseTypesWhitelistResultProcessor(
         ExtractLicensesSettingsBase settings,
@@ -22,15 +22,24 @@ internal sealed class ValidateLicenseTypesWhitelistResultProcessor : IResultProc
 
     public Task ProcessResultsAsync(IEnumerable<PackageReference> packageReferences)
     {
-        if (packageReferences == null) throw new ArgumentNullException(nameof(packageReferences));
+        if (packageReferences == null)
+        {
+            throw new ArgumentNullException(nameof(packageReferences));
+        }
 
         var whitelist = _settings.LicenseTypeWhitelist;
-        if (!whitelist.Any()) return Task.CompletedTask;
-        
+        if (!whitelist.Any())
+        {
+            return Task.CompletedTask;
+        }
+
         _logger.LogDebug($"Validating package-references against whitelist ({string.Join(", ", whitelist)})");
 
         var invalidPackageReferences = DetermineInvalidPackageReferences(packageReferences, whitelist);
-        if (!invalidPackageReferences.Any()) return Task.CompletedTask;
+        if (!invalidPackageReferences.Any())
+        {
+            return Task.CompletedTask;
+        }
 
         ThrowInvalidException(invalidPackageReferences, whitelist);
         return Task.CompletedTask;
@@ -52,13 +61,13 @@ internal sealed class ValidateLicenseTypesWhitelistResultProcessor : IResultProc
 
         return packagesThatViolateWhitelist;
     }
-    
+
     private static void ThrowInvalidException(
-        IEnumerable<PackageReference> invalidPackageReferences, 
+        IEnumerable<PackageReference> invalidPackageReferences,
         IEnumerable<string> whitelist)
     {
         var invalidPackagesDisplayMessages = invalidPackageReferences
-            .Select(package => 
+            .Select(package =>
                 $"> {package.Name} ({package.Version}): {string.Join(", ", package.LicenseInformation.Types)}");
 
         var message = "The determined package-references contain invalid license-types according to the provided " +

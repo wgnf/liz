@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.License.Sources.UrlToLicenseType;
 using Liz.Core.Settings;
 using Moq;
@@ -12,12 +12,7 @@ public class UrlToLicenseTypeFromSettingsProviderTests
     [Fact]
     public void Provides_Definitions_From_The_Settings()
     {
-        var mappings = new Dictionary<string, string>
-        {
-            { "a", "a" }, 
-            { "b", "b" }, 
-            { "c", "c" }
-        };
+        var mappings = new Dictionary<string, string> { { "a", "a" }, { "b", "b" }, { "c", "c" } };
         var settings = Mock.Of<ExtractLicensesSettingsBase>();
         settings.UrlToLicenseTypeMapping = mappings;
 

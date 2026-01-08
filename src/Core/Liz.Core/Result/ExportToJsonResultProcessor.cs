@@ -44,13 +44,13 @@ internal sealed class ExportToJsonResultProcessor : IResultProcessor
 
     private static string GetReferencesAsJson(IEnumerable<PackageReference> packageReferences)
     {
-        var json = JsonSerializer.Serialize(packageReferences, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(packageReferences, SourceGenerationContext.Default.IEnumerablePackageReference);
         return json;
     }
 
     private async Task WriteJsonToFile(string json)
     {
-        var destinationFile = _fileSystem.FileInfo.FromFileName(_settings.ExportJsonFile);
+        var destinationFile = _fileSystem.FileInfo.New(_settings.ExportJsonFile!);
 
         // this will basically 'overwrite' the file if it exists
         if (destinationFile.Exists)
@@ -59,7 +59,7 @@ internal sealed class ExportToJsonResultProcessor : IResultProcessor
         }
 
         // make sure the enclosing directory(s) exist
-        _fileSystem.Directory.CreateDirectory(destinationFile.Directory.FullName);
+        _fileSystem.Directory.CreateDirectory(destinationFile.Directory!.FullName);
         await _fileSystem.File.WriteAllTextAsync(destinationFile.FullName, json);
     }
 }

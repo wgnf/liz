@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.Extract;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Exceptions;

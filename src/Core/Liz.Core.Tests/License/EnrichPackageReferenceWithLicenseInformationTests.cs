@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.License;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;

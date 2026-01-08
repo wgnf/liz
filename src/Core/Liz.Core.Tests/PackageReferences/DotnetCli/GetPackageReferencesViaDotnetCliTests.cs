@@ -1,5 +1,6 @@
-﻿using ArrangeContext.Moq;
-using FluentAssertions;
+﻿using System.IO.Abstractions;
+using ArrangeContext.Moq;
+using AwesomeAssertions;
 using Liz.Core.CliTool.Contracts;
 using Liz.Core.PackageReferences.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
@@ -7,7 +8,6 @@ using Liz.Core.PackageReferences.DotnetCli;
 using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Models;
 using Moq;
-using System.IO.Abstractions;
 using Xunit;
 
 namespace Liz.Core.Tests.PackageReferences.DotnetCli;
@@ -68,7 +68,7 @@ public class GetPackageReferencesViaDotnetCliTests
     {
         var context = new ArrangeContext<GetPackageReferencesViaDotnetCli>();
         var sut = context.Build();
-        
+
         var packageReferences = new List<PackageReference>
         {
             new("something", "something", "something"),

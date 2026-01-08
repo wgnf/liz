@@ -28,7 +28,7 @@ internal sealed class ChooseALicenseUrlToLicenseTypeProvider : IUrlToLicenseType
             { "http://choosealicense.com/licenses/apache-2.0/", "Apache-2.0" },
             { "http://choosealicense.com/licenses/mit/", "MIT" },
             { "http://choosealicense.com/licenses/bsl-1.0/", "BSL-1.0" },
-            { "http://choosealicense.com/licenses/unlicense/", "Unlicense" }
+            { "http://choosealicense.com/licenses/unlicense/", "Unlicense" },
         };
     }
 }

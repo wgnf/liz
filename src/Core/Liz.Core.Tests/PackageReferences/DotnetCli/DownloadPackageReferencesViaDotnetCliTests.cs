@@ -1,9 +1,9 @@
-﻿using Liz.Core.CliTool.Contracts;
+﻿using System.IO.Abstractions;
+using ArrangeContext.Moq;
+using Liz.Core.CliTool.Contracts;
 using Liz.Core.PackageReferences.DotnetCli;
 using Moq;
-using System.IO.Abstractions;
 using Xunit;
-using ArrangeContext.Moq;
 
 namespace Liz.Core.Tests.PackageReferences.DotnetCli;
 
@@ -38,8 +38,8 @@ public class DownloadPackageReferencesViaDotnetCliTests
         context
             .For<ICliToolExecutor>()
             .Verify(executor => executor.ExecuteAsync(
-                    It.Is<string>(file => file == "dotnet"), 
-                    It.IsAny<string>()), 
+                    It.Is<string>(file => file == "dotnet"),
+                    It.IsAny<string>()),
                 Times.Once);
     }
 }

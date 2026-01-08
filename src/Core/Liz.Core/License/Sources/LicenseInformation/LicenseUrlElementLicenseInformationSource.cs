@@ -132,7 +132,7 @@ internal sealed class LicenseUrlElementLicenseInformationSource : ILicenseInform
 
         var licenseFile =
             _fileSystem.Path.Combine(licenseInformationContext.ArtifactDirectory.FullName, licenseElementValue);
-        var licenseFileInfo = _fileSystem.FileInfo.FromFileName(licenseFile);
+        var licenseFileInfo = _fileSystem.FileInfo.New(licenseFile);
 
         _logger.LogDebug($"Specified license file should be: '{licenseFileInfo}'");
 

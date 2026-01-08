@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.License.Sources.LicenseInformation;
@@ -51,7 +51,7 @@ public class UrlToLicenseTypeMappingLicenseInformationSourceTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public async Task GetInformation_Does_Nothing_When_No_License_Url(string licenseUrl)
+    public async Task GetInformation_Does_Nothing_When_No_License_Url(string? licenseUrl)
     {
         var context = ArrangeContext<UrlToLicenseTypeMappingLicenseInformationSource>.Create();
 
@@ -66,7 +66,7 @@ public class UrlToLicenseTypeMappingLicenseInformationSourceTests
 
         var licenseInformationContext = new GetLicenseInformationContext
         {
-            LicenseInformation = { Url = licenseUrl }
+            LicenseInformation = { Url = licenseUrl! },
         };
 
         await sut.GetInformationAsync(licenseInformationContext);
@@ -86,7 +86,7 @@ public class UrlToLicenseTypeMappingLicenseInformationSourceTests
         var mappings = new Dictionary<string, string>
         {
             { licenseUrl, "MIT" }, 
-            { "https://goole.com/goo-gl", "GOO-GL" }
+            { "https://goole.com/goo-gl", "GOO-GL" },
         };
         
         var context = ArrangeContext<UrlToLicenseTypeMappingLicenseInformationSource>.Create();
@@ -102,7 +102,7 @@ public class UrlToLicenseTypeMappingLicenseInformationSourceTests
 
         var licenseInformationContext = new GetLicenseInformationContext
         {
-            LicenseInformation = { Url = licenseUrl }
+            LicenseInformation = { Url = licenseUrl },
         };
 
         await sut.GetInformationAsync(licenseInformationContext);

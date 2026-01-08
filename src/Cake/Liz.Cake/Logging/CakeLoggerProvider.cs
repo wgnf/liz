@@ -1,6 +1,6 @@
-﻿using Cake.Core;
+﻿using System.Diagnostics.CodeAnalysis;
+using Cake.Core;
 using Liz.Core.Logging.Contracts;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Liz.Cake.Logging;
 
@@ -13,7 +13,7 @@ internal sealed class CakeLoggerProvider : ILoggerProvider
     {
         _cakeContext = cakeContext ?? throw new ArgumentNullException(nameof(cakeContext));
     }
-    
+
     public ILogger Get(LogLevel logLevel)
     {
         return new CakeLogger(_cakeContext);

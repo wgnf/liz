@@ -9,11 +9,11 @@ namespace Liz.Core.Result;
 
 internal sealed class ValidateLicenseTypesBlacklistResultProcessor : IResultProcessor
 {
-    private readonly ExtractLicensesSettingsBase _settings;
     private readonly ILogger _logger;
+    private readonly ExtractLicensesSettingsBase _settings;
 
     public ValidateLicenseTypesBlacklistResultProcessor(
-        ExtractLicensesSettingsBase settings, 
+        ExtractLicensesSettingsBase settings,
         ILogger logger)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
@@ -22,22 +22,31 @@ internal sealed class ValidateLicenseTypesBlacklistResultProcessor : IResultProc
 
     public Task ProcessResultsAsync(IEnumerable<PackageReference> packageReferences)
     {
-        if (packageReferences == null) throw new ArgumentNullException(nameof(packageReferences));
+        if (packageReferences == null)
+        {
+            throw new ArgumentNullException(nameof(packageReferences));
+        }
 
         var blacklist = _settings.LicenseTypeBlacklist;
-        if (!blacklist.Any()) return Task.CompletedTask;
+        if (!blacklist.Any())
+        {
+            return Task.CompletedTask;
+        }
 
         _logger.LogDebug($"Validating package-references against blacklist ({string.Join(", ", blacklist)})");
 
         var invalidPackageReferences = DetermineInvalidPackageReferences(packageReferences, blacklist);
-        if (!invalidPackageReferences.Any()) return Task.CompletedTask;
+        if (!invalidPackageReferences.Any())
+        {
+            return Task.CompletedTask;
+        }
 
         ThrowInvalidException(invalidPackageReferences, blacklist);
         return Task.CompletedTask;
     }
 
     private static PackageReference[] DetermineInvalidPackageReferences(
-        IEnumerable<PackageReference> packageReferences, 
+        IEnumerable<PackageReference> packageReferences,
         IEnumerable<string> blacklist)
     {
         // violating a blacklist means, that there is a license-type that is explicitly mentioned in the blacklist
@@ -54,7 +63,7 @@ internal sealed class ValidateLicenseTypesBlacklistResultProcessor : IResultProc
     }
 
     private static void ThrowInvalidException(
-        IEnumerable<PackageReference> invalidPackageReferences, 
+        IEnumerable<PackageReference> invalidPackageReferences,
         IEnumerable<string> blacklist)
     {
         var invalidPackagesDisplayMessages = invalidPackageReferences

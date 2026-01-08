@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using Liz.Core.License.Contracts.Models;
 using Nuke.Common.IO;
 using System.Reflection;

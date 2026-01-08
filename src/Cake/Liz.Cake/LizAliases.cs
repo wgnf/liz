@@ -1,11 +1,11 @@
-﻿using Cake.Core;
+﻿using System.Diagnostics.CodeAnalysis;
+using Cake.Core;
 using Cake.Core.Annotations;
 using Liz.Cake.Logging;
 using Liz.Core;
 using Liz.Core.Extract.Contracts;
 using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Settings;
-using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable MemberCanBePrivate.Global
@@ -30,7 +30,7 @@ public static class LizAliases
     [CakeMethodAlias]
     [CakeAliasCategory("ExtractLicenses")]
     public static async Task<IEnumerable<PackageReference>> ExtractLicensesAsync(
-        this ICakeContext context, 
+        this ICakeContext context,
         ExtractLicensesSettings settings)
     {
         if (context == null)

@@ -138,10 +138,10 @@ internal sealed class DownloadPackageReferencesFacade : IDownloadPackageReferenc
             targetDirectory.FullName, 
             "projects", 
             $"ProjectToDownload-{framework}.csproj");
-        var targetProjectFileInfo = _fileSystem.FileInfo.FromFileName(targetProjectFile);
+        var targetProjectFileInfo = _fileSystem.FileInfo.New(targetProjectFile);
         
         // make sure that the target-directory actually exists
-        targetProjectFileInfo.Directory.Create();
+        targetProjectFileInfo.Directory?.Create();
 
         var contentBuilder = new StringBuilder();
         

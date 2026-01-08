@@ -18,8 +18,13 @@ internal sealed class ProvideTemporaryDirectories : IProvideTemporaryDirectories
     public IDirectoryInfo GetRootDirectory()
     {
         var targetFileDirectory = _fileSystem.Path.GetDirectoryName(_settings.GetTargetFile());
+        if (targetFileDirectory == null)
+        {
+            throw new InvalidOperationException($"{nameof(targetFileDirectory)} cannot be null.");
+        }
+        
         var lizTemporaryDirectory = _fileSystem.Path.Combine(targetFileDirectory, ".liz_tmp");
-        var lizTemporaryDirectoryInfo = _fileSystem.DirectoryInfo.FromDirectoryName(lizTemporaryDirectory);
+        var lizTemporaryDirectoryInfo = _fileSystem.DirectoryInfo.New(lizTemporaryDirectory);
 
         return lizTemporaryDirectoryInfo;
     }
@@ -28,7 +33,7 @@ internal sealed class ProvideTemporaryDirectories : IProvideTemporaryDirectories
     {
         var rootDirectory = GetRootDirectory();
         var temporaryDownloadDirectoryName = _fileSystem.Path.Combine(rootDirectory.FullName, "download");
-        var temporaryDownloadDirectory = _fileSystem.DirectoryInfo.FromDirectoryName(temporaryDownloadDirectoryName);
+        var temporaryDownloadDirectory = _fileSystem.DirectoryInfo.New(temporaryDownloadDirectoryName);
 
         return temporaryDownloadDirectory;
     }

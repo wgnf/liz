@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.License.Sources.LicenseInformation;
@@ -35,7 +35,7 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public async Task GetInformation_Does_Nothing_When_No_License_Text(string licenseText)
+    public async Task GetInformation_Does_Nothing_When_No_License_Text(string? licenseText)
     {
         var context = ArrangeContext<LicenseTypeFromTextLicenseInformationSource>.Create();
         
@@ -51,7 +51,7 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
 
         var licenseInformationContext = new GetLicenseInformationContext
         {
-            LicenseInformation = { Text = licenseText }
+            LicenseInformation = { Text = licenseText! },
         };
 
         await sut.GetInformationAsync(licenseInformationContext);
@@ -82,7 +82,7 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
         
         var licenseInformationContext = new GetLicenseInformationContext
         {
-            LicenseInformation = { Text = licenseText }
+            LicenseInformation = { Text = licenseText },
         };
 
         await sut.GetInformationAsync(licenseInformationContext);
@@ -114,7 +114,7 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
         
         var licenseInformationContext = new GetLicenseInformationContext
         {
-            LicenseInformation = { Text = licenseText }
+            LicenseInformation = { Text = licenseText },
         };
         
         licenseInformationContext
@@ -136,7 +136,7 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
         var licenseTypeToInclude = new LicenseTypeDefinition("ABC", "123");
         var licenseTypeToNotInclude = new LicenseTypeDefinition("DEF", "123")
         {
-            ExclusiveTextSnippets = new[] { "4" }
+            ExclusiveTextSnippets = new[] { "4" },
         };
         
         var context = ArrangeContext<LicenseTypeFromTextLicenseInformationSource>.Create();
@@ -151,7 +151,7 @@ public class LicenseTypeFromTextLicenseInformationSourceTests
         
         var licenseInformationContext = new GetLicenseInformationContext
         {
-            LicenseInformation = { Text = "1234" }
+            LicenseInformation = { Text = "1234" },
         };
         
         await sut.GetInformationAsync(licenseInformationContext);

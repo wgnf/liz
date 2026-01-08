@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using Liz.Core.Projects;
 using Liz.Core.Projects.Contracts.Models;
 using System.IO.Abstractions;
@@ -14,7 +14,7 @@ public class GetProjectReferencesTests
         const string lizToolProjectPath = "../../../../../Tool/Liz.Tool/Liz.Tool.csproj";
         
         var fileSystem = new FileSystem();
-        var lizToolProjectFile = fileSystem.FileInfo.FromFileName(lizToolProjectPath);
+        var lizToolProjectFile = fileSystem.FileInfo.New(lizToolProjectPath);
         lizToolProjectFile
             .Exists
             .Should()

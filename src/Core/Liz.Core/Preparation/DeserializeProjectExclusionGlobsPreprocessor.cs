@@ -48,7 +48,7 @@ internal sealed class DeserializeProjectExclusionGlobsPreprocessor : IPreprocess
 
     private static IEnumerable<string> DeserializeProjectExclusionGlobs(string fileContent)
     {
-        var projectExclusionGlobs = JsonSerializer.Deserialize<List<string>>(fileContent);
+        var projectExclusionGlobs = JsonSerializer.Deserialize<List<string>>(fileContent, SourceGenerationContext.Default.ListString);
 
         return projectExclusionGlobs?.Where(entry => !string.IsNullOrWhiteSpace(entry)) ?? Enumerable.Empty<string>();
     }

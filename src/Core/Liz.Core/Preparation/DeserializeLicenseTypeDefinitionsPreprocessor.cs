@@ -46,7 +46,7 @@ internal sealed class DeserializeLicenseTypeDefinitionsPreprocessor : IPreproces
 
     private static IEnumerable<LicenseTypeDefinition> DeserializeLicenseTypeDefinitions(string fileContent)
     {
-        var typeDefinitions = JsonSerializer.Deserialize<List<JsonLicenseTypeDefinition>>(fileContent);
+        var typeDefinitions = JsonSerializer.Deserialize<List<JsonLicenseTypeDefinition>>(fileContent, SourceGenerationContext.Default.ListJsonLicenseTypeDefinition);
 
         return typeDefinitions?
             .Where(typeDefinition => !string.IsNullOrWhiteSpace(typeDefinition.LicenseType))

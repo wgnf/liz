@@ -44,7 +44,7 @@ internal sealed class DeserializeUrlToLicenseTypeMappingPreprocessor : IPreproce
 
     private static Dictionary<string, string> DeserializeUrlToLicenseTypeMappings(string fileContent)
     {
-        var urlToLicenseMappings = JsonSerializer.Deserialize<Dictionary<string, string>>(fileContent);
+        var urlToLicenseMappings = JsonSerializer.Deserialize<Dictionary<string, string>>(fileContent, SourceGenerationContext.Default.DictionaryStringString);
 
         return urlToLicenseMappings?
             .Where(mapping => !string.IsNullOrWhiteSpace(mapping.Key))

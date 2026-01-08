@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.Projects;
 using Liz.Core.Projects.Contracts;
 using Liz.Core.Projects.Contracts.Models;
@@ -37,7 +37,7 @@ public class GetProjectsViaSlnParserTests
 
         context
             .For<IFileSystem>()
-            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(It.IsAny<string>()))
+            .Setup(fileSystem => fileSystem.FileInfo.New(It.IsAny<string>()))
             .Returns(targetFileMock.Object);
 
         Assert.Throws<FileNotFoundException>(() => sut.GetFromFile("something"));
@@ -62,7 +62,7 @@ public class GetProjectsViaSlnParserTests
 
         context
             .For<IFileSystem>()
-            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(It.IsAny<string>()))
+            .Setup(fileSystem => fileSystem.FileInfo.New(It.IsAny<string>()))
             .Returns(targetFileMock.Object);
 
         Assert.Throws<ArgumentException>(() => sut.GetFromFile("something"));
@@ -132,7 +132,7 @@ public class GetProjectsViaSlnParserTests
         
         context
             .For<IFileSystem>()
-            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(targetFile))
+            .Setup(fileSystem => fileSystem.FileInfo.New(targetFile))
             .Returns(targetFileMock.Object);
 
         var solutionFolder = new SolutionFolder(Guid.NewGuid(), "Solution Folder", Guid.NewGuid(),
@@ -164,7 +164,7 @@ public class GetProjectsViaSlnParserTests
 
         context
             .For<IFileSystem>()
-            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(existingFile.FullName))
+            .Setup(fileSystem => fileSystem.FileInfo.New(existingFile.FullName))
             .Returns(Mock.Of<IFileInfo>());
 
         var projects = sut.GetFromFile(targetFile);
@@ -312,7 +312,7 @@ public class GetProjectsViaSlnParserTests
         
         context
             .For<IFileSystem>()
-            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(targetFile))
+            .Setup(fileSystem => fileSystem.FileInfo.New(targetFile))
             .Returns(targetFileMock.Object);
 
         var existingFileFsProject = new FileInfo("some/file.fsproj");
@@ -347,13 +347,13 @@ public class GetProjectsViaSlnParserTests
 
         context
             .For<IFileSystem>()
-            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(existingFileFsProject.FullName))
-            .Returns(new FileSystem().FileInfo.FromFileName(existingFileFsProject.FullName));
+            .Setup(fileSystem => fileSystem.FileInfo.New(existingFileFsProject.FullName))
+            .Returns(new FileSystem().FileInfo.New(existingFileFsProject.FullName));
         
         context
             .For<IFileSystem>()
-            .Setup(fileSystem => fileSystem.FileInfo.FromFileName(existingFileCsProject.FullName))
-            .Returns(new FileSystem().FileInfo.FromFileName(existingFileCsProject.FullName));
+            .Setup(fileSystem => fileSystem.FileInfo.New(existingFileCsProject.FullName))
+            .Returns(new FileSystem().FileInfo.New(existingFileCsProject.FullName));
 
         var projects = sut.GetFromFile(targetFile).ToList();
 

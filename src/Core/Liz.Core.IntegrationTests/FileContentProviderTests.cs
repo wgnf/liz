@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using Liz.Core.Settings;
 using Liz.Core.Utils;
 using Liz.Core.Utils.Wrappers;

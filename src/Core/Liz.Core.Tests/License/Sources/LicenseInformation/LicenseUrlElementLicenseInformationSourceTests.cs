@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.License.Contracts.Models;
 using Liz.Core.License.Sources.LicenseInformation;
 using Liz.Core.Utils.Contracts.Wrappers;
@@ -131,7 +131,7 @@ public class LicenseUrlElementLicenseInformationSourceTests
         var mockFileSystem = new MockFileSystem();
         
         mockFileSystem.AddDirectory(artifactDirectoryPath);
-        var artifactDirectory = mockFileSystem.DirectoryInfo.FromDirectoryName(artifactDirectoryPath);
+        var artifactDirectory = mockFileSystem.DirectoryInfo.New(artifactDirectoryPath);
 
         var context = ArrangeContext<LicenseUrlElementLicenseInformationSource>.Create();
         context.Use<IFileSystem>(mockFileSystem);
@@ -175,7 +175,7 @@ public class LicenseUrlElementLicenseInformationSourceTests
         var mockFileSystem = new MockFileSystem();
         
         mockFileSystem.AddDirectory(artifactDirectoryPath);
-        var artifactDirectory = mockFileSystem.DirectoryInfo.FromDirectoryName(artifactDirectoryPath);
+        var artifactDirectory = mockFileSystem.DirectoryInfo.New(artifactDirectoryPath);
         
         // NOTE: matches the (relative) file path in the XML
         mockFileSystem.AddFile($"{artifactDirectory}/licenses/LICENSE.md", new MockFileData(licenseFileContent));

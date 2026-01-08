@@ -1,17 +1,17 @@
-﻿using Liz.Core.PackageReferences.Contracts.Models;
-using Liz.Core.Result.Contracts;
-using Liz.Core.Settings;
-using System.IO.Abstractions;
+﻿using System.IO.Abstractions;
 using Liz.Core.Logging;
 using Liz.Core.Logging.Contracts;
+using Liz.Core.PackageReferences.Contracts.Models;
+using Liz.Core.Result.Contracts;
+using Liz.Core.Settings;
 
 namespace Liz.Core.Result;
 
 internal sealed class ExportLicenseTextsResultProcessor : IResultProcessor
 {
-    private readonly ExtractLicensesSettingsBase _settings;
     private readonly IFileSystem _fileSystem;
     private readonly ILogger _logger;
+    private readonly ExtractLicensesSettingsBase _settings;
 
     public ExportLicenseTextsResultProcessor(
         ExtractLicensesSettingsBase settings,
@@ -22,7 +22,7 @@ internal sealed class ExportLicenseTextsResultProcessor : IResultProcessor
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-    
+
     public async Task ProcessResultsAsync(IEnumerable<PackageReference> packageReferences)
     {
         if (packageReferences == null)
@@ -37,18 +37,18 @@ internal sealed class ExportLicenseTextsResultProcessor : IResultProcessor
 
         var directory = EnsureDirectoryExists();
         await WriteLicenseTextsToFilesAsync(directory, packageReferences).ConfigureAwait(false);
-        
+
         _logger.LogInformation($"Exported license-texts to '{_settings.ExportLicenseTextsDirectory}'!");
     }
 
     private IDirectoryInfo EnsureDirectoryExists()
     {
-        var directory = _fileSystem.DirectoryInfo.FromDirectoryName(_settings.ExportLicenseTextsDirectory);
+        var directory = _fileSystem.DirectoryInfo.New(_settings.ExportLicenseTextsDirectory!);
         directory.Create();
-        
+
         return directory;
     }
-    
+
     private async Task WriteLicenseTextsToFilesAsync(IFileSystemInfo directory, IEnumerable<PackageReference> packageReferences)
     {
         foreach (var packageReference in packageReferences)

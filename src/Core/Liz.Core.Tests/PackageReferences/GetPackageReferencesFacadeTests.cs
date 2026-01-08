@@ -5,7 +5,7 @@ using Liz.Core.PackageReferences.Contracts.NuGetCli;
 using Liz.Core.Projects.Contracts.Models;
 using Moq;
 using System.IO.Abstractions;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Settings;
 using Xunit;

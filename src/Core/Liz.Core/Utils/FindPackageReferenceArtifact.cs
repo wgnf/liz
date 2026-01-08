@@ -46,7 +46,7 @@ internal sealed class FindPackageReferenceArtifact : IFindPackageReferenceArtifa
     }
 
     private bool TryGetArtifactDirectoryFromCache(
-        string? nugetCache, 
+        string nugetCache, 
         PackageReference packageReference,
         out IDirectoryInfo? artifactDirectory)
     {
@@ -56,7 +56,7 @@ internal sealed class FindPackageReferenceArtifact : IFindPackageReferenceArtifa
         
         _logger.LogDebug($"Candidate: {artifactCandidate}");
         
-        artifactDirectory = _fileSystem.DirectoryInfo.FromDirectoryName(artifactCandidate);
+        artifactDirectory = _fileSystem.DirectoryInfo.New(artifactCandidate);
 
         return artifactDirectory is { Exists: true };
     }

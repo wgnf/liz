@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.License;
 using Liz.Core.License.Contracts;
 using Liz.Core.License.Contracts.Models;
@@ -30,7 +30,7 @@ public class GetLicenseInformationFromArtifactTests
         var mockFileSystem = new MockFileSystem();
 
         mockFileSystem.AddDirectory(downloadDirectoryPath);
-        var downloadDirectory = mockFileSystem.DirectoryInfo.FromDirectoryName(downloadDirectoryPath);
+        var downloadDirectory = mockFileSystem.DirectoryInfo.New(downloadDirectoryPath);
 
         var (context, licenseInformation) = CreateContext();
         context.Use<IFileSystem>(mockFileSystem);

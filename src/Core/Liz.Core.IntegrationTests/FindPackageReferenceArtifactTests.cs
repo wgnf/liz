@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using Liz.Core.CliTool;
 using Liz.Core.PackageReferences.Contracts.Models;
 using Liz.Core.Utils;

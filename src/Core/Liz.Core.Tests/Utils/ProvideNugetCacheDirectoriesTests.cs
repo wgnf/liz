@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.CliTool.Contracts;
 using Liz.Core.Utils;
 using Moq;

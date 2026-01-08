@@ -1,8 +1,8 @@
-﻿using Liz.Core.Projects.Contracts;
-using Liz.Core.Projects.Contracts.Models;
-using System.IO.Abstractions;
+﻿using System.IO.Abstractions;
 using System.Xml;
 using System.Xml.Linq;
+using Liz.Core.Projects.Contracts;
+using Liz.Core.Projects.Contracts.Models;
 
 namespace Liz.Core.Projects;
 
@@ -16,14 +16,20 @@ internal sealed class GetProjectReferences : IGetProjectReferences
     {
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
-    
+
     public IEnumerable<ProjectReference> Get(Project project)
     {
-        if (project == null) throw new ArgumentNullException(nameof(project));
+        if (project == null)
+        {
+            throw new ArgumentNullException(nameof(project));
+        }
 
         var projectFile = project.File;
-        if (!projectFile.Exists) return Enumerable.Empty<ProjectReference>();
-        
+        if (!projectFile.Exists)
+        {
+            return Enumerable.Empty<ProjectReference>();
+        }
+
         var projectReference = DoGetProjectReference(projectFile);
         var projectReferences = FlattenProjectReferences(projectReference).Distinct();
 
@@ -39,7 +45,10 @@ internal sealed class GetProjectReferences : IGetProjectReferences
         // if something is in the (local class-)cache, we don't have to run the whole thing again
         var cachedCandidate = _projectReferencesCache
             .FirstOrDefault(reference => reference.Name == projectReferenceName);
-        if (cachedCandidate != null) return cachedCandidate;
+        if (cachedCandidate != null)
+        {
+            return cachedCandidate;
+        }
 
         var currentProjectReference = new ProjectReference(projectReferenceName, projectFileName);
         var subProjectReferenceFiles = DetermineSubProjectReferenceFiles(projectFileContent, projectFile);
@@ -49,11 +58,11 @@ internal sealed class GetProjectReferences : IGetProjectReferences
             var subProjectReferences = DoGetProjectReference(subProjectReferenceFile);
             currentProjectReference.AddReference(subProjectReferences);
         }
-        
+
         _projectReferencesCache.Add(currentProjectReference);
         return currentProjectReference;
     }
-    
+
     /*
      * NOTE:
      * the project-name (which is later used as the package-name i.e. when doing 'dotnet list package') is one of the
@@ -68,74 +77,93 @@ internal sealed class GetProjectReferences : IGetProjectReferences
     {
         // this somehow only works reliably using XDocument?!
         var projectXml = XDocument.Parse(projectFileContent);
-        
+
         var packageId = projectXml
             .Descendants("PackageId")
             .FirstOrDefault()?
             .Value;
-        
+
         var assemblyName = projectXml
             .Descendants("AssemblyName")
             .FirstOrDefault()?
             .Value;
-        
+
         var projectReferenceName = _fileSystem.Path.GetFileNameWithoutExtension(projectFile.FullName);
 
         if (!string.IsNullOrWhiteSpace(assemblyName))
+        {
             projectReferenceName = assemblyName;
+        }
 
         if (!string.IsNullOrWhiteSpace(packageId))
+        {
             projectReferenceName = packageId;
+        }
+
         return projectReferenceName;
     }
 
     private IEnumerable<IFileInfo> DetermineSubProjectReferenceFiles(string projectFileContent, IFileInfo projectFile)
     {
+        if (projectFile.Directory == null)
+        {
+            throw new ArgumentException("The project file directory must not be null.", nameof(projectFile));
+        }
+
         // this somehow only works reliably using XmlDocument?!
         var projectXml = new XmlDocument();
         projectXml.LoadXml(projectFileContent);
-        
+
         var projectReferencePaths = new List<string>();
 
         var projectReferenceNodes = projectXml.GetElementsByTagName("ProjectReference");
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (XmlNode? projectReferenceNode in projectReferenceNodes)
         {
-            if (!TryGetProjectReferencePath(projectReferenceNode, out var projectReferencePath)) continue;
-            
+            if (!TryGetProjectReferencePath(projectReferenceNode, out var projectReferencePath))
+            {
+                continue;
+            }
+
             projectReferencePaths.Add(projectReferencePath);
         }
-        
+
         // the project-reference is a relative path of the current project-file
         var projectReferenceFiles = projectReferencePaths
             .Select(path => _fileSystem.Path.Combine(projectFile.Directory.FullName, path))
-            .Select(combinedPath => _fileSystem.FileInfo.FromFileName(combinedPath))
+            .Select(combinedPath => _fileSystem.FileInfo.New(combinedPath))
             .Where(file => file.Exists);
 
         return projectReferenceFiles;
     }
-    
+
     private static bool TryGetProjectReferencePath(XmlNode? projectReferenceNode, out string projectReferencePath)
     {
-        projectReferencePath = string.Empty;   
-        
+        projectReferencePath = string.Empty;
+
         var projectReferenceNodeAttributes = projectReferenceNode?.Attributes;
-        if (projectReferenceNodeAttributes == null) return false;
+        if (projectReferenceNodeAttributes == null)
+        {
+            return false;
+        }
 
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (XmlAttribute? projectReferenceAttribute in projectReferenceNodeAttributes)
         {
-            if (projectReferenceAttribute?.Name != "Include") continue;
-                
+            if (projectReferenceAttribute?.Name != "Include")
+            {
+                continue;
+            }
+
             projectReferencePath = projectReferenceAttribute.Value;
-            
+
             // first thing we got is the only thing we need
             return true;
         }
 
         return false;
     }
-    
+
     private static IEnumerable<ProjectReference> FlattenProjectReferences(ProjectReference projectReference)
     {
         var projectReferences = new List<ProjectReference>(new[] { projectReference });

@@ -1,5 +1,5 @@
 ﻿using ArrangeContext.Moq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Liz.Core.Projects;
 using Liz.Core.Projects.Contracts.Models;
 using Moq;
@@ -80,7 +80,7 @@ public class GetProjectReferencesTests
 <Project Sdk=""Microsoft.NET.Sdk"">
 </Project>"));
 
-        var projectOne = mockFileSystem.FileInfo.FromFileName("ProjectOne.csproj");
+        var projectOne = mockFileSystem.FileInfo.New("ProjectOne.csproj");
         var project = new Project("ProjectOne", projectOne, ProjectFormatStyle.SdkStyle);
 
         var result = sut.Get(project);
